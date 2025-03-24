@@ -1,0 +1,20 @@
+{
+  "extends": "@finda-co/typescript-config/nextjs.json",
+  "compilerOptions": {
+    "plugins": [{ "name": "next" }],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/material-ui-pigment-css.d.ts",
+    "../../packages/theme/src/mui-pigment-css.d.ts",
+    "../../packages/theme/src/overrides.d.ts"
+  ],
+  "exclude": ["node_modules"]
+}

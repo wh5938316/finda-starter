@@ -1,0 +1,16 @@
+{
+  "extends": "@finda-co/typescript-config/base.json",
+  "compilerOptions": {
+    "target": "es2017",
+    "noEmit": false,
+    "allowImportingTsExtensions": false,
+    "module": "Node16",
+    "moduleResolution": "node16",
+    "experimentalDecorators": true,
+    "declaration": true,
+    "isolatedModules": false,
+    "emitDecoratorMetadata": true,
+    "strictNullChecks": true,
+    "outDir": "./dist"
+  }
+}

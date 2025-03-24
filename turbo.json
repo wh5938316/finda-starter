@@ -1,0 +1,45 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    "**/.env.*local"
+  ],
+  "tasks": {
+    "app:dev": {
+      "env": [],
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "env": [
+        "KB_PASSWORD",
+        "KB_SERVER",
+        "SENTRY_AUTH_TOKEN",
+        "NEXT_PUBLIC_SENTRY_DSN",
+        "NEXT_PUBLIC_KB_PASSWORD",
+        "NEXT_PUBLIC_SEARCH_SERVER"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        ".i18n/**",
+        "dist/**"
+      ]
+    },
+    "test": {
+      "outputs": [
+        "coverage/**"
+      ],
+      "dependsOn": []
+    },
+    "lint": {},
+    "type-check": {},
+    "dev": {
+      "dependsOn": [],
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

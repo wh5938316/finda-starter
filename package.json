@@ -1,0 +1,46 @@
+{
+  "name": "finda-app",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "app:dev": "turbo app:dev",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "type-check": "turbo type-check",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prettier-fix": "prettier --write packages apps",
+    "build-type": "pnpm build-master-type && pnpm build-public-type",
+    "prepare": "husky || true"
+  },
+  "author": "@finda-co",
+  "license": "private",
+  "lint-staged": {
+    "apps/**/*.{ts,tsx}": [
+      "prettier --write"
+    ],
+    "packages/**/*.{ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{md,mdx,mjs,yml,yaml,css}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@finda-co/eslint-config": "workspace:*",
+    "@finda-co/typescript-config": "workspace:*",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.4.2",
+    "turbo": "^2.4.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "express": "^5.0.1"
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@9.9.0"
+}

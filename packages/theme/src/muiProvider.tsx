@@ -1,0 +1,104 @@
+'use client';
+
+import DefaultPropsProvider from '@mui/material/DefaultPropsProvider';
+import type { SvgIconProps } from '@mui/material/SvgIcon';
+import React from 'react';
+
+import {
+  CheckBoxOutlineBlankIcon,
+  CheckIcon,
+  CloseIcon,
+  ExpandMoreIcon,
+  RemoveIcon,
+  UnfoldMoreIcon,
+} from '@finda-co/icons';
+
+interface MuiProviderProps {
+  children: React.ReactNode;
+}
+
+export default function MuiProvider(props: MuiProviderProps) {
+  const { children } = props;
+
+  return (
+    <DefaultPropsProvider
+      value={{
+        MuiButton: {
+          disableRipple: true,
+        },
+        MuiButtonBase: {
+          disableRipple: true,
+          disableTouchRipple: true,
+        },
+        MuiButtonGroup: {
+          disableRipple: true,
+        },
+        MuiChip: {
+          size: 'small',
+        },
+        MuiIconButton: {
+          disableRipple: true,
+          variant: 'soft' as const,
+        },
+        MuiSvgIcon: {
+          fontSize: 'small',
+        },
+        MuiTooltip: {
+          slotProps: {
+            popper: {
+              modifiers: [
+                {
+                  name: 'offset',
+                  options: {
+                    offset: [0, -8],
+                  },
+                },
+              ],
+            },
+          },
+        },
+        MuiCheckbox: {
+          disableRipple: false,
+          icon: <CheckBoxOutlineBlankIcon sx={{ color: 'hsla(210, 0%, 0%, 0.0)' }} />,
+          checkedIcon: <CheckIcon sx={{ height: 14, width: 14 }} />,
+          indeterminateIcon: <RemoveIcon sx={{ height: 14, width: 14 }} />,
+        },
+        MuiSelect: {
+          IconComponent: React.forwardRef<SVGSVGElement, SvgIconProps>((props: any, ref) => (
+            <UnfoldMoreIcon fontSize="small" {...props} ref={ref} />
+          )),
+        },
+        MuiLink: {
+          underline: 'none',
+        },
+        MuiAutocomplete: {
+          slotProps: {
+            paper: {
+              variant: 'popper',
+            },
+          },
+          popupIcon: <ExpandMoreIcon />,
+          clearIcon: <CloseIcon />,
+        },
+        MuiAccordion: {
+          elevation: 0,
+          disableGutters: true,
+        },
+        MuiPaper: {
+          elevation: 0,
+        },
+        MuiTextField: {
+          slotProps: {
+            // 因为 MuiTextField 的 inputLabel 默认是不会 shrink 的，所以这里设置为 true
+            // 否则在定制的主题中，placeholder被隐藏
+            inputLabel: {
+              shrink: true,
+            },
+          },
+        },
+      }}
+    >
+      {children}
+    </DefaultPropsProvider>
+  );
+}
