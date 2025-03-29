@@ -1,0 +1,15 @@
+{
+  "extends": "@finda-co/typescript-config/nestjs.json",
+  "compilerOptions": {
+    "strict": true,
+    "declaration": false,
+    "declarationMap": false,
+    "strictPropertyInitialization": false,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "baseUrl": "./",
+    "outDir": "./dist"
+  },
+  "include": ["./src/**/*.ts", "./seed/**/*.ts", "drizzle.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}

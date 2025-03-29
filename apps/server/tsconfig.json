@@ -1,0 +1,18 @@
+{
+  "extends": "@finda-co/typescript-config/nestjs.json",
+  "compilerOptions": {
+    "strict": true,
+    "declaration": false,
+    "declarationMap": false,
+    "strictPropertyInitialization": false,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "exclude": ["dist"],
+  "include": ["**/*.ts"]
+}
