@@ -1,17 +1,13 @@
-import { Options, defineConfig } from 'tsup';
+import { defineConfig } from 'tsup';
 
-export default defineConfig((options: Options) => ({
-  entry: {
-    index: './src/index.ts',
-    dal: './src/dal/index.ts',
-  },
-  splitting: false,
-  sourcemap: true,
-  target: 'es2015',
-  format: ['cjs', 'esm'],
-  dts: true,
-  // minify: true,
+export default defineConfig({
   clean: false,
-  external: [],
-  ...options,
-}));
+  target: 'es2020',
+  entry: {
+    index: 'src/index.ts',
+  },
+  dts: true,
+  external: ['class-validator', 'class-transformer'],
+  format: ['cjs', 'esm'],
+  publicDir: 'public',
+});

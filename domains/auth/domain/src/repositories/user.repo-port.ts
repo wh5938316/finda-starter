@@ -59,14 +59,6 @@ export interface IUserRepository {
   loadSessions(user: User): Promise<User>;
 
   /**
-   * 通过指纹查找用户会话
-   * @param fingerprint 设备指纹
-   */
-  findSessionByFingerprint(
-    fingerprint: string,
-  ): Promise<{ user: User; sessionId: SessionId } | null>;
-
-  /**
    * 判断邮箱是否已存在
    * @param email 邮箱
    * @param excludeUserId 需要排除的用户ID

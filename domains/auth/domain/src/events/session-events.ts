@@ -8,7 +8,6 @@ export class SessionCreatedEvent extends DomainEvent {
     public readonly userId: UserId,
     public readonly ipAddress?: string,
     public readonly userAgent?: string,
-    public readonly fingerprint?: string,
   ) {
     super();
   }

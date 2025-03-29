@@ -19,7 +19,6 @@ export interface SessionProps {
   ipAddress?: string;
   userAgent?: string;
   impersonatedBy?: UserId;
-  fingerprint?: string;
   expiresAt: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -32,7 +31,6 @@ export class Session extends Entity<SessionProps> {
   private _ipAddress?: string;
   private _userAgent?: string;
   private _impersonatedBy?: UserId;
-  private _fingerprint?: string;
   private _expiresAt: Date;
   private _createdAt: Date;
   private _updatedAt: Date;
@@ -45,7 +43,6 @@ export class Session extends Entity<SessionProps> {
     this._ipAddress = props.ipAddress;
     this._userAgent = props.userAgent;
     this._impersonatedBy = props.impersonatedBy;
-    this._fingerprint = props.fingerprint;
     this._expiresAt = props.expiresAt;
     this._createdAt = props.createdAt;
     this._updatedAt = props.updatedAt;
@@ -64,7 +61,6 @@ export class Session extends Entity<SessionProps> {
     token?: string,
     ipAddress?: string,
     userAgent?: string,
-    fingerprint?: string,
     impersonatedBy?: UserId,
     expiresAtMinutes: number = 60 * 24 * 7, // 默认7天
   ): Session {
@@ -79,13 +75,12 @@ export class Session extends Entity<SessionProps> {
       ipAddress,
       userAgent,
       impersonatedBy,
-      fingerprint,
       expiresAt,
       createdAt: now,
       updatedAt: now,
     });
 
-    session.addEvent(new SessionCreatedEvent(id, userId, ipAddress, userAgent, fingerprint));
+    session.addEvent(new SessionCreatedEvent(id, userId, ipAddress, userAgent));
 
     return session;
   }
@@ -118,10 +113,6 @@ export class Session extends Entity<SessionProps> {
 
   public get impersonatedBy(): UserId | undefined {
     return this._impersonatedBy;
-  }
-
-  public get fingerprint(): string | undefined {
-    return this._fingerprint;
   }
 
   public get expiresAt(): Date {
@@ -223,14 +214,5 @@ export class Session extends Entity<SessionProps> {
 
     this._expiresAt = newExpiresAt;
     this.addEvent(new SessionExtendedEvent(this._id, this._userId, newExpiresAt));
-  }
-
-  public updateFingerprintData(fingerprint: string): void {
-    this.update({
-      fingerprint,
-      updatedAt: new Date(),
-    } as Partial<SessionProps>);
-
-    this._fingerprint = fingerprint;
   }
 }

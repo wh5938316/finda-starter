@@ -51,14 +51,6 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  // 暂时实现IUserRepository接口的缺失方法
-  async findSessionByFingerprint(
-    fingerprint: string,
-  ): Promise<{ user: User; sessionId: SessionId } | null> {
-    // 此方法待实现 - 已从接口移除FingerprintId
-    return null;
-  }
-
   private async _create(user: User): Promise<void> {
     await this.drizzle.transaction(async (trx) => {
       // 将领域用户转换为数据库记录

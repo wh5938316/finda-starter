@@ -13,11 +13,13 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "import": "./dist/index.js"
     },
     "./schema": {
       "types": "./dist/schema.d.ts",
-      "require": "./dist/schema.js"
+      "require": "./dist/schema.js",
+      "import": "./dist/schema.js"
     }
   },
   "scripts": {
@@ -28,6 +30,7 @@
     "lint": "eslint \"src/**/*.ts\""
   },
   "dependencies": {
+    "@finda-co/core": "workspace:*",
     "@finda-co/domain-auth-core": "workspace:*",
     "@nestjs/common": "^11.0.7",
     "@nestjs/config": "^2.3.1",

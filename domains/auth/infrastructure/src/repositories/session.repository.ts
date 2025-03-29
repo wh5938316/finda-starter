@@ -131,43 +131,6 @@ export class SessionRepository implements ISessionRepository {
     return sessions;
   }
 
-  async findByFingerprint(
-    fingerprint: string,
-    includeExpired: boolean = false,
-  ): Promise<Session | null> {
-    // 首先尝试从Redis获取
-    if (!includeExpired) {
-      const cachedSession = await this.redisService.getSessionByFingerprint(fingerprint);
-      if (cachedSession) {
-        return this.sessionMapper.toDomain(cachedSession);
-      }
-    }
-
-    // 从数据库查询
-    const sessionData = await this.drizzle.query.session.findFirst({
-      where: includeExpired
-        ? eq(schema.session.fingerprint, fingerprint)
-        : and(
-            eq(schema.session.fingerprint, fingerprint),
-            gt(schema.session.expiresAt, new Date()),
-          ),
-      orderBy: [desc(schema.session.createdAt)],
-    });
-
-    if (!sessionData) {
-      return null;
-    }
-
-    const session = this.sessionMapper.toDomain(sessionData);
-
-    // 如果会话未过期，缓存到Redis
-    if (!includeExpired && !session.isExpired()) {
-      await this.redisService.setSession(session);
-    }
-
-    return session;
-  }
-
   async delete(session: Session): Promise<void> {
     // 从Redis删除
     await this.redisService.deleteSession(session.id);

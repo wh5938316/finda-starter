@@ -1,24 +1,16 @@
-import { Id } from '../core/id';
-import { InvalidIdException } from '../errors/id-errors';
+import { UUID } from '@finda-co/core';
 
 /**
  * 身份ID值对象
  */
-export class IdentityId extends Id {
+export class IdentityId extends UUID {
   public readonly type: string = 'IdentityId';
 
-  constructor(id: string) {
-    super(id);
+  public static generate() {
+    return new IdentityId();
   }
 
-  public static create(): IdentityId {
-    return new IdentityId(Id.generateUUID());
-  }
-
-  public static from(id: string): IdentityId {
-    if (!id) {
-      throw InvalidIdException.becauseEmpty();
-    }
+  public static from(id: string) {
     return new IdentityId(id);
   }
 }

@@ -58,12 +58,6 @@ export class SessionExpiredError extends DomainError {
   }
 }
 
-export class InvalidFingerprint extends DomainError {
-  constructor() {
-    super('无效的指纹信息');
-  }
-}
-
 export class SuspiciousActivityError extends DomainError {
   constructor(reason: string) {
     super(`检测到可疑活动：${reason}`);

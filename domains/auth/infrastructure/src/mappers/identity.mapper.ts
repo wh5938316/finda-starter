@@ -1,10 +1,8 @@
+import { Injectable } from '@nestjs/common';
+
 import { Identity, IdentityId, UserId } from '@finda-co/domain-auth-core';
 
-// 注意：我们在domain模块中修改了Identity类，但基础设施层仍在引用旧版本
-// 在发布新版本的domain模块后，此处应该更新为：
-// import { Identity, IdentityId, UserId, Provider } from '@finda-co/domain-auth-core';
-// 并使用新的provider和accountId字段
-
+@Injectable()
 export class IdentityMapper {
   /**
    * 将身份领域对象转换为持久化对象

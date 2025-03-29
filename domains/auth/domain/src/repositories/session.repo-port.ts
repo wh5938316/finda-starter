@@ -33,13 +33,6 @@ export interface ISessionRepository {
   findByUserId(userId: UserId, includeExpired?: boolean): Promise<Session[]>;
 
   /**
-   * 通过指纹ID查找会话
-   * @param fingerprint 设备指纹
-   * @param includeExpired 是否包含已过期的会话
-   */
-  findByFingerprint(fingerprint: string, includeExpired?: boolean): Promise<Session | null>;
-
-  /**
    * 删除会话
    * @param session 会话实体
    */

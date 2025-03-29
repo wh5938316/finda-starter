@@ -1,5 +1,8 @@
+import { Injectable } from '@nestjs/common';
+
 import { Session, SessionId, UserId } from '@finda-co/domain-auth-core';
 
+@Injectable()
 export class SessionMapper {
   /**
    * 将会话领域对象转换为持久化对象
@@ -12,7 +15,6 @@ export class SessionMapper {
       ipAddress: session.ipAddress,
       userAgent: session.userAgent,
       impersonatedBy: session.impersonatedBy?.toString(),
-      fingerprint: session.fingerprint,
       expiresAt: session.expiresAt,
       createdAt: session.createdAt,
       updatedAt: session.updatedAt,
@@ -42,10 +44,6 @@ export class SessionMapper {
       changes.impersonatedBy = session.impersonatedBy?.toString();
     }
 
-    if (changedFields.includes('fingerprint')) {
-      changes.fingerprint = session.fingerprint;
-    }
-
     if (changedFields.includes('expiresAt')) {
       changes.expiresAt = session.expiresAt;
     }
@@ -70,7 +68,6 @@ export class SessionMapper {
       impersonatedBy: sessionRecord.impersonatedBy
         ? UserId.from(sessionRecord.impersonatedBy)
         : undefined,
-      fingerprint: sessionRecord.fingerprint,
       expiresAt: new Date(sessionRecord.expiresAt),
       createdAt: new Date(sessionRecord.createdAt),
       updatedAt: new Date(sessionRecord.updatedAt),

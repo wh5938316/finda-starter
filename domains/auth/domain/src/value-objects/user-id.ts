@@ -1,21 +1,15 @@
-import { UUID } from '../core/uuid';
+import { UUID } from '@finda-co/core';
+
 import { InvalidIdException } from '../errors/id-errors';
 
 export class UserId extends UUID {
   public readonly type: string = 'UserId';
 
-  constructor(id?: string) {
-    super(id);
-  }
-
-  public static generate(): UserId {
+  public static generate() {
     return new UserId();
   }
 
-  public static from(id: string): UserId {
-    if (!id) {
-      throw InvalidIdException.becauseEmpty();
-    }
+  public static from(id: string) {
     return new UserId(id);
   }
 }

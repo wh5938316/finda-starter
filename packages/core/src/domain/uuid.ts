@@ -1,52 +1,45 @@
-import { v7 as uuid, validate as uuidValidate } from 'uuid';
+import { v7 as uuid, validate } from 'uuid';
 
 import { InvalidIdException } from './exceptions/id-errors';
+import { Id } from './id';
 
-/**
- * UUID基类
- * 用于表示基于UUID的标识符
- */
-export abstract class UUID {
-  private readonly _id: string;
+export class UUID extends Id {
+  public readonly type: string = 'UUID';
 
-  protected constructor(id?: string) {
-    if (!id) {
-      this._id = uuid();
-      return;
-    }
-
-    if (!uuidValidate(id)) {
+  protected constructor(id = uuid()) {
+    if (!validate(id)) {
       throw InvalidIdException.becauseWrongFormat(id);
     }
-
-    this._id = id;
+    super(id);
   }
 
-  /**
-   * 获取UUID值
-   */
-  public get value(): string {
-    return this._id;
+  public static generate(): UUID {
+    return new UUID();
   }
 
-  /**
-   * 将UUID转换为字符串
-   * @returns UUID字符串
-   */
-  public toString(): string {
-    return this._id;
+  public static from(id: string): UUID {
+    return new UUID(id);
   }
 
-  /**
-   * 比较两个UUID是否相等
-   * @param other 要比较的UUID或字符串
-   * @returns 是否相等
-   */
-  public equals(other: UUID | string): boolean {
-    if (other instanceof UUID) {
-      return this._id === other.value;
-    }
+  get time(): number {
+    const parts = this.value.split('-');
+    const highBitsHex = parts[0] + parts[1].slice(0, 4);
+    const timestampInMilliseconds = parseInt(highBitsHex, 16);
 
-    return this._id === other;
+    return timestampInMilliseconds;
+  }
+
+  get date(): Date {
+    const date = new Date(this.time);
+
+    return date;
+  }
+
+  get yearMonth(): string {
+    return this.date.toISOString().substring(0, 7);
+  }
+
+  get value(): string {
+    return this.props.value;
   }
 }

@@ -1,11 +1,12 @@
+import { Injectable } from '@nestjs/common';
 import { Redis } from 'ioredis';
 
 import { Session, SessionId, UserId } from '@finda-co/domain-auth-core';
 
+@Injectable()
 export class RedisService {
   private readonly SESSION_PREFIX = 'auth:session:';
   private readonly SESSION_BY_TOKEN_PREFIX = 'auth:session:token:';
-  private readonly SESSION_BY_FINGERPRINT_PREFIX = 'auth:session:fingerprint:';
   private readonly SESSION_TTL = 60 * 60 * 24 * 7; // 7天，秒为单位
 
   constructor(private readonly redis: Redis) {}
@@ -35,7 +36,6 @@ export class RedisService {
       ipAddress: session.ipAddress,
       userAgent: session.userAgent,
       impersonatedBy: session.impersonatedBy?.toString(),
-      fingerprint: session.fingerprint?.toString(),
       expiresAt: session.expiresAt.toISOString(),
     };
 
@@ -47,12 +47,6 @@ export class RedisService {
     if (session.token) {
       const tokenKey = this.getSessionByTokenKey(session.token);
       await this.redis.setex(tokenKey, ttl, session.id.toString());
-    }
-
-    // 创建指纹索引
-    if (session.fingerprint) {
-      const fingerprintKey = this.getSessionByFingerprintKey(session.fingerprint);
-      await this.redis.setex(fingerprintKey, ttl, session.id.toString());
     }
   }
 
@@ -85,20 +79,6 @@ export class RedisService {
   }
 
   /**
-   * 通过指纹获取会话ID，然后获取会话
-   */
-  async getSessionByFingerprint(fingerprint: string): Promise<any | null> {
-    const fingerprintKey = this.getSessionByFingerprintKey(fingerprint);
-    const sessionId = await this.redis.get(fingerprintKey);
-
-    if (!sessionId) {
-      return null;
-    }
-
-    return this.getSession(SessionId.from(sessionId));
-  }
-
-  /**
    * 通过会话ID获取用户ID
    */
   async getUserIdBySessionId(sessionId: SessionId): Promise<string | null> {
@@ -120,12 +100,6 @@ export class RedisService {
     if (sessionData.token) {
       const tokenKey = this.getSessionByTokenKey(sessionData.token);
       await this.redis.del(tokenKey);
-    }
-
-    // 删除指纹索引
-    if (sessionData.fingerprint) {
-      const fingerprintKey = this.getSessionByFingerprintKey(sessionData.fingerprint);
-      await this.redis.del(fingerprintKey);
     }
 
     // 删除会话数据
@@ -155,12 +129,5 @@ export class RedisService {
    */
   private getSessionByTokenKey(token: string): string {
     return `${this.SESSION_BY_TOKEN_PREFIX}${token}`;
-  }
-
-  /**
-   * 生成指纹索引键
-   */
-  private getSessionByFingerprintKey(fingerprint: string): string {
-    return `${this.SESSION_BY_FINGERPRINT_PREFIX}${fingerprint}`;
   }
 }
