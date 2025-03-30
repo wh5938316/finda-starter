@@ -1,3 +1,4 @@
+import { InjectRedis } from '@nestjs-modules/ioredis';
 import { Injectable } from '@nestjs/common';
 import { Redis } from 'ioredis';
 
@@ -9,7 +10,7 @@ export class RedisService {
   private readonly SESSION_BY_TOKEN_PREFIX = 'auth:session:token:';
   private readonly SESSION_TTL = 60 * 60 * 24 * 7; // 7天，秒为单位
 
-  constructor(private readonly redis: Redis) {}
+  constructor(@InjectRedis() private readonly redis: Redis) {}
 
   /**
    * 将会话存储到Redis

@@ -6,13 +6,8 @@ export * from './repositories/user.repository';
 export * from './repositories/session.repository';
 export * from './repositories/identity.repository';
 
-// 导出映射器
-export * from './mappers/user.mapper';
-export * from './mappers/session.mapper';
-export * from './mappers/identity.mapper';
-
 // 导出服务
 export * from './services/redis.service';
 
 // 导出基础设施模块
-export * from './auth.infrastructure.module';
+export * from './auth-infrastructure.module';

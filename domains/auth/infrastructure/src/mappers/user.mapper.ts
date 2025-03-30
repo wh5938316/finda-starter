@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 import { User, UserId } from '@finda-co/domain-auth-core';
 
-@Injectable()
 export class UserMapper {
   /**
    * 将用户领域对象转换为持久化对象

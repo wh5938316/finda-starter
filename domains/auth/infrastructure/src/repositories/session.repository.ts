@@ -10,10 +10,11 @@ import { RedisService } from '../services/redis.service';
 
 @Injectable()
 export class SessionRepository implements ISessionRepository {
+  private readonly sessionMapper = new SessionMapper();
+
   constructor(
     @Inject('App') private readonly drizzle: NodePgDrizzle,
     private readonly redisService: RedisService,
-    private readonly sessionMapper: SessionMapper,
   ) {}
 
   async save(session: Session): Promise<void> {

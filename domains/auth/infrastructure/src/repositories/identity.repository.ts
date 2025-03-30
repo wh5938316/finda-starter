@@ -15,10 +15,7 @@ import { IdentityMapper } from '../mappers/identity.mapper';
 
 @Injectable()
 export class IdentityRepository implements IIdentityRepository {
-  constructor(
-    @Inject('App') private readonly drizzle: NodePgDrizzle,
-    private readonly identityMapper: IdentityMapper,
-  ) {}
+  constructor(@Inject('App') private readonly drizzle: NodePgDrizzle) {}
 
   async save(identity: Identity): Promise<void> {
     if (identity.isNew) {
@@ -30,7 +27,7 @@ export class IdentityRepository implements IIdentityRepository {
 
   private async _create(identity: Identity): Promise<void> {
     // 将领域身份转换为数据库记录
-    const identityData = this.identityMapper.toPersistence(identity);
+    const identityData = IdentityMapper.toPersistence(identity);
 
     // 插入身份记录
     await this.drizzle.insert(schema.identity).values(identityData);
@@ -40,7 +37,7 @@ export class IdentityRepository implements IIdentityRepository {
 
   private async _update(identity: Identity): Promise<void> {
     // 将领域身份变更转换为数据库更新
-    const identityData = this.identityMapper.toPartialPersistence(identity);
+    const identityData = IdentityMapper.toPartialPersistence(identity);
 
     // 更新数据库记录
     await this.drizzle
@@ -60,7 +57,7 @@ export class IdentityRepository implements IIdentityRepository {
       return null;
     }
 
-    return this.identityMapper.toDomain(identityData);
+    return IdentityMapper.toDomain(identityData);
   }
 
   async findByUserId(userId: UserId): Promise<Identity[]> {
@@ -68,7 +65,7 @@ export class IdentityRepository implements IIdentityRepository {
       where: eq(schema.identity.userId, userId.toString()),
     });
 
-    return identitiesData.map((identity) => this.identityMapper.toDomain(identity));
+    return identitiesData.map((identity) => IdentityMapper.toDomain(identity));
   }
 
   async findByProvider(
@@ -86,7 +83,7 @@ export class IdentityRepository implements IIdentityRepository {
       return null;
     }
 
-    return this.identityMapper.toDomain(identityData);
+    return IdentityMapper.toDomain(identityData);
   }
 
   async findByUserIdAndProvider(
@@ -104,7 +101,7 @@ export class IdentityRepository implements IIdentityRepository {
       return null;
     }
 
-    return this.identityMapper.toDomain(identityData);
+    return IdentityMapper.toDomain(identityData);
   }
 
   async delete(identity: Identity): Promise<void> {

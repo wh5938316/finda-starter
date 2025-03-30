@@ -35,12 +35,12 @@ import { RedisService } from '../services/redis.service';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
+  private readonly userMapper = new UserMapper();
+  private readonly sessionMapper = new SessionMapper();
+
   constructor(
     @Inject('App') private readonly drizzle: NodePgDrizzle,
     private readonly redisService: RedisService,
-    private readonly userMapper: UserMapper,
-    private readonly identityMapper: IdentityMapper,
-    private readonly sessionMapper: SessionMapper,
   ) {}
 
   async save(user: User): Promise<void> {
@@ -62,7 +62,7 @@ export class UserRepository implements IUserRepository {
       // 处理用户的身份信息
       if (user.identities.length > 0) {
         const identityRecords = user.identities.map((identity) =>
-          this.identityMapper.toPersistence(identity),
+          IdentityMapper.toPersistence(identity),
         );
         await trx.insert(schema.identity).values(identityRecords);
       }
@@ -100,7 +100,7 @@ export class UserRepository implements IUserRepository {
       const newIdentities = user.identities.filter((identity) => identity.isNew);
       if (newIdentities.length > 0) {
         const identityRecords = newIdentities.map((identity) =>
-          this.identityMapper.toPersistence(identity),
+          IdentityMapper.toPersistence(identity),
         );
         await trx.insert(schema.identity).values(identityRecords);
         newIdentities.forEach((identity) => identity.setSaved());
@@ -111,7 +111,7 @@ export class UserRepository implements IUserRepository {
         (identity) => !identity.isNew && identity.isChanged,
       );
       for (const identity of changedIdentities) {
-        const identityData = this.identityMapper.toPartialPersistence(identity);
+        const identityData = IdentityMapper.toPartialPersistence(identity);
         await trx
           .update(schema.identity)
           .set(identityData)
@@ -265,7 +265,7 @@ export class UserRepository implements IUserRepository {
       where: eq(schema.identity.userId, user.id.toString()),
     });
 
-    const domainIdentities = identities.map((identity) => this.identityMapper.toDomain(identity));
+    const domainIdentities = identities.map((identity) => IdentityMapper.toDomain(identity));
 
     // 使用User实体的方法添加子实体
     for (const identity of domainIdentities) {
