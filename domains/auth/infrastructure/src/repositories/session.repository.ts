@@ -10,8 +10,6 @@ import { RedisService } from '../services/redis.service';
 
 @Injectable()
 export class SessionRepository implements ISessionRepository {
-  private readonly sessionMapper = new SessionMapper();
-
   constructor(
     @Inject('App') private readonly drizzle: NodePgDrizzle,
     private readonly redisService: RedisService,
@@ -27,7 +25,7 @@ export class SessionRepository implements ISessionRepository {
 
   private async _create(session: Session): Promise<void> {
     // 将领域会话转换为数据库记录
-    const sessionData = this.sessionMapper.toPersistence(session);
+    const sessionData = SessionMapper.toPersistence(session);
 
     // 插入会话记录到数据库
     await this.drizzle.insert(schema.session).values(sessionData);
@@ -42,7 +40,7 @@ export class SessionRepository implements ISessionRepository {
 
   private async _update(session: Session): Promise<void> {
     // 将领域会话变更转换为数据库更新
-    const sessionData = this.sessionMapper.toPartialPersistence(session);
+    const sessionData = SessionMapper.toPartialPersistence(session);
 
     // 更新数据库记录
     await this.drizzle
@@ -66,7 +64,7 @@ export class SessionRepository implements ISessionRepository {
     // 首先尝试从Redis获取
     const cachedSession = await this.redisService.getSession(id);
     if (cachedSession) {
-      return this.sessionMapper.toDomain(cachedSession);
+      return SessionMapper.toDomain(cachedSession);
     }
 
     // 从数据库查询
@@ -78,7 +76,7 @@ export class SessionRepository implements ISessionRepository {
       return null;
     }
 
-    const session = this.sessionMapper.toDomain(sessionData);
+    const session = SessionMapper.toDomain(sessionData);
 
     // 如果会话未过期，缓存到Redis
     if (!session.isExpired()) {
@@ -92,7 +90,7 @@ export class SessionRepository implements ISessionRepository {
     // 首先尝试从Redis获取
     const cachedSession = await this.redisService.getSessionByToken(token);
     if (cachedSession) {
-      return this.sessionMapper.toDomain(cachedSession);
+      return SessionMapper.toDomain(cachedSession);
     }
 
     // 从数据库查询
@@ -104,7 +102,7 @@ export class SessionRepository implements ISessionRepository {
       return null;
     }
 
-    const session = this.sessionMapper.toDomain(sessionData);
+    const session = SessionMapper.toDomain(sessionData);
 
     // 如果会话未过期，缓存到Redis
     if (!session.isExpired()) {
@@ -127,7 +125,7 @@ export class SessionRepository implements ISessionRepository {
     });
 
     // 转换为领域对象
-    const sessions = sessionsData.map((session: any) => this.sessionMapper.toDomain(session));
+    const sessions = sessionsData.map((session: any) => SessionMapper.toDomain(session));
 
     return sessions;
   }

@@ -54,6 +54,6 @@
     "@types/react-dom": "^19.0.0",
     "@types/ua-parser-js": "^0.7.39",
     "server-only": "^0.0.1",
-    "typescript": "^5.7.2"
+    "typescript": "^5.8.2"
   }
 }

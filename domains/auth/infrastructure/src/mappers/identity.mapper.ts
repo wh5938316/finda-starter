@@ -1,5 +1,3 @@
-import { Injectable } from '@nestjs/common';
-
 import { Identity, IdentityId, UserId } from '@finda-co/domain-auth-core';
 
 export class IdentityMapper {

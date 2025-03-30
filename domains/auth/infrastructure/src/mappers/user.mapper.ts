@@ -1,12 +1,10 @@
-import { Injectable } from '@nestjs/common';
-
 import { User, UserId } from '@finda-co/domain-auth-core';
 
 export class UserMapper {
   /**
    * 将用户领域对象转换为持久化对象
    */
-  toPersistence(user: User): any {
+  static toPersistence(user: User): any {
     return {
       id: user.id.toString(),
       anonymousCreditAccountId: user.anonymousCreditAccountId,
@@ -27,7 +25,7 @@ export class UserMapper {
   /**
    * 将用户的变更转换为部分持久化对象
    */
-  toPartialPersistence(user: User): any {
+  static toPartialPersistence(user: User): any {
     const changes: any = {};
     const changedFields = user.changedFields;
 
@@ -80,7 +78,7 @@ export class UserMapper {
   /**
    * 将持久化对象转换为用户领域对象
    */
-  toDomain(userRecord: any): User {
+  static toDomain(userRecord: any): User {
     // 基本用户属性
     const userProps = {
       id: UserId.from(userRecord.id),

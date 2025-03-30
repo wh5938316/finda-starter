@@ -10,4 +10,4 @@ export * from './repositories/identity.repository';
 export * from './services/redis.service';
 
 // 导出基础设施模块
-export * from './auth-infrastructure.module';
+// export * from './auth-infrastructure.module';

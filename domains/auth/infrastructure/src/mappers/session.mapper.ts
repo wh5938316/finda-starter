@@ -1,12 +1,10 @@
-import { Injectable } from '@nestjs/common';
-
 import { Session, SessionId, UserId } from '@finda-co/domain-auth-core';
 
 export class SessionMapper {
   /**
    * 将会话领域对象转换为持久化对象
    */
-  toPersistence(session: Session): any {
+  static toPersistence(session: Session): any {
     return {
       id: session.id.toString(),
       userId: session.userId.toString(),
@@ -23,7 +21,7 @@ export class SessionMapper {
   /**
    * 将会话的变更转换为部分持久化对象
    */
-  toPartialPersistence(session: Session): any {
+  static toPartialPersistence(session: Session): any {
     const changes: any = {};
     const changedFields = session.changedFields;
 
@@ -56,7 +54,7 @@ export class SessionMapper {
   /**
    * 将持久化对象转换为会话领域对象
    */
-  toDomain(sessionRecord: any): Session {
+  static toDomain(sessionRecord: any): Session {
     // 会话属性
     const sessionProps = {
       id: SessionId.from(sessionRecord.id),

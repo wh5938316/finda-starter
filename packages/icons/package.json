@@ -29,7 +29,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tsup": "^8.3.5",
-    "typescript": "^5.7.2"
+    "typescript": "^5.8.2"
   },
   "peerDependencies": {
     "@mui/material": ">= 5.0.0",

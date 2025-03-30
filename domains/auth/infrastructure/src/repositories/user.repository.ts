@@ -35,9 +35,6 @@ import { RedisService } from '../services/redis.service';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
-  private readonly userMapper = new UserMapper();
-  private readonly sessionMapper = new SessionMapper();
-
   constructor(
     @Inject('App') private readonly drizzle: NodePgDrizzle,
     private readonly redisService: RedisService,
@@ -54,7 +51,7 @@ export class UserRepository implements IUserRepository {
   private async _create(user: User): Promise<void> {
     await this.drizzle.transaction(async (trx) => {
       // 将领域用户转换为数据库记录
-      const userData = this.userMapper.toPersistence(user);
+      const userData = UserMapper.toPersistence(user);
 
       // 插入用户记录
       await trx.insert(schema.user).values(userData);
@@ -69,9 +66,7 @@ export class UserRepository implements IUserRepository {
 
       // 处理用户的会话信息
       if (user.sessions.length > 0) {
-        const sessionRecords = user.sessions.map((session) =>
-          this.sessionMapper.toPersistence(session),
-        );
+        const sessionRecords = user.sessions.map((session) => SessionMapper.toPersistence(session));
         await trx.insert(schema.session).values(sessionRecords);
 
         // 将活跃会话同步到Redis
@@ -92,7 +87,7 @@ export class UserRepository implements IUserRepository {
     await this.drizzle.transaction(async (trx) => {
       // 处理用户的更新
       if (user.isChanged) {
-        const userData = this.userMapper.toPartialPersistence(user);
+        const userData = UserMapper.toPartialPersistence(user);
         await trx.update(schema.user).set(userData).where(eq(schema.user.id, user.id.toString()));
       }
 
@@ -122,9 +117,7 @@ export class UserRepository implements IUserRepository {
       // 处理新增的会话信息
       const newSessions = user.sessions.filter((session) => session.isNew);
       if (newSessions.length > 0) {
-        const sessionRecords = newSessions.map((session) =>
-          this.sessionMapper.toPersistence(session),
-        );
+        const sessionRecords = newSessions.map((session) => SessionMapper.toPersistence(session));
         await trx.insert(schema.session).values(sessionRecords);
 
         // 将新的活跃会话同步到Redis
@@ -142,7 +135,7 @@ export class UserRepository implements IUserRepository {
         (session) => !session.isNew && session.isChanged,
       );
       for (const session of changedSessions) {
-        const sessionData = this.sessionMapper.toPartialPersistence(session);
+        const sessionData = SessionMapper.toPartialPersistence(session);
         await trx
           .update(schema.session)
           .set(sessionData)
@@ -173,7 +166,7 @@ export class UserRepository implements IUserRepository {
       return null;
     }
 
-    const user = this.userMapper.toDomain(userData);
+    const user = UserMapper.toDomain(userData);
     return user;
   }
 
@@ -188,7 +181,7 @@ export class UserRepository implements IUserRepository {
       return null;
     }
 
-    const user = this.userMapper.toDomain(userData);
+    const user = UserMapper.toDomain(userData);
     return user;
   }
 
@@ -215,7 +208,7 @@ export class UserRepository implements IUserRepository {
       return null;
     }
 
-    const user = this.userMapper.toDomain(result[0].user);
+    const user = UserMapper.toDomain(result[0].user);
     return user;
   }
 
@@ -233,7 +226,7 @@ export class UserRepository implements IUserRepository {
       return null;
     }
 
-    const user = this.userMapper.toDomain(result[0].user);
+    const user = UserMapper.toDomain(result[0].user);
     return user;
   }
 
@@ -256,7 +249,7 @@ export class UserRepository implements IUserRepository {
       return null;
     }
 
-    const user = this.userMapper.toDomain(result[0].user);
+    const user = UserMapper.toDomain(result[0].user);
     return user;
   }
 
@@ -280,7 +273,7 @@ export class UserRepository implements IUserRepository {
       where: eq(schema.session.userId, user.id.toString()),
     });
 
-    const domainSessions = sessions.map((session) => this.sessionMapper.toDomain(session));
+    const domainSessions = sessions.map((session) => SessionMapper.toDomain(session));
 
     // 使用User实体的方法添加子实体
     for (const session of domainSessions) {
@@ -369,7 +362,7 @@ export class UserRepository implements IUserRepository {
       orderBy: [desc(schema.user.createdAt)],
     });
 
-    const users = userData.map((user) => this.userMapper.toDomain(user));
+    const users = userData.map((user) => UserMapper.toDomain(user));
 
     return {
       users,
