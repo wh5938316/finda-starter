@@ -81,14 +81,6 @@ export class Identity extends Entity<IdentityProps> {
   }
 
   /**
-   * 添加领域事件
-   */
-  private addEvent(event: any): void {
-    // 使用类型断言处理
-    (this as any).apply(event);
-  }
-
-  /**
    * 创建新的身份
    * 注意：此方法应由User聚合根调用，不应直接在领域外部使用
    * @param id 身份ID
@@ -132,8 +124,6 @@ export class Identity extends Entity<IdentityProps> {
       createdAt: now,
       updatedAt: now,
     });
-
-    identity.addEvent(new IdentityCreatedEvent(id, userId, provider));
 
     return identity;
   }
@@ -286,8 +276,6 @@ export class Identity extends Entity<IdentityProps> {
     this.update({
       updatedAt: new Date(),
     } as Partial<IdentityProps>);
-
-    this.addEvent(new IdentityScopesUpdatedEvent(this._id, this._userId, scopes));
   }
 
   /**
@@ -297,8 +285,6 @@ export class Identity extends Entity<IdentityProps> {
    */
   public markAsRemoved(token: symbol): void {
     this._checkInternalToken(token);
-
-    this.addEvent(new IdentityRemovedEvent(this._id, this._userId, this._provider));
   }
 
   /**

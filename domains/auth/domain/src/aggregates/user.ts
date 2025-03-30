@@ -105,12 +105,6 @@ export class User extends AggregateRoot<UserProps> {
     this._currentSessionId = props.currentSessionId;
   }
 
-  // 添加领域事件
-  private addEvent(event: any): void {
-    // 使用类型断言处理
-    (this as any).apply(event);
-  }
-
   // 工厂方法，创建新用户
   public static async create(
     id: UserId,
@@ -140,10 +134,10 @@ export class User extends AggregateRoot<UserProps> {
       updatedAt: now,
     });
 
-    user.addEvent(new UserCreatedEvent(id, emailObj.value));
+    user.apply(new UserCreatedEvent(id, emailObj.value));
 
     if (isAnonymous) {
-      user.addEvent(new UserAnonymousEvent(id));
+      user.apply(new UserAnonymousEvent(id));
     }
 
     return user;
@@ -329,7 +323,7 @@ export class User extends AggregateRoot<UserProps> {
     session.terminate();
 
     // 发布会话撤销事件
-    this.addEvent(new UserSessionRevokedEvent(this._id, SessionId.from(sessionIdStr)));
+    this.apply(new UserSessionRevokedEvent(this._id, SessionId.from(sessionIdStr)));
 
     // 如果撤销的是当前会话，清除当前会话ID
     if (this._currentSessionId === sessionIdStr) {
@@ -361,7 +355,7 @@ export class User extends AggregateRoot<UserProps> {
     } as Partial<UserProps>);
 
     // 发布所有会话撤销事件
-    this.addEvent(new UserAllSessionsRevokedEvent(this._id));
+    this.apply(new UserAllSessionsRevokedEvent(this._id));
   }
 
   /**
@@ -389,7 +383,7 @@ export class User extends AggregateRoot<UserProps> {
       updatedAt: new Date(),
     } as Partial<UserProps>);
 
-    this.addEvent(new UserProfileUpdatedEvent(this._id, firstName, lastName));
+    this.apply(new UserProfileUpdatedEvent(this._id, firstName, lastName));
   }
 
   public async updatePassword(plainPassword: string): Promise<void> {
@@ -402,7 +396,7 @@ export class User extends AggregateRoot<UserProps> {
     } as Partial<UserProps>);
 
     this._password = passwordObj;
-    this.addEvent(new UserPasswordChangedEvent(this._id));
+    this.apply(new UserPasswordChangedEvent(this._id));
 
     // 密码更改后撤销所有会话（除当前会话外）
     this.revokeOtherSessions();
@@ -426,7 +420,7 @@ export class User extends AggregateRoot<UserProps> {
     });
 
     // 发布所有会话撤销事件
-    this.addEvent(new UserAllSessionsRevokedEvent(this._id, this._currentSessionId));
+    this.apply(new UserAllSessionsRevokedEvent(this._id, this._currentSessionId));
   }
 
   public verifyEmail(): void {
@@ -440,7 +434,7 @@ export class User extends AggregateRoot<UserProps> {
     } as Partial<UserProps>);
 
     this._isEmailVerified = true;
-    this.addEvent(new UserEmailVerifiedEvent(this._id));
+    this.apply(new UserEmailVerifiedEvent(this._id));
   }
 
   public deactivate(): void {
@@ -454,7 +448,7 @@ export class User extends AggregateRoot<UserProps> {
     } as Partial<UserProps>);
 
     this._isActive = false;
-    this.addEvent(new UserDeactivatedEvent(this._id));
+    this.apply(new UserDeactivatedEvent(this._id));
 
     // 停用账户时撤销所有会话
     this.revokeAllSessions();
@@ -471,7 +465,7 @@ export class User extends AggregateRoot<UserProps> {
     } as Partial<UserProps>);
 
     this._isActive = true;
-    this.addEvent(new UserActivatedEvent(this._id));
+    this.apply(new UserActivatedEvent(this._id));
   }
 
   public ban(reason?: string, expiresDays?: number): void {
@@ -494,7 +488,7 @@ export class User extends AggregateRoot<UserProps> {
     this._banReason = reason;
     this._banExpires = banExpires;
 
-    this.addEvent(new UserBannedEvent(this._id, reason, banExpires));
+    this.apply(new UserBannedEvent(this._id, reason, banExpires));
 
     // 封禁账户时撤销所有会话
     this.revokeAllSessions();
@@ -516,7 +510,7 @@ export class User extends AggregateRoot<UserProps> {
     this._banReason = undefined;
     this._banExpires = undefined;
 
-    this.addEvent(new UserUnbannedEvent(this._id));
+    this.apply(new UserUnbannedEvent(this._id));
   }
 
   public convertToRegular(email: string): void {
@@ -537,7 +531,7 @@ export class User extends AggregateRoot<UserProps> {
     this._email = emailObj;
     this._anonymousCreditAccountId = undefined;
 
-    this.addEvent(new UserRegularEvent(this._id, emailObj.value));
+    this.apply(new UserRegularEvent(this._id, emailObj.value));
   }
 
   public recordLogin(): void {
@@ -548,7 +542,7 @@ export class User extends AggregateRoot<UserProps> {
     } as Partial<UserProps>);
 
     this._lastLoginAt = now;
-    this.addEvent(new UserLoggedInEvent(this._id, now));
+    this.apply(new UserLoggedInEvent(this._id, now));
   }
 
   // 检查用户是否可以登录

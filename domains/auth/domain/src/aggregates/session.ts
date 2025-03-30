@@ -48,12 +48,6 @@ export class Session extends Entity<SessionProps> {
     this._updatedAt = props.updatedAt;
   }
 
-  // 添加领域事件
-  private addEvent(event: any): void {
-    // 使用类型断言处理
-    (this as any).apply(event);
-  }
-
   // 工厂方法
   public static create(
     id: SessionId,
@@ -79,8 +73,6 @@ export class Session extends Entity<SessionProps> {
       createdAt: now,
       updatedAt: now,
     });
-
-    session.addEvent(new SessionCreatedEvent(id, userId, ipAddress, userAgent));
 
     return session;
   }
@@ -186,7 +178,6 @@ export class Session extends Entity<SessionProps> {
     } as Partial<SessionProps>);
 
     this._expiresAt = now;
-    this.addEvent(new SessionTerminatedEvent(this._id, this._userId));
   }
 
   public checkAndHandleExpiration(): boolean {
@@ -194,8 +185,6 @@ export class Session extends Entity<SessionProps> {
       return false;
     }
 
-    // 如果已过期但未标记为过期，则发布过期事件
-    this.addEvent(new SessionExpiredEvent(this._id, this._userId));
     return true;
   }
 
@@ -213,6 +202,5 @@ export class Session extends Entity<SessionProps> {
     } as Partial<SessionProps>);
 
     this._expiresAt = newExpiresAt;
-    this.addEvent(new SessionExtendedEvent(this._id, this._userId, newExpiresAt));
   }
 }
