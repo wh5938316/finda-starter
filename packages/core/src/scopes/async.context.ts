@@ -25,7 +25,7 @@ export class AsyncContext {
    * @returns "true" if the target is attached to an async context, "false" otherwise.
    */
   static isAttached(target: object): boolean {
-    return !!(target as Record<symbol, unknown>)[ASYNC_CONTEXT_ATTRIBUTE];
+    return !!target[ASYNC_CONTEXT_ATTRIBUTE];
   }
 
   /**
@@ -37,7 +37,7 @@ export class AsyncContext {
     if (!from || !to) {
       return;
     }
-    const fromContext = (from as Record<symbol, unknown>)[ASYNC_CONTEXT_ATTRIBUTE];
+    const fromContext = from[ASYNC_CONTEXT_ATTRIBUTE];
     if (!fromContext) {
       return;
     }
@@ -53,6 +53,6 @@ export class AsyncContext {
    * @returns An "AsyncContext" instance or "undefined" if the context is not found.
    */
   static of(target: object): AsyncContext | undefined {
-    return (target as Record<symbol, unknown>)[ASYNC_CONTEXT_ATTRIBUTE] as AsyncContext | undefined;
+    return target[ASYNC_CONTEXT_ATTRIBUTE];
   }
 }

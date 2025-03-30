@@ -5,7 +5,7 @@ import { Observable, filter } from 'rxjs';
 import { CQRS_MODULE_OPTIONS } from './constants';
 import { DefaultUnhandledExceptionPubSub } from './helpers/default-unhandled-exception-pubsub';
 import {
-  type CqrsModuleOptions,
+  CqrsModuleOptions,
   ICommand,
   IEvent,
   IUnhandledExceptionPublisher,

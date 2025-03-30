@@ -119,6 +119,6 @@ export class CqrsModule<EventBase extends IEvent = IEvent> implements OnApplicat
     this.queryBus.register(queries);
     this.eventBus.registerSagas(sagas);
 
-    AggregateRootStorage.mergeContext(this.eventBus as unknown as EventBus<IEvent>);
+    AggregateRootStorage.mergeContext(this.eventBus);
   }
 }

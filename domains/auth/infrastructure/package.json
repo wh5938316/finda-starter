@@ -32,10 +32,11 @@
   "dependencies": {
     "@finda-co/core": "workspace:*",
     "@finda-co/domain-auth-core": "workspace:*",
-    "@nestjs/common": "^11.0.7",
+    "@nestjs-modules/ioredis": "^2.0.2",
+    "@nestjs/common": "^11.0.12",
     "@nestjs/config": "^2.3.1",
-    "ioredis": "^5.6.0",
-    "drizzle-orm": "^0.39.0"
+    "drizzle-orm": "^0.39.0",
+    "ioredis": "^5.6.0"
   },
   "peerDependencies": {
     "@nestjs/core": ">=11.0.0"

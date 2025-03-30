@@ -24,14 +24,13 @@
   },
   "dependencies": {
     "@finda-co/core": "workspace:*",
-    "@nestjs/cqrs": "^11.0.1",
     "uuid": "^11.0.2"
   },
   "devDependencies": {
     "@finda-co/eslint-config": "workspace:*",
     "@finda-co/jest-config": "workspace:*",
     "@finda-co/typescript-config": "workspace:*",
-    "@nestjs/common": "^11.0.7",
+    "@nestjs/common": "^11.0.12",
     "@nestjs/testing": "^11.0.7",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.13",

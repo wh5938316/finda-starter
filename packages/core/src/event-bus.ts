@@ -11,7 +11,7 @@ import { InvalidSagaException, UnsupportedSagaScopeException } from './exception
 import { defaultEventIdProvider } from './helpers/default-event-id-provider';
 import { DefaultPubSub } from './helpers/default-pubsub';
 import {
-  type CqrsModuleOptions,
+  CqrsModuleOptions,
   EventIdProvider,
   ICommand,
   IEvent,
@@ -246,7 +246,7 @@ export class EventBus<EventBase extends IEvent = IEvent>
         if (!wrapper.isDependencyTreeStatic()) {
           throw new UnsupportedSagaScopeException();
         }
-        const instance = wrapper.instance as Record<string, any>;
+        const instance = wrapper.instance;
         return metadata.map((key: string) => {
           const sagaFn = instance[key].bind(instance);
           Object.defineProperty(sagaFn, 'name', {

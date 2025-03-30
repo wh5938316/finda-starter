@@ -11,7 +11,7 @@ import { DefaultCommandPubSub } from './helpers/default-command-pubsub';
 import { InvalidCommandHandlerException } from './index';
 import { CommandMetadata } from './interfaces/commands/command-metadata.interface';
 import {
-  type CqrsModuleOptions,
+  CqrsModuleOptions,
   ICommand,
   ICommandBus,
   ICommandHandler,
@@ -113,7 +113,7 @@ export class CommandBus<CommandBase extends ICommand = ICommand>
       return;
     }
 
-    this.handlers.set(id, async (command: CommandBase, context?: AsyncContext) => {
+    this.handlers.set(id, async (command: T, context?: AsyncContext) => {
       context ??= AsyncContext.of(command) ?? new AsyncContext();
 
       if (!AsyncContext.isAttached(context)) {

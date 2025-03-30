@@ -6,7 +6,6 @@
  */
 
 export * from './aggregate-root';
-export * from './repository';
 export * from './classes';
 export * from './command-bus';
 export * from './cqrs.module';
@@ -20,7 +19,6 @@ export * from './query-bus';
 export * from './scopes';
 export * from './unhandled-exception-bus';
 export * from './utils';
-
-// 导出域模型相关
 export * from './domain';
 export * from './filters';
+export * from './repository';

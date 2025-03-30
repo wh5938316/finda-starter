@@ -10,7 +10,7 @@ import { QueryHandlerNotFoundException } from './exceptions';
 import { InvalidQueryHandlerException } from './exceptions/invalid-query-handler.exception';
 import { DefaultQueryPubSub } from './helpers/default-query-pubsub';
 import {
-  type CqrsModuleOptions,
+  CqrsModuleOptions,
   IQuery,
   IQueryBus,
   IQueryHandler,
@@ -124,7 +124,7 @@ export class QueryBus<QueryBase extends IQuery = IQuery>
       return;
     }
 
-    this.handlers.set(queryId, async (query: QueryBase, context?: AsyncContext) => {
+    this.handlers.set(queryId, async (query: T, context?: AsyncContext) => {
       context ??= AsyncContext.of(query) ?? new AsyncContext();
 
       this.moduleRef.registerRequestByContextId(context, context.id);
