@@ -1,6 +1,10 @@
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
-import * as schema from './schema';
+import * as authSchema from '@finda-co/domain-auth-infra/schema';
+
+const schema = {
+  ...authSchema,
+};
 
 export type NodePgDrizzle = NodePgDatabase<typeof schema>;
 

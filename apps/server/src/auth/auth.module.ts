@@ -1,30 +1,29 @@
 import { DrizzlePGModule } from '@knaadh/nestjs-drizzle-pg';
 import { Module } from '@nestjs/common';
 
-import { CommandBus, QueryBus } from '@finda-co/core';
 import { schema } from '@finda-co/database';
 import {
+  // AuthQueryHandlers,
   IdentityRepositoryToken,
   SessionRepositoryToken,
   UserRepositoryToken,
 } from '@finda-co/domain-auth-core';
 import {
-  IdentityRepository,
+  // IdentityRepository,
   // SessionRepository,
-  // UserRepository
+  UserRepository,
 } from '@finda-co/domain-auth-infra';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { TestRepository } from './test';
 
 @Module({
   imports: [],
-  controllers: [
-    // AuthController
-  ],
+  controllers: [AuthController],
   providers: [
     // 服务
-    // AuthService,
+    AuthService,
 
     // 仓库
     // {
@@ -35,11 +34,12 @@ import { AuthService } from './auth.service';
     //   provide: SessionRepositoryToken,
     //   useClass: SessionRepository,
     // },
-    {
-      provide: IdentityRepositoryToken,
-      useClass: IdentityRepository,
-    },
+    // {
+    //   provide: UserRepositoryToken,
+    //   useClass: UserRepository,
+    // },
+    // ...AuthQueryHandlers,
   ],
   exports: [],
 })
-export class AuthModule { }
+export class AuthModule {}

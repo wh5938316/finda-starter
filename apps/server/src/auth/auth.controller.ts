@@ -6,16 +6,16 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // @Post('register')
-  // async register(
-  //   @Body('email') email: string,
-  //   @Body('password') password: string,
-  //   @Body('firstName') firstName?: string,
-  //   @Body('lastName') lastName?: string,
-  //   @Body('isAnonymous') isAnonymous?: boolean,
-  // ) {
-  //   return this.authService.register(email, password, firstName, lastName, isAnonymous);
-  // }
+  @Post('register')
+  async register(
+    @Body('email') email: string,
+    @Body('password') password: string,
+    @Body('firstName') firstName?: string,
+    @Body('lastName') lastName?: string,
+    @Body('isAnonymous') isAnonymous?: boolean,
+  ) {
+    return this.authService.register(email, password, firstName, lastName, isAnonymous);
+  }
 
   // @Post('login')
   // async login(@Body('email') email: string, @Body('password') password: string) {

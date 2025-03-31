@@ -61,7 +61,7 @@ export class UserDto {
 
   public static from(user: User): UserDto {
     return new UserDto(
-      user.id.toString(),
+      user.id.value,
       user.email,
       user.firstName || null,
       user.lastName || null,

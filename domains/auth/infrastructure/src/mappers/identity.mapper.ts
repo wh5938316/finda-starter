@@ -6,8 +6,8 @@ export class IdentityMapper {
    */
   static toPersistence(identity: Identity) {
     return {
-      id: identity.id.toString(),
-      userId: identity.userId.toString(),
+      id: identity.id.value,
+      userId: identity.userId.value,
       identityId: identity.accountId,
       provider: identity.provider,
       accountId: identity.accountId,

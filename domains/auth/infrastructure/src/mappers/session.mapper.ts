@@ -6,12 +6,12 @@ export class SessionMapper {
    */
   static toPersistence(session: Session): any {
     return {
-      id: session.id.toString(),
-      userId: session.userId.toString(),
+      id: session.id.value,
+      userId: session.userId.value,
       token: session.token,
       ipAddress: session.ipAddress,
       userAgent: session.userAgent,
-      impersonatedBy: session.impersonatedBy?.toString(),
+      impersonatedBy: session.impersonatedBy?.value,
       expiresAt: session.expiresAt,
       createdAt: session.createdAt,
       updatedAt: session.updatedAt,
@@ -38,7 +38,7 @@ export class SessionMapper {
     }
 
     if (changedFields.includes('impersonatedBy')) {
-      changes.impersonatedBy = session.impersonatedBy?.toString();
+      changes.impersonatedBy = session.impersonatedBy?.value;
     }
 
     if (changedFields.includes('expiresAt')) {

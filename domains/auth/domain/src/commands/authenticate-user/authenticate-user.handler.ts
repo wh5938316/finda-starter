@@ -55,7 +55,7 @@ export class AuthenticateUserHandler implements ICommandHandler<AuthenticateUser
       await this.userRepository.save(user);
 
       // 返回会话ID
-      return sessionId.toString();
+      return sessionId.value;
     } catch (error) {
       if (error instanceof InvalidCredentialsError) {
         throw new UnauthorizedException('用户不存在或密码错误');

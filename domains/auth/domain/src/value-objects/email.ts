@@ -1,4 +1,5 @@
 import { DomainError } from '../core/domain-error';
+import { isEmail } from '@/utils';
 
 export class InvalidEmailError extends DomainError {
   constructor(email: string) {
@@ -8,8 +9,6 @@ export class InvalidEmailError extends DomainError {
 
 export class Email {
   private readonly _value: string;
-  // 邮箱正则匹配模式
-  private static readonly EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   private constructor(value: string) {
     this._value = value.toLowerCase();
@@ -25,7 +24,6 @@ export class Email {
     if (!email) {
       throw new InvalidEmailError(email);
     }
-
     const trimmedEmail = email.trim();
     if (!Email.isValid(trimmedEmail)) {
       throw new InvalidEmailError(trimmedEmail);
@@ -40,7 +38,7 @@ export class Email {
    * @returns 是否有效
    */
   public static isValid(email: string): boolean {
-    return Email.EMAIL_PATTERN.test(email);
+    return isEmail(email);
   }
 
   /**

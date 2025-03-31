@@ -9,7 +9,7 @@ export default defineConfig({
   },
   dts: true,
   external: ['class-validator', 'class-transformer'],
-  format: ['cjs'],
-  tsconfig: 'tsconfig.build.json',
+  format: ['cjs', 'esm'],
+  tsconfig: 'tsconfig.json',
   publicDir: 'public',
 });

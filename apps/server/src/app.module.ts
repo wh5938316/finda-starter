@@ -1,26 +1,12 @@
 import { DrizzlePGModule } from '@knaadh/nestjs-drizzle-pg';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { Module } from '@nestjs/common';
-import { DevtoolsModule } from '@nestjs/devtools-integration';
+import { APP_FILTER } from '@nestjs/core';
 
-import { CqrsModule } from '@finda-co/core';
+import { CqrsModule, DomainExceptionFilter } from '@finda-co/core';
 import { schema } from '@finda-co/database';
-import {
-  // AuthCommandHandlers,
-  // AuthQueryHandlers,
-  IdentityRepositoryToken,
-  // SessionRepositoryToken,
-  // UserRepositoryToken,
-} from '@finda-co/domain-auth-core';
-import {
-  // AuthInfrastructureModule,
-  // UserMapper,
-  IdentityRepository,
-  // SessionRepository,
-  // UserRepository,
-} from '@finda-co/domain-auth-infra';
+import { AuthInfrastructureModule } from '@finda-co/domain-auth-infra';
 
-// import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './config/config.module';
 import { TestModule } from './test/test.module';
@@ -28,7 +14,6 @@ import { TestModule } from './test/test.module';
 @Module({
   imports: [
     ConfigModule,
-    CqrsModule.forRoot(),
     DrizzlePGModule.register({
       tag: 'App',
       pg: {
@@ -39,6 +24,7 @@ import { TestModule } from './test/test.module';
       },
       config: { schema: { ...schema } },
     }),
+    CqrsModule.forRoot(),
     RedisModule.forRootAsync({
       useFactory: () => {
         const host = process.env.REDIS_HOST || 'localhost';
@@ -55,21 +41,15 @@ import { TestModule } from './test/test.module';
       },
     }),
     TestModule,
-    // AuthInfrastructureModule,
     AuthModule,
+    AuthInfrastructureModule,
   ],
   controllers: [],
   providers: [
-    // {
-    //   provide: SessionRepositoryToken,
-    //   useClass: SessionRepository
-    // },
-    // {
-    //   provide: IdentityRepositoryToken,
-    //   useClass: IdentityRepository
-    // },
-    // ...AuthCommandHandlers,
-    // ...AuthQueryHandlers,
+    {
+      provide: APP_FILTER,
+      useClass: DomainExceptionFilter,
+    },
   ],
 })
 export class AppModule {}

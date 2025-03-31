@@ -27,12 +27,12 @@ export class SessionDto {
 
   public static from(session: Session): SessionDto {
     return new SessionDto(
-      session.id.toString(),
-      session.userId.toString(),
+      session.id.value,
+      session.userId.value,
       session.token || null,
       session.ipAddress || null,
       session.userAgent || null,
-      session.impersonatedBy?.toString() || null,
+      session.impersonatedBy?.value || null,
       session.expiresAt,
       session.createdAt,
       session.updatedAt,

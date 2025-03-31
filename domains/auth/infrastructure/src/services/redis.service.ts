@@ -31,12 +31,12 @@ export class RedisService {
 
     // 会话数据
     const sessionData = {
-      id: session.id.toString(),
-      userId: session.userId.toString(),
+      id: session.id.value,
+      userId: session.userId.value,
       token: session.token,
       ipAddress: session.ipAddress,
       userAgent: session.userAgent,
-      impersonatedBy: session.impersonatedBy?.toString(),
+      impersonatedBy: session.impersonatedBy?.value,
       expiresAt: session.expiresAt.toISOString(),
     };
 
@@ -47,7 +47,7 @@ export class RedisService {
     // 创建token索引
     if (session.token) {
       const tokenKey = this.getSessionByTokenKey(session.token);
-      await this.redis.setex(tokenKey, ttl, session.id.toString());
+      await this.redis.setex(tokenKey, ttl, session.id.value);
     }
   }
 
@@ -122,7 +122,7 @@ export class RedisService {
    * 生成会话键
    */
   private getSessionKey(sessionId: SessionId): string {
-    return `${this.SESSION_PREFIX}${sessionId.toString()}`;
+    return `${this.SESSION_PREFIX}${sessionId.value}`;
   }
 
   /**

@@ -42,8 +42,8 @@ export class IdentityDto {
 
   public static from(identity: Identity): IdentityDto {
     return new IdentityDto(
-      identity.id.toString(),
-      identity.userId.toString(),
+      identity.id.value,
+      identity.userId.value,
       identity.providerUserId,
       identity.provider,
       identity.accessToken || null,

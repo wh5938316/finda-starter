@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 
 import { CommandBus, QueryBus } from '@finda-co/core';
+// import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   AuthenticateUserCommand,
   GetUserQuery,
@@ -23,28 +24,29 @@ import {
 
 @Injectable()
 export class AuthService {
-  constructor() // private readonly commandBus: CommandBus, // private readonly userRepository: IUserRepository, // @Inject(UserRepositoryToken)
-  // private readonly queryBus: QueryBus,
-  {}
+  constructor(
+    private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus,
+  ) {}
 
-  // /**
-  //  * 用户注册
-  //  */
-  // async register(
-  //   email: string,
-  //   password: string,
-  //   firstName?: string,
-  //   lastName?: string,
-  //   isAnonymous = false,
-  // ) {
-  //   try {
-  //     return await this.commandBus.execute(
-  //       new RegisterUserCommand(email, password, firstName, lastName, isAnonymous),
-  //     );
-  //   } catch (error: any) {
-  //     throw new BadRequestException(error.message);
-  //   }
-  // }
+  /**
+   * 用户注册
+   */
+  async register(
+    email: string,
+    password: string,
+    firstName?: string,
+    lastName?: string,
+    isAnonymous = false,
+  ) {
+    const userId = await this.commandBus.execute(
+      new RegisterUserCommand(email, password, firstName, lastName, isAnonymous),
+    );
+
+    const user = await this.queryBus.execute(new GetUserQuery(userId));
+
+    return user;
+  }
 
   // /**
   //  * 用户登录

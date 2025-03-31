@@ -24,6 +24,7 @@
     "studio": "pnpm drizzle-kit studio"
   },
   "devDependencies": {
+    "@finda-co/domain-auth-core": "workspace:*",
     "@finda-co/domain-auth-infra": "workspace:*",
     "@types/node": "^20.17.9",
     "dotenv": "^16.4.5",
@@ -34,6 +35,7 @@
     "typescript": "^5.8.2"
   },
   "peerDependencies": {
-    "drizzle-orm": ">= 0.39.0"
+    "drizzle-orm": ">= 0.39.0",
+    "@finda-co/domain-auth-core": "workspace:*"
   }
 }

@@ -43,14 +43,14 @@ export class IdentityRepository implements IIdentityRepository {
     await this.drizzle
       .update(schema.identity)
       .set(identityData)
-      .where(eq(schema.identity.id, identity.id.toString()));
+      .where(eq(schema.identity.id, identity.id.value));
 
     identity.clearChanges();
   }
 
   async findById(id: IdentityId): Promise<Identity | null> {
     const identityData = await this.drizzle.query.identity.findFirst({
-      where: eq(schema.identity.id, id.toString()),
+      where: eq(schema.identity.id, id.value),
     });
 
     if (!identityData) {
@@ -62,7 +62,7 @@ export class IdentityRepository implements IIdentityRepository {
 
   async findByUserId(userId: UserId): Promise<Identity[]> {
     const identitiesData = await this.drizzle.query.identity.findMany({
-      where: eq(schema.identity.userId, userId.toString()),
+      where: eq(schema.identity.userId, userId.value),
     });
 
     return identitiesData.map((identity) => IdentityMapper.toDomain(identity));
@@ -91,10 +91,7 @@ export class IdentityRepository implements IIdentityRepository {
     provider: IdentityProvider,
   ): Promise<Identity | null> {
     const identityData = await this.drizzle.query.identity.findFirst({
-      where: and(
-        eq(schema.identity.userId, userId.toString()),
-        eq(schema.identity.provider, provider),
-      ),
+      where: and(eq(schema.identity.userId, userId.value), eq(schema.identity.provider, provider)),
     });
 
     if (!identityData) {
@@ -111,7 +108,7 @@ export class IdentityRepository implements IIdentityRepository {
         deletedAt: new Date(),
         updatedAt: new Date(),
       })
-      .where(eq(schema.identity.id, identity.id.toString()));
+      .where(eq(schema.identity.id, identity.id.value));
   }
 
   async deleteById(id: IdentityId): Promise<void> {
@@ -121,13 +118,13 @@ export class IdentityRepository implements IIdentityRepository {
         deletedAt: new Date(),
         updatedAt: new Date(),
       })
-      .where(eq(schema.identity.id, id.toString()));
+      .where(eq(schema.identity.id, id.value));
   }
 
   async deleteAllByUserId(userId: UserId): Promise<number> {
     // 查询用户的所有身份
     const identities = await this.drizzle.query.identity.findMany({
-      where: eq(schema.identity.userId, userId.toString()),
+      where: eq(schema.identity.userId, userId.value),
       columns: { id: true },
     });
 
@@ -138,7 +135,7 @@ export class IdentityRepository implements IIdentityRepository {
         deletedAt: new Date(),
         updatedAt: new Date(),
       })
-      .where(eq(schema.identity.userId, userId.toString()));
+      .where(eq(schema.identity.userId, userId.value));
 
     return identities.length;
   }
@@ -149,7 +146,7 @@ export class IdentityRepository implements IIdentityRepository {
   }> {
     // 查询用户的所有身份
     const identitiesData = await this.drizzle.query.identity.findMany({
-      where: eq(schema.identity.userId, userId.toString()),
+      where: eq(schema.identity.userId, userId.value),
       columns: { provider: true },
     });
 
@@ -173,7 +170,7 @@ export class IdentityRepository implements IIdentityRepository {
     );
 
     if (excludeUserId) {
-      query = and(query, ne(schema.identity.userId, excludeUserId.toString()));
+      query = and(query, ne(schema.identity.userId, excludeUserId.value));
     }
 
     const [countResult] = await this.drizzle

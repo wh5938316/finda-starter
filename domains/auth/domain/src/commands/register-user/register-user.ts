@@ -7,7 +7,7 @@ import { UserId } from '../../value-objects/user-id';
  * 用户注册命令
  * 用于创建新用户
  */
-export class RegisterUserCommand extends Command<UserId> {
+export class RegisterUserCommand extends Command<string> {
   public readonly email: Email;
 
   constructor(

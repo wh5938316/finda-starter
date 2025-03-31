@@ -6,7 +6,7 @@ export class UserMapper {
    */
   static toPersistence(user: User): any {
     return {
-      id: user.id.toString(),
+      id: user.id.value,
       anonymousCreditAccountId: user.anonymousCreditAccountId,
       name: user.fullName || null,
       email: user.email,

@@ -52,7 +52,6 @@ export class UserRepository implements IUserRepository {
     await this.drizzle.transaction(async (trx) => {
       // 将领域用户转换为数据库记录
       const userData = UserMapper.toPersistence(user);
-
       // 插入用户记录
       await trx.insert(schema.user).values(userData);
 
@@ -67,6 +66,7 @@ export class UserRepository implements IUserRepository {
       // 处理用户的会话信息
       if (user.sessions.length > 0) {
         const sessionRecords = user.sessions.map((session) => SessionMapper.toPersistence(session));
+
         await trx.insert(schema.session).values(sessionRecords);
 
         // 将活跃会话同步到Redis
@@ -88,7 +88,7 @@ export class UserRepository implements IUserRepository {
       // 处理用户的更新
       if (user.isChanged) {
         const userData = UserMapper.toPartialPersistence(user);
-        await trx.update(schema.user).set(userData).where(eq(schema.user.id, user.id.toString()));
+        await trx.update(schema.user).set(userData).where(eq(schema.user.id, user.id.value));
       }
 
       // 处理新增的身份信息
@@ -110,7 +110,7 @@ export class UserRepository implements IUserRepository {
         await trx
           .update(schema.identity)
           .set(identityData)
-          .where(eq(schema.identity.id, identity.id.toString()));
+          .where(eq(schema.identity.id, identity.id.value));
         identity.clearChanges();
       }
 
@@ -139,7 +139,7 @@ export class UserRepository implements IUserRepository {
         await trx
           .update(schema.session)
           .set(sessionData)
-          .where(eq(schema.session.id, session.id.toString()));
+          .where(eq(schema.session.id, session.id.value));
 
         // 同步会话状态到Redis
         if (session.isExpired()) {
@@ -158,9 +158,10 @@ export class UserRepository implements IUserRepository {
   }
 
   async findById(id: UserId): Promise<User | null> {
-    const userData = await this.drizzle.query.user.findFirst({
-      where: eq(schema.user.id, id.toString()),
-    });
+    const [userData] = await this.drizzle
+      .select()
+      .from(schema.user)
+      .where(eq(schema.user.id, id.value));
 
     if (!userData) {
       return null;
@@ -201,7 +202,7 @@ export class UserRepository implements IUserRepository {
       })
       .from(schema.session)
       .innerJoin(schema.user, eq(schema.session.userId, schema.user.id))
-      .where(eq(schema.session.id, sessionId.toString()))
+      .where(eq(schema.session.id, sessionId.value))
       .limit(1);
 
     if (!result || result.length === 0) {
@@ -219,7 +220,7 @@ export class UserRepository implements IUserRepository {
       })
       .from(schema.identity)
       .innerJoin(schema.user, eq(schema.identity.userId, schema.user.id))
-      .where(eq(schema.identity.id, identityId.toString()))
+      .where(eq(schema.identity.id, identityId.value))
       .limit(1);
 
     if (!result || result.length === 0) {
@@ -255,7 +256,7 @@ export class UserRepository implements IUserRepository {
 
   async loadIdentities(user: User): Promise<User> {
     const identities = await this.drizzle.query.identity.findMany({
-      where: eq(schema.identity.userId, user.id.toString()),
+      where: eq(schema.identity.userId, user.id.value),
     });
 
     const domainIdentities = identities.map((identity) => IdentityMapper.toDomain(identity));
@@ -270,7 +271,7 @@ export class UserRepository implements IUserRepository {
 
   async loadSessions(user: User): Promise<User> {
     const sessions = await this.drizzle.query.session.findMany({
-      where: eq(schema.session.userId, user.id.toString()),
+      where: eq(schema.session.userId, user.id.value),
     });
 
     const domainSessions = sessions.map((session) => SessionMapper.toDomain(session));
@@ -289,7 +290,7 @@ export class UserRepository implements IUserRepository {
     let whereCondition: SQL | undefined = eq(schema.user.email, emailValue);
 
     if (excludeUserId) {
-      whereCondition = and(whereCondition, ne(schema.user.id, excludeUserId.toString()));
+      whereCondition = and(whereCondition, ne(schema.user.id, excludeUserId.value));
     }
 
     const [count] = await this.drizzle

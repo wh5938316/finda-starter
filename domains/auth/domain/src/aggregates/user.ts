@@ -1,6 +1,5 @@
 import { AggregateRoot } from '@finda-co/core';
 
-import { DomainError } from '../core/domain-error';
 import { CannotUnlinkLastIdentityError, IdentityNotFoundError } from '../errors/identity-errors';
 import {
   EmailNotVerifiedError,
@@ -249,7 +248,7 @@ export class User extends AggregateRoot<UserProps> {
       return undefined;
     }
 
-    return this._sessions.find((s) => s.id.toString() === this._currentSessionId);
+    return this._sessions.find((s) => s.id.value === this._currentSessionId);
   }
 
   /**
@@ -258,17 +257,17 @@ export class User extends AggregateRoot<UserProps> {
    */
   public setCurrentSession(session: Session): void {
     // 确保会话属于此用户
-    if (!session || session.userId.toString() !== this._id.toString()) {
+    if (!session || session.userId.value !== this._id.value) {
       throw new Error('会话不属于此用户');
     }
 
     // 更新当前会话ID
     this.update({
-      currentSessionId: session.id.toString(),
+      currentSessionId: session.id.value,
       updatedAt: new Date(),
     } as Partial<UserProps>);
 
-    this._currentSessionId = session.id.toString();
+    this._currentSessionId = session.id.value;
 
     // 确保会话在用户的会话列表中
     this.addSession(session);
@@ -276,24 +275,24 @@ export class User extends AggregateRoot<UserProps> {
 
   // 关系管理
   public addIdentity(identity: Identity): void {
-    if (!this._identities.some((i) => i.id.toString() === identity.id.toString())) {
+    if (!this._identities.some((i) => i.id.value === identity.id.value)) {
       this._identities.push(identity);
       identity.setUser(this);
     }
   }
 
   public removeIdentity(identityId: string): void {
-    this._identities = this._identities.filter((i) => i.id.toString() !== identityId);
+    this._identities = this._identities.filter((i) => i.id.value !== identityId);
   }
 
   public addSession(session: Session): void {
-    if (!this._sessions.some((s) => s.id.toString() === session.id.toString())) {
+    if (!this._sessions.some((s) => s.id.value === session.id.value)) {
       this._sessions.push(session);
     }
   }
 
   public removeSession(sessionId: string): void {
-    this._sessions = this._sessions.filter((s) => s.id.toString() !== sessionId);
+    this._sessions = this._sessions.filter((s) => s.id.value !== sessionId);
 
     // 如果移除的是当前会话，清除当前会话ID
     if (this._currentSessionId === sessionId) {
@@ -311,9 +310,9 @@ export class User extends AggregateRoot<UserProps> {
    * @param sessionId 会话ID
    * @throws SessionNotFoundError 如果会话不存在
    */
-  public revokeSession(sessionId: string | SessionId): void {
-    const sessionIdStr = sessionId.toString();
-    const session = this._sessions.find((s) => s.id.toString() === sessionIdStr);
+  public revokeSession(sessionId: SessionId): void {
+    const sessionIdStr = sessionId.value;
+    const session = this._sessions.find((s) => s.id.value === sessionIdStr);
 
     if (!session) {
       throw new SessionNotFoundError(sessionIdStr);
@@ -363,9 +362,9 @@ export class User extends AggregateRoot<UserProps> {
    * @param sessionId 会话ID
    * @returns 会话是否有效
    */
-  public validateSession(sessionId: string | SessionId): boolean {
-    const sessionIdStr = sessionId.toString();
-    const session = this._sessions.find((s) => s.id.toString() === sessionIdStr);
+  public validateSession(sessionId: SessionId): boolean {
+    const sessionIdStr = sessionId.value;
+    const session = this._sessions.find((s) => s.id.value === sessionIdStr);
 
     if (!session) {
       return false;
@@ -414,7 +413,7 @@ export class User extends AggregateRoot<UserProps> {
 
     // 终止所有非当前会话
     this._sessions.forEach((session) => {
-      if (session.id.toString() !== this._currentSessionId) {
+      if (session.id.value !== this._currentSessionId) {
         session.terminate();
       }
     });
@@ -619,10 +618,10 @@ export class User extends AggregateRoot<UserProps> {
    * @param props 要更新的属性
    * @throws IdentityNotFoundError 如果身份不存在
    */
-  public updateIdentity(identityId: string | IdentityId, props: Partial<IdentityProps>): void {
+  public updateIdentity(identityId: IdentityId, props: Partial<IdentityProps>): void {
     const identity = this.findIdentity(identityId);
     if (!identity) {
-      throw new IdentityNotFoundError(identityId.toString());
+      throw new IdentityNotFoundError(identityId.value);
     }
 
     identity.updateIdentity(INTERNAL_IDENTITY_FUNC_TOKEN, props);
@@ -637,14 +636,14 @@ export class User extends AggregateRoot<UserProps> {
    * @throws IdentityNotFoundError 如果身份不存在
    */
   public updateIdentityTokens(
-    identityId: string | IdentityId,
+    identityId: IdentityId,
     accessToken: string,
     refreshToken?: string,
     expiresAt?: Date,
   ): void {
     const identity = this.findIdentity(identityId);
     if (!identity) {
-      throw new IdentityNotFoundError(identityId.toString());
+      throw new IdentityNotFoundError(identityId.value);
     }
 
     identity.updateTokens(INTERNAL_IDENTITY_FUNC_TOKEN, accessToken, refreshToken, expiresAt);
@@ -656,10 +655,10 @@ export class User extends AggregateRoot<UserProps> {
    * @param scopes 新的授权作用域
    * @throws IdentityNotFoundError 如果身份不存在
    */
-  public updateIdentityScopes(identityId: string | IdentityId, scopes: string[]): void {
+  public updateIdentityScopes(identityId: IdentityId, scopes: string[]): void {
     const identity = this.findIdentity(identityId);
     if (!identity) {
-      throw new IdentityNotFoundError(identityId.toString());
+      throw new IdentityNotFoundError(identityId.value);
     }
 
     identity.updateScopes(INTERNAL_IDENTITY_FUNC_TOKEN, scopes);
@@ -671,10 +670,10 @@ export class User extends AggregateRoot<UserProps> {
    * @throws IdentityNotFoundError 如果身份不存在
    * @throws CannotUnlinkLastIdentityError 如果尝试解除最后一个身份
    */
-  public unlinkIdentity(identityId: string | IdentityId): void {
+  public unlinkIdentity(identityId: IdentityId): void {
     const identity = this.findIdentity(identityId);
     if (!identity) {
-      throw new IdentityNotFoundError(identityId.toString());
+      throw new IdentityNotFoundError(identityId.value);
     }
 
     // 确保用户至少有一个其他身份
@@ -686,7 +685,7 @@ export class User extends AggregateRoot<UserProps> {
     identity.markAsRemoved(INTERNAL_IDENTITY_FUNC_TOKEN);
 
     // 从用户的身份集合中移除
-    this.removeIdentity(identity.id.toString());
+    this.removeIdentity(identity.id.value);
   }
 
   /**
@@ -694,9 +693,9 @@ export class User extends AggregateRoot<UserProps> {
    * @param identityId 身份ID
    * @returns 找到的身份，如果不存在返回undefined
    */
-  public findIdentity(identityId: string | IdentityId): Identity | undefined {
-    const idStr = identityId.toString();
-    return this._identities.find((i) => i.id.toString() === idStr);
+  public findIdentity(identityId: IdentityId): Identity | undefined {
+    const idStr = identityId.value;
+    return this._identities.find((i) => i.id.value === idStr);
   }
 
   /**

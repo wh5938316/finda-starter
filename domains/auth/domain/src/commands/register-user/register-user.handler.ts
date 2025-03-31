@@ -11,13 +11,13 @@ import { UserId } from '../../value-objects/user-id';
 import { RegisterUserCommand } from './register-user';
 
 @CommandHandler(RegisterUserCommand)
-export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand, UserId> {
+export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand, string> {
   constructor(
     @Inject(UserRepositoryToken)
     private readonly userRepository: IUserRepository,
   ) {}
 
-  async execute(command: RegisterUserCommand): Promise<UserId> {
+  async execute(command: RegisterUserCommand): Promise<string> {
     const { email, password, firstName, lastName, isAnonymous } = command;
 
     // 检查邮箱是否已存在
@@ -42,8 +42,8 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand,
 
     // 创建凭证身份 (credential identity)
     const identityId = IdentityId.from(crypto.randomUUID());
-    user.createIdentity(identityId, 'credential', email.value, {
-      accountId: userId.toString(),
+    user.createIdentity(identityId, 'credential', user.id.value, {
+      accountId: userId.value,
       email: email.value,
       name: `${firstName || ''} ${lastName || ''}`.trim(),
       password: await Password.create(password).getHashedValue(),
@@ -53,6 +53,6 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand,
     await this.userRepository.save(user);
 
     // 返回用户ID
-    return userId;
+    return userId.value;
   }
 }

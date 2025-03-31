@@ -1,13 +1,6 @@
 import { Entity } from '@finda-co/core';
 
-import { DomainError } from '../core/domain-error';
 import { SessionExpiredError } from '../errors/user-errors';
-import {
-  SessionCreatedEvent,
-  SessionExpiredEvent,
-  SessionExtendedEvent,
-  SessionTerminatedEvent,
-} from '../events/session-events';
 import { generateToken, signJwt, verifyJwt } from '../utils';
 import { SessionId } from '../value-objects/session-id';
 import { UserId } from '../value-objects/user-id';
@@ -146,8 +139,8 @@ export class Session extends Entity<SessionProps> {
 
     return signJwt(
       {
-        sub: this._userId.toString(),
-        sid: this._id.toString(),
+        sub: this._userId.value,
+        sid: this._id.value,
         ...additionalData,
       },
       secret,

@@ -6,6 +6,6 @@ export default defineConfig({
   entry: ['src/index.ts'],
   dts: true,
   external: ['class-validator', 'class-transformer'],
-  format: ['cjs'],
+  format: ['cjs', 'esm'],
   publicDir: 'public',
 });

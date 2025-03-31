@@ -46,7 +46,7 @@ export class SessionRepository implements ISessionRepository {
     await this.drizzle
       .update(schema.session)
       .set(sessionData)
-      .where(eq(schema.session.id, session.id.toString()));
+      .where(eq(schema.session.id, session.id.value));
 
     // 同步到Redis
     if (session.isExpired()) {
@@ -69,7 +69,7 @@ export class SessionRepository implements ISessionRepository {
 
     // 从数据库查询
     const sessionData = await this.drizzle.query.session.findFirst({
-      where: eq(schema.session.id, id.toString()),
+      where: eq(schema.session.id, id.value),
     });
 
     if (!sessionData) {
@@ -116,11 +116,8 @@ export class SessionRepository implements ISessionRepository {
     // 从数据库查询
     const sessionsData = await this.drizzle.query.session.findMany({
       where: includeExpired
-        ? eq(schema.session.userId, userId.toString())
-        : and(
-            eq(schema.session.userId, userId.toString()),
-            gt(schema.session.expiresAt, new Date()),
-          ),
+        ? eq(schema.session.userId, userId.value)
+        : and(eq(schema.session.userId, userId.value), gt(schema.session.expiresAt, new Date())),
       orderBy: [desc(schema.session.createdAt)],
     });
 
@@ -141,7 +138,7 @@ export class SessionRepository implements ISessionRepository {
         deletedAt: new Date(),
         updatedAt: new Date(),
       })
-      .where(eq(schema.session.id, session.id.toString()));
+      .where(eq(schema.session.id, session.id.value));
   }
 
   async deleteById(id: SessionId): Promise<void> {
@@ -155,17 +152,14 @@ export class SessionRepository implements ISessionRepository {
         deletedAt: new Date(),
         updatedAt: new Date(),
       })
-      .where(eq(schema.session.id, id.toString()));
+      .where(eq(schema.session.id, id.value));
   }
 
   async deleteAllByUserId(userId: UserId, exceptSessionId?: SessionId): Promise<number> {
     // 构建查询条件
     const whereCondition = exceptSessionId
-      ? and(
-          eq(schema.session.userId, userId.toString()),
-          ne(schema.session.id, exceptSessionId.toString()),
-        )
-      : eq(schema.session.userId, userId.toString());
+      ? and(eq(schema.session.userId, userId.value), ne(schema.session.id, exceptSessionId.value))
+      : eq(schema.session.userId, userId.value);
 
     // 查询需要删除的会话
     const sessionsToDelete = await this.drizzle.query.session.findMany({

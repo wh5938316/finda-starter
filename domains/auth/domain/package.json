@@ -13,7 +13,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
     }
   },
   "scripts": {
@@ -24,6 +25,7 @@
   },
   "dependencies": {
     "@finda-co/core": "workspace:*",
+    "@nestjs/cqrs": "^11.0.3",
     "uuid": "^11.0.2"
   },
   "devDependencies": {

@@ -1,16 +1,5 @@
 import { Entity } from '@finda-co/core';
 
-import { DomainError } from '../core/domain-error';
-import {
-  CannotUnlinkLastIdentityError,
-  IdentityNotFoundError,
-  IdentityProviderNotSupportedError,
-} from '../errors/identity-errors';
-import {
-  IdentityCreatedEvent,
-  IdentityRemovedEvent,
-  IdentityScopesUpdatedEvent,
-} from '../events/identity-events';
 import { IdentityId } from '../value-objects/identity-id';
 import { UserId } from '../value-objects/user-id';
 import { User } from './user';
@@ -112,8 +101,7 @@ export class Identity extends Entity<IdentityProps> {
       userId,
       provider,
       providerUserId,
-      accountId:
-        options?.accountId || (provider === 'credential' ? userId.toString() : providerUserId),
+      accountId: options?.accountId || (provider === 'credential' ? userId.value : providerUserId),
       email: options?.email,
       name: options?.name,
       scopes: options?.scopes || [],
@@ -209,7 +197,7 @@ export class Identity extends Entity<IdentityProps> {
 
   // 设置用户引用，用于双向导航
   public setUser(user: User): void {
-    if (user.id.toString() !== this._userId.toString()) {
+    if (user.id.value !== this._userId.value) {
       throw new Error('用户ID不匹配，无法设置用户引用');
     }
     this._user = user;
