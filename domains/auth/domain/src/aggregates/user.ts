@@ -86,7 +86,7 @@ export class User extends AggregateRoot<UserProps> {
   constructor(props: UserProps, isNew: boolean = true) {
     super(isNew);
     this._id = props.id;
-    this._email = Email.create(props.email);
+    this._email = Email.from(props.email);
     this._firstName = props.firstName;
     this._lastName = props.lastName;
     this._isActive = props.isActive;
@@ -114,7 +114,7 @@ export class User extends AggregateRoot<UserProps> {
     role: UserRole = 'user',
     isAnonymous: boolean = false,
   ): Promise<User> {
-    const emailObj = Email.create(email);
+    const emailObj = Email.from(email);
     const passwordObj = Password.create(plainPassword);
     const hashedPassword = await passwordObj.getHashedValue();
 
@@ -517,7 +517,7 @@ export class User extends AggregateRoot<UserProps> {
       return; // 已经是正式用户
     }
 
-    const emailObj = Email.create(email);
+    const emailObj = Email.from(email);
 
     this.update({
       isAnonymous: false,

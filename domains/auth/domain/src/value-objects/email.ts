@@ -20,11 +20,12 @@ export class Email {
    * @returns Email对象
    * @throws InvalidEmailError 如果邮箱格式无效
    */
-  public static create(email: string): Email {
+  public static from(email: string): Email {
     if (!email) {
       throw new InvalidEmailError(email);
     }
-    const trimmedEmail = email.trim();
+
+    const trimmedEmail = email.trim().toLocaleLowerCase();
     if (!Email.isValid(trimmedEmail)) {
       throw new InvalidEmailError(trimmedEmail);
     }

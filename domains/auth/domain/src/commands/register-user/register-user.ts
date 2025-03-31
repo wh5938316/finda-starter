@@ -18,6 +18,6 @@ export class RegisterUserCommand extends Command<string> {
     public readonly isAnonymous: boolean = false,
   ) {
     super();
-    this.email = Email.create(email);
+    this.email = Email.from(email);
   }
 }

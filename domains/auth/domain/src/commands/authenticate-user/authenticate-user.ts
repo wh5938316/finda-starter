@@ -14,6 +14,6 @@ export class AuthenticateUserCommand extends Command<string> {
     public readonly password: string,
   ) {
     super();
-    this.email = Email.create(email);
+    this.email = Email.from(email);
   }
 }

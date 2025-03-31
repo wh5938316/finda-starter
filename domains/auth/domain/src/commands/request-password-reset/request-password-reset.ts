@@ -11,6 +11,6 @@ export class RequestPasswordResetCommand extends Command<string> {
 
   constructor(email: string) {
     super();
-    this.email = Email.create(email);
+    this.email = Email.from(email);
   }
 }
