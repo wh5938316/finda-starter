@@ -1,4 +1,4 @@
-import { DomainError } from '../core/domain-error';
+import { DomainError } from '@finda-co/core';
 
 export class InvalidIdException extends DomainError {
   private constructor(message: string) {

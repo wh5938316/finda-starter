@@ -1,4 +1,4 @@
-import { Identity } from '../aggregates/identity';
+import { Identity } from '../aggregates/identity.entity';
 import { IdentityId } from '../value-objects/identity-id';
 import { UserId } from '../value-objects/user-id';
 

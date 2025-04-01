@@ -171,13 +171,12 @@ export class UserRepository implements IUserRepository {
     return user;
   }
 
-  async findByEmail(email: string | Email): Promise<User | null> {
-    const emailValue = email instanceof Email ? email.value.toLowerCase() : email.toLowerCase();
-
-    const userData = await this.drizzle.query.user.findFirst({
-      where: eq(schema.user.email, emailValue),
-    });
-
+  async findByEmail(email: Email): Promise<User | null> {
+    console.log('11111', email);
+    const [userData] = await this.drizzle
+      .select()
+      .from(schema.user)
+      .where(eq(schema.user.email, email.value));
     if (!userData) {
       return null;
     }
@@ -255,9 +254,10 @@ export class UserRepository implements IUserRepository {
   }
 
   async loadIdentities(user: User): Promise<User> {
-    const identities = await this.drizzle.query.identity.findMany({
-      where: eq(schema.identity.userId, user.id.value),
-    });
+    const identities = await this.drizzle
+      .select()
+      .from(schema.identity)
+      .where(eq(schema.identity.userId, user.id.value));
 
     const domainIdentities = identities.map((identity) => IdentityMapper.toDomain(identity));
 

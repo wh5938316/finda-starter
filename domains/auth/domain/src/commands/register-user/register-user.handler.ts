@@ -2,7 +2,7 @@ import { ConflictException, Inject } from '@nestjs/common';
 
 import { CommandHandler, ICommandHandler } from '@finda-co/core';
 
-import { User } from '../../aggregates/user';
+import { User } from '../../aggregates/user.aggregate';
 import { UserRepositoryToken } from '../../constants';
 import { type IUserRepository } from '../../repositories/user.repo-port';
 import { IdentityId } from '../../value-objects/identity-id';
@@ -18,7 +18,7 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand,
   ) {}
 
   async execute(command: RegisterUserCommand): Promise<string> {
-    const { email, password, firstName, lastName, isAnonymous } = command;
+    const { email, password: plainPassword, firstName, lastName, isAnonymous } = command;
 
     // 检查邮箱是否已存在
     const emailExists = await this.userRepository.emailExists(email);
@@ -33,20 +33,19 @@ export class RegisterUserHandler implements ICommandHandler<RegisterUserCommand,
     const user = await User.create(
       userId,
       email.value,
-      password,
       firstName,
       lastName,
       'user', // 默认角色为普通用户
       isAnonymous,
     );
 
-    // 创建凭证身份 (credential identity)
-    const identityId = IdentityId.from(crypto.randomUUID());
-    user.createIdentity(identityId, 'credential', user.id.value, {
-      accountId: userId.value,
+    const password = await Password.create(plainPassword);
+
+    user.createIdentity(IdentityId.generate(), 'credential', user.id.value, {
+      accountId: user.id.value,
       email: email.value,
       name: `${firstName || ''} ${lastName || ''}`.trim(),
-      password: await Password.create(password).getHashedValue(),
+      password: password,
     });
 
     // 保存用户

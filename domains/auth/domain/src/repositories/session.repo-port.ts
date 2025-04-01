@@ -1,4 +1,4 @@
-import { Session } from '../aggregates/session';
+import { Session } from '../aggregates/session.entity';
 import { SessionId } from '../value-objects/session-id';
 import { UserId } from '../value-objects/user-id';
 

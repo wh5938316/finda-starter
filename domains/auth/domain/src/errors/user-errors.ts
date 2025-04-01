@@ -1,4 +1,4 @@
-import { DomainError } from '../core/domain-error';
+import { DomainError } from '@finda-co/core';
 
 export class UserNotFoundError extends DomainError {
   constructor(userId: string) {

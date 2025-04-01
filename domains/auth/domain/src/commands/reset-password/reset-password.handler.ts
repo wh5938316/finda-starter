@@ -5,6 +5,7 @@ import { CommandHandler, ICommandHandler } from '@finda-co/core';
 import { UserRepositoryToken } from '../../constants';
 import { type IUserRepository } from '../../repositories/user.repo-port';
 import { ResetPasswordCommand } from './reset-password';
+import { Password } from '@/value-objects';
 
 @CommandHandler(ResetPasswordCommand)
 export class ResetPasswordHandler implements ICommandHandler<ResetPasswordCommand, void> {
@@ -29,7 +30,7 @@ export class ResetPasswordHandler implements ICommandHandler<ResetPasswordComman
     // }
 
     // 更新用户密码
-    await user.updatePassword(newPassword);
+    await user.updatePassword(await Password.create(newPassword));
 
     // 保存用户
     await this.userRepository.save(user);

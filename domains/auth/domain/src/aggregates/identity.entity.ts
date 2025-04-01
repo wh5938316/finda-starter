@@ -1,8 +1,9 @@
 import { Entity } from '@finda-co/core';
 
 import { IdentityId } from '../value-objects/identity-id';
+import { Password } from '../value-objects/password';
 import { UserId } from '../value-objects/user-id';
-import { User } from './user';
+import { User } from './user.aggregate';
 
 // 内部令牌，用于限制子实体关键方法的访问
 export const INTERNAL_IDENTITY_FUNC_TOKEN = Symbol('INTERNAL_IDENTITY_FUNC_TOKEN');
@@ -23,7 +24,7 @@ export interface IdentityProps {
   accessToken?: string; // OAuth访问令牌
   refreshToken?: string; // OAuth刷新令牌
   tokenExpiresAt?: Date; // 令牌过期时间
-  password?: string; // 密码，仅用于credential类型
+  password?: Password; // 存储的是密码哈希值
   createdAt: Date;
   updatedAt: Date;
 }
@@ -44,7 +45,7 @@ export class Identity extends Entity<IdentityProps> {
   private _accessToken?: string;
   private _refreshToken?: string;
   private _tokenExpiresAt?: Date;
-  private _password?: string; // 添加密码属性，仅用于credential类型
+  private _password?: Password;
   private _createdAt: Date;
   private _updatedAt: Date;
 
@@ -91,10 +92,14 @@ export class Identity extends Entity<IdentityProps> {
       accessToken?: string;
       refreshToken?: string;
       tokenExpiresAt?: Date;
-      password?: string;
+      password?: Password; // 这里接收Password对象
     },
   ): Identity {
     const now = new Date();
+
+    if (provider !== 'credential' && options?.password) {
+      // TODO: 报错
+    }
 
     const identity = new Identity({
       id,
@@ -164,12 +169,12 @@ export class Identity extends Entity<IdentityProps> {
     return this._refreshToken;
   }
 
-  public get tokenExpiresAt(): Date | undefined {
-    return this._tokenExpiresAt;
+  public get hashedPassword(): string | undefined {
+    return this._password?.value;
   }
 
-  public get password(): string | undefined {
-    return this._password;
+  public get tokenExpiresAt(): Date | undefined {
+    return this._tokenExpiresAt;
   }
 
   public get createdAt(): Date {
@@ -201,6 +206,24 @@ export class Identity extends Entity<IdentityProps> {
       throw new Error('用户ID不匹配，无法设置用户引用');
     }
     this._user = user;
+  }
+
+  /**
+   * 设置密码 - 内部方法
+   * 此方法受内部令牌保护，只能由User聚合根调用
+   * @param token 内部令牌
+   * @param plainPassword 明文密码
+   */
+  public setPassword(token: symbol, newPassword: Password): void {
+    this._checkInternalToken(token);
+
+    if (this._provider !== 'credential') {
+      throw new Error('只有credential提供商支持设置密码');
+    }
+
+    this._password = newPassword;
+    this._updatedAt = new Date();
+    super.update({});
   }
 
   /**
@@ -301,9 +324,9 @@ export class Identity extends Entity<IdentityProps> {
     if (!this._password) {
       throw new Error('没有设置密码');
     }
-
-    // 这里应该调用密码验证服务
-    return false; // 示例实现
+    console.log('this._password', this._password.value, plainPassword);
+    // 使用Password值对象的verify方法验证密码
+    return await this._password.verify(plainPassword);
   }
 
   /**

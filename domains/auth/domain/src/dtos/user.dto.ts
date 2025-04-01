@@ -1,7 +1,7 @@
 import { Expose } from 'class-transformer';
 
 import { Identity, Session } from '../aggregates';
-import { User, UserRole } from '../aggregates/user';
+import { User, UserRole } from '../aggregates/user.aggregate';
 import { IdentityDto } from './identity.dto';
 import { SessionDto } from './session.dto';
 
@@ -62,7 +62,7 @@ export class UserDto {
   public static from(user: User): UserDto {
     return new UserDto(
       user.id.value,
-      user.email,
+      user.email.value,
       user.firstName || null,
       user.lastName || null,
       user.isActive,

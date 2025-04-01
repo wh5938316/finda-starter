@@ -1,4 +1,5 @@
-import { DomainError } from '../core/domain-error';
+import { DomainError } from '@finda-co/core';
+
 import { isEmail } from '@/utils';
 
 export class InvalidEmailError extends DomainError {

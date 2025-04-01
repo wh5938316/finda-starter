@@ -1,4 +1,4 @@
-import { Identity, IdentityId, UserId } from '@finda-co/domain-auth-core';
+import { Identity, IdentityId, Password, UserId } from '@finda-co/domain-auth-core';
 
 export class IdentityMapper {
   /**
@@ -17,7 +17,7 @@ export class IdentityMapper {
       refreshTokenExpiresAt: identity.tokenExpiresAt, // 暂时使用相同的过期时间
       scope: identity.scopes,
       idToken: null, // idToken暂时为空
-      password: identity.password, // 添加password字段
+      password: identity.hashedPassword, // 添加password字段
       createdAt: identity.createdAt,
       updatedAt: identity.updatedAt,
     };
@@ -60,7 +60,7 @@ export class IdentityMapper {
     }
 
     if (changedFields.includes('password')) {
-      changes.password = identity.password;
+      changes.password = identity.hashedPassword;
     }
 
     // 总是更新updatedAt
@@ -73,6 +73,7 @@ export class IdentityMapper {
    * 将持久化对象转换为身份领域对象
    */
   static toDomain(identityRecord: any): Identity {
+    const password = Password.from(identityRecord.password);
     // 身份属性
     const identityProps = {
       id: IdentityId.from(identityRecord.id),
@@ -86,7 +87,7 @@ export class IdentityMapper {
       accessToken: identityRecord.accessToken,
       refreshToken: identityRecord.refreshToken,
       tokenExpiresAt: identityRecord.accessTokenExpiresAt,
-      password: identityRecord.password,
+      password: password,
       createdAt: new Date(identityRecord.createdAt),
       updatedAt: new Date(identityRecord.updatedAt),
     };

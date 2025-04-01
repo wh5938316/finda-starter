@@ -1,4 +1,4 @@
-import { User } from '../aggregates/user';
+import { User } from '../aggregates/user.aggregate';
 import { Email } from '../value-objects/email';
 import { IdentityId } from '../value-objects/identity-id';
 import { SessionId } from '../value-objects/session-id';

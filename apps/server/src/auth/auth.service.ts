@@ -48,17 +48,13 @@ export class AuthService {
     return user;
   }
 
-  // /**
-  //  * 用户登录
-  //  */
-  // async login(email: string, password: string) {
-  //   try {
-  //     const sessionId = await this.commandBus.execute(new AuthenticateUserCommand(email, password));
-  //     return { sessionId };
-  //   } catch (error: any) {
-  //     throw new UnauthorizedException(error.message);
-  //   }
-  // }
+  /**
+   * 用户登录
+   */
+  async login(email: string, password: string) {
+    const sessionId = await this.commandBus.execute(new AuthenticateUserCommand(email, password));
+    return { sessionId };
+  }
 
   // /**
   //  * 用户登出

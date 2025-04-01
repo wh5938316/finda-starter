@@ -33,13 +33,14 @@ import {
   Identity,
   IdentityProps,
   IdentityProvider,
-} from './identity';
-import { Session } from './session';
+} from './identity.entity';
+import { Session } from './session.entity';
 
 export const userRoleValues = ['user', 'admin'] as const;
 export type UserRole = (typeof userRoleValues)[number];
 
-export interface UserProps {
+// 用户构造函数参数接口
+export interface UserConstructorProps {
   id: UserId;
   email: string;
   firstName?: string;
@@ -56,13 +57,30 @@ export interface UserProps {
   createdAt: Date;
   updatedAt: Date;
   lastLoginAt?: Date;
-  currentSessionId?: string;
+  currentSessionId?: string; // 仅在内存中使用，不存储到数据库
 }
 
-export class User extends AggregateRoot<UserProps> {
+// 定义可通过update方法修改的数据属性
+export interface UserChangeableData {
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  isActive?: boolean;
+  isEmailVerified?: boolean;
+  isAnonymous?: boolean;
+  role?: UserRole;
+  banned?: boolean;
+  banReason?: string;
+  banExpires?: Date;
+  image?: string;
+  anonymousCreditAccountId?: string;
+  updatedAt?: Date;
+  lastLoginAt?: Date;
+}
+
+export class User extends AggregateRoot<UserChangeableData> {
   private _id: UserId;
   private _email: Email;
-  private _password: Password;
   private _firstName?: string;
   private _lastName?: string;
   private _isActive: boolean;
@@ -77,13 +95,13 @@ export class User extends AggregateRoot<UserProps> {
   private _createdAt: Date;
   private _updatedAt: Date;
   private _lastLoginAt?: Date;
-  private _currentSessionId?: string;
+  private _currentSessionId?: string; // 仅在内存中，不存储到数据库
 
   // 子实体集合
   private _identities: Identity[] = [];
   private _sessions: Session[] = [];
 
-  constructor(props: UserProps, isNew: boolean = true) {
+  constructor(props: UserConstructorProps, isNew: boolean = true) {
     super(isNew);
     this._id = props.id;
     this._email = Email.from(props.email);
@@ -108,15 +126,12 @@ export class User extends AggregateRoot<UserProps> {
   public static async create(
     id: UserId,
     email: string,
-    plainPassword: string,
     firstName?: string,
     lastName?: string,
     role: UserRole = 'user',
     isAnonymous: boolean = false,
   ): Promise<User> {
     const emailObj = Email.from(email);
-    const passwordObj = Password.create(plainPassword);
-    const hashedPassword = await passwordObj.getHashedValue();
 
     const now = new Date();
     const user = new User({
@@ -143,7 +158,7 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   // 重建用户（从存储库恢复）
-  public static load(props: UserProps): User {
+  public static load(props: UserConstructorProps): User {
     return new User(props, false);
   }
 
@@ -152,24 +167,31 @@ export class User extends AggregateRoot<UserProps> {
     return this._id;
   }
 
-  public get email(): string {
-    return this._email.value;
-  }
-
-  public get emailObj(): Email {
+  public get email(): Email {
     return this._email;
   }
 
-  public get passwordObj(): Password {
-    return this._password;
+  public set email(value: string) {
+    this._email = Email.from(value);
+    this._updatedAt = new Date();
   }
 
   public get firstName(): string | undefined {
     return this._firstName;
   }
 
+  public set firstName(value: string | undefined) {
+    this._firstName = value;
+    this._updatedAt = new Date();
+  }
+
   public get lastName(): string | undefined {
     return this._lastName;
+  }
+
+  public set lastName(value: string | undefined) {
+    this._lastName = value;
+    this._updatedAt = new Date();
   }
 
   public get fullName(): string {
@@ -183,36 +205,81 @@ export class User extends AggregateRoot<UserProps> {
     return this._isActive;
   }
 
+  public set isActive(value: boolean) {
+    this._isActive = value;
+    this._updatedAt = new Date();
+  }
+
   public get isEmailVerified(): boolean {
     return this._isEmailVerified;
+  }
+
+  public set isEmailVerified(value: boolean) {
+    this._isEmailVerified = value;
+    this._updatedAt = new Date();
   }
 
   public get isAnonymous(): boolean {
     return this._isAnonymous;
   }
 
+  public set isAnonymous(value: boolean) {
+    this._isAnonymous = value;
+    this._updatedAt = new Date();
+  }
+
   public get role(): UserRole {
     return this._role;
+  }
+
+  public set role(value: UserRole) {
+    this._role = value;
+    this._updatedAt = new Date();
   }
 
   public get banned(): boolean {
     return this._banned;
   }
 
+  public set banned(value: boolean) {
+    this._banned = value;
+    this._updatedAt = new Date();
+  }
+
   public get banReason(): string | undefined {
     return this._banReason;
+  }
+
+  public set banReason(value: string | undefined) {
+    this._banReason = value;
+    this._updatedAt = new Date();
   }
 
   public get banExpires(): Date | undefined {
     return this._banExpires;
   }
 
+  public set banExpires(value: Date | undefined) {
+    this._banExpires = value;
+    this._updatedAt = new Date();
+  }
+
   public get image(): string | undefined {
     return this._image;
   }
 
+  public set image(value: string | undefined) {
+    this._image = value;
+    this._updatedAt = new Date();
+  }
+
   public get anonymousCreditAccountId(): string | undefined {
     return this._anonymousCreditAccountId;
+  }
+
+  public set anonymousCreditAccountId(value: string | undefined) {
+    this._anonymousCreditAccountId = value;
+    this._updatedAt = new Date();
   }
 
   public get createdAt(): Date {
@@ -223,13 +290,25 @@ export class User extends AggregateRoot<UserProps> {
     return this._updatedAt;
   }
 
+  public set updatedAt(date: Date) {
+    this._updatedAt = date;
+  }
+
   public get lastLoginAt(): Date | undefined {
     return this._lastLoginAt;
   }
 
+  public set lastLoginAt(date: Date | undefined) {
+    this._lastLoginAt = date;
+    this._updatedAt = new Date();
+  }
+
+  // 非持久化属性，仅在内存中使用
   public get currentSessionId(): string | undefined {
     return this._currentSessionId;
   }
+
+  // 这里不定义setter，因为currentSessionId的修改应该通过setCurrentSession方法进行
 
   public get identities(): Identity[] {
     return [...this._identities];
@@ -261,12 +340,7 @@ export class User extends AggregateRoot<UserProps> {
       throw new Error('会话不属于此用户');
     }
 
-    // 更新当前会话ID
-    this.update({
-      currentSessionId: session.id.value,
-      updatedAt: new Date(),
-    } as Partial<UserProps>);
-
+    // 更新当前会话ID（内存中的状态）
     this._currentSessionId = session.id.value;
 
     // 确保会话在用户的会话列表中
@@ -297,11 +371,6 @@ export class User extends AggregateRoot<UserProps> {
     // 如果移除的是当前会话，清除当前会话ID
     if (this._currentSessionId === sessionId) {
       this._currentSessionId = undefined;
-
-      this.update({
-        currentSessionId: undefined,
-        updatedAt: new Date(),
-      } as Partial<UserProps>);
     }
   }
 
@@ -327,11 +396,6 @@ export class User extends AggregateRoot<UserProps> {
     // 如果撤销的是当前会话，清除当前会话ID
     if (this._currentSessionId === sessionIdStr) {
       this._currentSessionId = undefined;
-
-      this.update({
-        currentSessionId: undefined,
-        updatedAt: new Date(),
-      } as Partial<UserProps>);
     }
   }
 
@@ -347,11 +411,6 @@ export class User extends AggregateRoot<UserProps> {
 
     // 清除当前会话ID
     this._currentSessionId = undefined;
-
-    this.update({
-      currentSessionId: undefined,
-      updatedAt: new Date(),
-    } as Partial<UserProps>);
 
     // 发布所有会话撤销事件
     this.apply(new UserAllSessionsRevokedEvent(this._id));
@@ -375,26 +434,33 @@ export class User extends AggregateRoot<UserProps> {
 
   // 业务方法
   public updateProfile(firstName?: string, lastName?: string, image?: string): void {
-    this.update({
+    // 使用可变数据属性更新
+    const changes: UserChangeableData = {
       firstName,
       lastName,
       image,
       updatedAt: new Date(),
-    } as Partial<UserProps>);
+    };
+
+    this.update(changes);
+
+    // 直接设置属性
+    this._firstName = firstName;
+    this._lastName = lastName;
+    this._image = image;
+    this._updatedAt = new Date();
 
     this.apply(new UserProfileUpdatedEvent(this._id, firstName, lastName));
   }
 
-  public async updatePassword(plainPassword: string): Promise<void> {
-    const passwordObj = Password.create(plainPassword);
-    const hashedPassword = await passwordObj.getHashedValue();
+  public async updatePassword(newPassword: Password): Promise<void> {
+    const identity = this.identities.find((i) => i.provider === 'credential');
+    if (!identity) {
+      throw new IdentityNotFoundError('credential');
+    }
 
-    this.update({
-      password: hashedPassword,
-      updatedAt: new Date(),
-    } as Partial<UserProps>);
+    identity.setPassword(INTERNAL_IDENTITY_FUNC_TOKEN, newPassword);
 
-    this._password = passwordObj;
     this.apply(new UserPasswordChangedEvent(this._id));
 
     // 密码更改后撤销所有会话（除当前会话外）
@@ -427,12 +493,16 @@ export class User extends AggregateRoot<UserProps> {
       return; // 已经验证过了，无需再次验证
     }
 
+    // 使用可变数据更新
     this.update({
       isEmailVerified: true,
       updatedAt: new Date(),
-    } as Partial<UserProps>);
+    });
 
+    // 直接更新属性
     this._isEmailVerified = true;
+    this._updatedAt = new Date();
+
     this.apply(new UserEmailVerifiedEvent(this._id));
   }
 
@@ -441,12 +511,16 @@ export class User extends AggregateRoot<UserProps> {
       return; // 已经停用，无需再次停用
     }
 
+    // 使用可变数据更新
     this.update({
       isActive: false,
       updatedAt: new Date(),
-    } as Partial<UserProps>);
+    });
 
+    // 直接更新属性
     this._isActive = false;
+    this._updatedAt = new Date();
+
     this.apply(new UserDeactivatedEvent(this._id));
 
     // 停用账户时撤销所有会话
@@ -458,12 +532,16 @@ export class User extends AggregateRoot<UserProps> {
       return; // 已经激活，无需再次激活
     }
 
+    // 使用可变数据更新
     this.update({
       isActive: true,
       updatedAt: new Date(),
-    } as Partial<UserProps>);
+    });
 
+    // 直接设置属性
     this._isActive = true;
+    this._updatedAt = new Date();
+
     this.apply(new UserActivatedEvent(this._id));
   }
 
@@ -476,16 +554,19 @@ export class User extends AggregateRoot<UserProps> {
       ? new Date(Date.now() + expiresDays * 24 * 60 * 60 * 1000)
       : undefined;
 
+    // 使用可变数据更新
     this.update({
       banned: true,
       banReason: reason,
       banExpires,
       updatedAt: new Date(),
-    } as Partial<UserProps>);
+    });
 
+    // 直接设置属性
     this._banned = true;
     this._banReason = reason;
     this._banExpires = banExpires;
+    this._updatedAt = new Date();
 
     this.apply(new UserBannedEvent(this._id, reason, banExpires));
 
@@ -498,16 +579,19 @@ export class User extends AggregateRoot<UserProps> {
       return; // 未被封禁
     }
 
+    // 使用可变数据更新
     this.update({
       banned: false,
       banReason: undefined,
       banExpires: undefined,
       updatedAt: new Date(),
-    } as Partial<UserProps>);
+    });
 
+    // 直接设置属性
     this._banned = false;
     this._banReason = undefined;
     this._banExpires = undefined;
+    this._updatedAt = new Date();
 
     this.apply(new UserUnbannedEvent(this._id));
   }
@@ -519,28 +603,36 @@ export class User extends AggregateRoot<UserProps> {
 
     const emailObj = Email.from(email);
 
+    // 使用可变数据更新
     this.update({
       isAnonymous: false,
       email: emailObj.value,
       anonymousCreditAccountId: undefined,
       updatedAt: new Date(),
-    } as Partial<UserProps>);
+    });
 
+    // 直接设置属性
     this._isAnonymous = false;
     this._email = emailObj;
     this._anonymousCreditAccountId = undefined;
+    this._updatedAt = new Date();
 
     this.apply(new UserRegularEvent(this._id, emailObj.value));
   }
 
   public recordLogin(): void {
     const now = new Date();
+
+    // 使用可变数据更新
     this.update({
       lastLoginAt: now,
       updatedAt: now,
-    } as Partial<UserProps>);
+    });
 
+    // 直接设置属性
     this._lastLoginAt = now;
+    this._updatedAt = now;
+
     this.apply(new UserLoggedInEvent(this._id, now));
   }
 
@@ -604,7 +696,7 @@ export class User extends AggregateRoot<UserProps> {
       accessToken?: string;
       refreshToken?: string;
       tokenExpiresAt?: Date;
-      password?: string; // 为credential类型添加密码选项
+      password?: Password; // 为credential类型添加密码选项
     },
   ): Identity {
     const identity = Identity.create(id, this._id, provider, providerUserId, options);
@@ -729,7 +821,6 @@ export class User extends AggregateRoot<UserProps> {
     const credentialIdentity = this._identities.find(
       (identity) => identity.provider === 'credential',
     );
-
     if (!credentialIdentity) {
       throw new InvalidCredentialsError();
     }

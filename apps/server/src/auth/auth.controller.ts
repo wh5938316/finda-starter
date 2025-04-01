@@ -17,10 +17,10 @@ export class AuthController {
     return this.authService.register(email, password, firstName, lastName, isAnonymous);
   }
 
-  // @Post('login')
-  // async login(@Body('email') email: string, @Body('password') password: string) {
-  //   return this.authService.login(email, password);
-  // }
+  @Post('login')
+  async login(@Body('email') email: string, @Body('password') password: string) {
+    return this.authService.login(email, password);
+  }
 
   // @Post('logout')
   // async logout(@Body('sessionId') sessionId: string) {

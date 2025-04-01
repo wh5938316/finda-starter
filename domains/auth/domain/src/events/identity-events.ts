@@ -1,4 +1,4 @@
-import { IdentityProvider } from '../aggregates/identity';
+import { IdentityProvider } from '../aggregates/identity.entity';
 import { DomainEvent } from '../core/domain-event';
 import { IdentityId } from '../value-objects/identity-id';
 import { UserId } from '../value-objects/user-id';

@@ -1,3 +1,3 @@
-export * from './user';
-export * from './identity';
-export * from './session';
+export * from './user.aggregate';
+export * from './identity.entity';
+export * from './session.entity';
