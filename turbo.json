@@ -37,7 +37,6 @@
     "lint": {},
     "type-check": {},
     "dev": {
-      "dependsOn": [],
       "cache": false,
       "persistent": true
     }
