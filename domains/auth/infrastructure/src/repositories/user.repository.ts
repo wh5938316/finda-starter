@@ -172,7 +172,6 @@ export class UserRepository implements IUserRepository {
   }
 
   async findByEmail(email: Email): Promise<User | null> {
-    console.log('11111', email);
     const [userData] = await this.drizzle
       .select()
       .from(schema.user)

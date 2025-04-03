@@ -1,28 +1,28 @@
-import { DrizzlePGModule } from '@knaadh/nestjs-drizzle-pg';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CqrsModule, DomainExceptionFilter } from '@finda-co/core';
-import { schema } from '@finda-co/database';
 import { AuthInfrastructureModule } from '@finda-co/domain-auth-infra';
 
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './config/config.module';
+import * as entities from './entities';
 import { TestModule } from './test/test.module';
 
 @Module({
   imports: [
     ConfigModule,
-    DrizzlePGModule.register({
-      tag: 'App',
-      pg: {
-        connection: 'client',
-        config: {
-          connectionString: process.env.DATABASE_URL!,
-        },
-      },
-      config: { schema: { ...schema } },
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
+        type: 'postgres',
+        url: process.env.DATABASE_URL,
+        entities: Object.values(entities),
+        synchronize: process.env.NODE_ENV !== 'production',
+        logging: process.env.NODE_ENV !== 'production',
+        ssl: process.env.NODE_ENV === 'production',
+      }),
     }),
     CqrsModule.forRoot(),
     RedisModule.forRootAsync({
