@@ -32,11 +32,11 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
-  Grid,
   IconButton,
   InputAdornment,
   InputLabel,
   MenuItem,
+  Grid as MuiGrid,
   OutlinedInput,
   Select,
   Stack,
@@ -55,6 +55,11 @@ import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
 import { alpha, styled } from '@mui/material/styles';
 import * as React from 'react';
+
+// 使用MuiGrid组件但重命名为Grid以避免大量改动
+const Grid = MuiGrid;
+// 或改为直接使用带item属性的MuiGrid
+// import Grid2 from '@mui/material/Unstable_Grid2';
 
 // 自定义步骤连接器样式 - 简化
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
@@ -162,8 +167,64 @@ const projectTypes = [
   },
 ];
 
+// 定义步骤内容类型
+type StepContentFunc = (handleSelectType: (type: string) => void) => React.ReactNode;
+type StepContent = React.ReactNode | StepContentFunc;
+
+// 针对首个组件
+const TypeCards = ({ handleSelectType }: { handleSelectType: (type: string) => void }) => {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '16px' }}>
+      {projectTypes.map((type, index) => (
+        <div key={type.name} style={{ gridColumn: 'span 6' }}>
+          <ProjectTypeCard
+            onClick={() => handleSelectType(type.name)}
+            sx={{
+              borderLeft: `4px solid ${type.color}`,
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Avatar
+                sx={{
+                  bgcolor: '#f5f5f5',
+                  color: type.color,
+                  mr: 2,
+                }}
+              >
+                {type.icon}
+              </Avatar>
+              <Typography variant="subtitle1" component="div" fontWeight="500">
+                {type.name}
+              </Typography>
+            </Box>
+            <Typography variant="body2" color="text.secondary">
+              {type.description}
+            </Typography>
+            {index < 2 && (
+              <Chip
+                size="small"
+                icon={<StarIcon />}
+                label="推荐"
+                sx={{
+                  mt: 1,
+                  bgcolor: '#f5f5f5',
+                  color: type.color,
+                }}
+              />
+            )}
+          </ProjectTypeCard>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 // 步骤内容定义
-const steps = [
+const steps: {
+  label: string;
+  description: string;
+  content: StepContent;
+}[] = [
   {
     label: '选择项目类型',
     description: '选择您要创建的项目类型',
@@ -176,48 +237,7 @@ const steps = [
           选择合适的项目类型可以帮助我们为您提供最适合的模板和工具支持。
         </Typography>
 
-        <Grid container spacing={2} sx={{ mt: 1 }}>
-          {projectTypes.map((type, index) => (
-            <Grid key={type.name} size={{ xs: 12, md: 6 }}>
-              <ProjectTypeCard
-                onClick={() => handleSelectType(type.name)}
-                sx={{
-                  borderLeft: `4px solid ${type.color}`,
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <Avatar
-                    sx={{
-                      bgcolor: '#f5f5f5',
-                      color: type.color,
-                      mr: 2,
-                    }}
-                  >
-                    {type.icon}
-                  </Avatar>
-                  <Typography variant="subtitle1" component="div" fontWeight="500">
-                    {type.name}
-                  </Typography>
-                </Box>
-                <Typography variant="body2" color="text.secondary">
-                  {type.description}
-                </Typography>
-                {index < 2 && (
-                  <Chip
-                    size="small"
-                    icon={<StarIcon />}
-                    label="推荐"
-                    sx={{
-                      mt: 1,
-                      bgcolor: '#f5f5f5',
-                      color: type.color,
-                    }}
-                  />
-                )}
-              </ProjectTypeCard>
-            </Grid>
-          ))}
-        </Grid>
+        <TypeCards handleSelectType={handleSelectType} />
       </Box>
     ),
   },
@@ -720,6 +740,14 @@ const ProjectCreationPage = () => {
     }, 100);
   };
 
+  const renderStepContent = (step: number) => {
+    const content = steps[step].content;
+    if (step === 0) {
+      return (content as StepContentFunc)(handleSelectProjectType);
+    }
+    return content;
+  };
+
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Paper
@@ -771,7 +799,7 @@ const ProjectCreationPage = () => {
             <Box>
               <Box>
                 {activeStep === 0
-                  ? steps[activeStep].content(handleSelectProjectType)
+                  ? (steps[0].content as any)(handleSelectProjectType)
                   : steps[activeStep].content}
               </Box>
               <Box
