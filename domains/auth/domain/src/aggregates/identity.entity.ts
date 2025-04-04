@@ -324,7 +324,6 @@ export class Identity extends Entity<IdentityProps> {
     if (!this._password) {
       throw new Error('没有设置密码');
     }
-    console.log('this._password', this._password.value, plainPassword);
     // 使用Password值对象的verify方法验证密码
     return await this._password.verify(plainPassword);
   }

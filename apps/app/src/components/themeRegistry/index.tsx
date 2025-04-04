@@ -1,17 +1,14 @@
-'use client';
-
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ConfirmProvider } from 'material-ui-confirm';
 import { SnackbarProvider } from 'notistack';
 import * as React from 'react';
 
-import { getTheme } from '@finda-co/theme';
-import MuiProvider from '@finda-co/theme/mui-provider';
+import { MuiProvider, getTheme } from '@/theme';
 
 const theme = createTheme({
   cssVariables: true,
-  ...getTheme('light'),
+  ...(getTheme('light') as any),
 });
 
 export default function ThemeRegistry({ children }: React.PropsWithChildren<{}>) {
