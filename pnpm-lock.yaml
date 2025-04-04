@@ -41,9 +41,6 @@ importers:
       '@finda-co/icons':
         specifier: workspace:*
         version: link:../../packages/icons
-      '@finda-co/theme':
-        specifier: workspace:*
-        version: link:../../packages/theme
       '@finda-co/ui-patterns':
         specifier: workspace:*
         version: link:../../packages/ui-patterns
