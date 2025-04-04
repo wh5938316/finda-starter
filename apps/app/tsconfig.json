@@ -1,20 +1,15 @@
 {
-  "extends": "@finda-co/typescript-config/nextjs.json",
+  "extends": "@finda-co/typescript-config/vite.json",
   "compilerOptions": {
-    "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["src/*"]
     }
   },
   "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "src/material-ui-pigment-css.d.ts",
-    "../../packages/theme/src/mui-pigment-css.d.ts",
-    "../../packages/theme/src/overrides.d.ts"
+    "src",
+    "./src/theme/src/mui-pigment-css.d.ts",
+    "./src/theme/src/overrides.d.ts"
   ],
   "exclude": ["node_modules"]
 }
