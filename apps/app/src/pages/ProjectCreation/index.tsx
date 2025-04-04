@@ -3,7 +3,7 @@ import ApiIcon from '@mui/icons-material/Api';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import BusinessIcon from '@mui/icons-material/Business';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckIcon from '@mui/icons-material/Check';
 import CloudIcon from '@mui/icons-material/Cloud';
 import CodeIcon from '@mui/icons-material/Code';
 import DevicesOtherIcon from '@mui/icons-material/DevicesOther';
@@ -61,47 +61,48 @@ const Grid = MuiGrid;
 // 或改为直接使用带item属性的MuiGrid
 // import Grid2 from '@mui/material/Unstable_Grid2';
 
-// 自定义步骤连接器样式 - 简化
+// 自定义步骤连接器样式
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 22,
   },
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
-      backgroundColor: theme.palette.primary.main,
+      backgroundImage: `linear-gradient(95deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.primary.dark} 100%)`,
     },
   },
   [`&.${stepConnectorClasses.completed}`]: {
     [`& .${stepConnectorClasses.line}`]: {
-      backgroundColor: theme.palette.primary.main,
+      backgroundImage: `linear-gradient(95deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.primary.dark} 100%)`,
     },
   },
   [`& .${stepConnectorClasses.line}`]: {
-    height: 2,
+    height: 3,
     border: 0,
     backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[800] : '#eaeaf0',
     borderRadius: 1,
   },
 }));
 
-// 自定义步骤图标样式 - 简化
+// 自定义步骤图标样式
 const ColorlibStepIconRoot = styled('div')<{
   ownerState: { completed?: boolean; active?: boolean };
 }>(({ theme, ownerState }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[700] : '#ccc',
   zIndex: 1,
   color: '#fff',
-  width: 40,
-  height: 40,
+  width: 45,
+  height: 45,
   display: 'flex',
   borderRadius: '50%',
   justifyContent: 'center',
   alignItems: 'center',
   ...(ownerState.active && {
-    backgroundColor: theme.palette.primary.main,
+    backgroundImage: `linear-gradient(136deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.primary.dark} 100%)`,
+    boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
   }),
   ...(ownerState.completed && {
-    backgroundColor: theme.palette.primary.main,
+    backgroundImage: `linear-gradient(136deg, ${theme.palette.primary.light} 0%, ${theme.palette.primary.main} 50%, ${theme.palette.primary.dark} 100%)`,
   }),
 }));
 
@@ -123,12 +124,12 @@ const ColorlibStepIcon = (props: any) => {
     2: <PersonAddIcon />,
     3: <CodeIcon />,
     4: <FileUploadIcon />,
-    5: <CheckCircleIcon />,
+    5: <CheckIcon />,
   };
 
   return (
     <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
-      {completed ? <CheckCircleIcon /> : icons[String(icon)]}
+      {completed ? <CheckIcon /> : icons[String(icon)]}
     </ColorlibStepIconRoot>
   );
 };
@@ -672,7 +673,7 @@ const steps: {
             bgcolor: 'success.main',
           }}
         >
-          <CheckCircleIcon sx={{ fontSize: 50, color: 'white' }} />
+          <CheckIcon sx={{ fontSize: 50, color: 'white' }} />
         </Avatar>
 
         <Typography variant="h5" gutterBottom fontWeight="500">
@@ -720,6 +721,14 @@ const ProjectCreationPage = () => {
   const [projectType, setProjectType] = React.useState('');
 
   const handleNext = () => {
+    // 如果是最后一步，执行完成操作
+    if (activeStep === steps.length - 1) {
+      // 在这里可以添加项目创建成功后的逻辑，比如跳转到项目管理页面
+      console.log('项目创建完成:', projectType);
+      // 或者不做任何操作，因为最后一步已经显示了成功信息
+      return;
+    }
+    // 不是最后一步，继续下一步
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -745,7 +754,7 @@ const ProjectCreationPage = () => {
     if (step === 0) {
       return (content as StepContentFunc)(handleSelectProjectType);
     }
-    return content;
+    return content as React.ReactNode;
   };
 
   return (
@@ -782,49 +791,30 @@ const ProjectCreationPage = () => {
 
         {/* 步骤内容 */}
         <Box sx={{ mt: 2, minHeight: 300 }}>
-          {activeStep === steps.length ? (
-            <Box sx={{ p: 3, textAlign: 'center' }}>
-              <CheckCircleIcon sx={{ fontSize: 60, color: 'success.main', mb: 2 }} />
-              <Typography variant="h5" gutterBottom>
-                所有步骤已完成
-              </Typography>
-              <Typography variant="body1" paragraph>
-                您的项目已经成功创建，可以开始使用或创建新项目。
-              </Typography>
-              <Button onClick={handleReset} variant="outlined" sx={{ mt: 2 }}>
-                创建新项目
+          <Box>
+            <Box>{renderStepContent(activeStep)}</Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                mt: 3,
+                pt: 2,
+                borderTop: '1px solid #eee',
+              }}
+            >
+              <Button
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+              >
+                上一步
+              </Button>
+              <Button variant="contained" onClick={handleNext} sx={{ minWidth: 100 }}>
+                {activeStep === steps.length - 1 ? '完成' : '下一步'}
               </Button>
             </Box>
-          ) : (
-            <Box>
-              <Box>
-                {activeStep === 0
-                  ? (steps[0].content as any)(handleSelectProjectType)
-                  : steps[activeStep].content}
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  mt: 3,
-                  pt: 2,
-                  borderTop: '1px solid #eee',
-                }}
-              >
-                <Button
-                  color="inherit"
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                  sx={{ mr: 1 }}
-                >
-                  上一步
-                </Button>
-                <Button variant="contained" onClick={handleNext} sx={{ minWidth: 100 }}>
-                  {activeStep === steps.length - 1 ? '完成' : '下一步'}
-                </Button>
-              </Box>
-            </Box>
-          )}
+          </Box>
         </Box>
       </Paper>
     </Container>
