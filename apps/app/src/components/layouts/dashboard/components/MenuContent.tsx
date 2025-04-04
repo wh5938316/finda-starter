@@ -4,6 +4,7 @@ import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import MessageIcon from '@mui/icons-material/Message';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import List from '@mui/material/List';
@@ -43,6 +44,12 @@ const mainNavItems: NavItem[] = [
     icon: <MessageIcon />,
     path: '/messages',
     tooltip: '查看消息',
+  },
+  {
+    text: '通知',
+    icon: <NotificationsIcon />,
+    path: '/notifications',
+    tooltip: '查看通知',
   },
   {
     text: '客户管理',

@@ -72,6 +72,14 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: 'notifications',
+        handle: {
+          title: '通知',
+          icon: <NotificationsIcon fontSize="small" />,
+        },
+        lazy: () => import('./Notifications'),
+      },
+      {
         path: 'clients',
         handle: {
           title: '客户管理',
