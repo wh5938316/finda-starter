@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { LineChart } from '@mui/x-charts/LineChart';
-import * as React from 'react';
+import React from 'react';
 
 function AreaGradient({ color, id }: { color: string; id: string }) {
   return (

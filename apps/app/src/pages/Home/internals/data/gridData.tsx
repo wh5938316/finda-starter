@@ -2,7 +2,7 @@ import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
 import { GridCellParams, GridColDef, GridRowsProp } from '@mui/x-data-grid';
-import * as React from 'react';
+import React from 'react';
 
 import { brand } from '@/theme/themePrimitives';
 

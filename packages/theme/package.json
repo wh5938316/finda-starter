@@ -37,7 +37,7 @@
     "@finda-co/eslint-config": "workspace:*",
     "@finda-co/icons": "workspace:*",
     "@finda-co/typescript-config": "workspace:*",
-    "@mui/material": "^6.4.5",
+    "@mui/material": "^7.0.1",
     "@mui/types": "^7.2.21",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/addon-interactions": "^8.4.7",

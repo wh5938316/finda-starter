@@ -7,7 +7,7 @@ import { tabsClasses } from '@mui/material/Tabs';
 import MuiToolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import * as React from 'react';
+import React from 'react';
 
 import MenuButton from './MenuButton';
 import SideMenuMobile from './SideMenuMobile';

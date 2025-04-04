@@ -8,7 +8,7 @@ import { SvgIconProps, svgIconClasses } from '@mui/material/SvgIcon';
 import { toggleButtonClasses } from '@mui/material/ToggleButton';
 import { toggleButtonGroupClasses } from '@mui/material/ToggleButtonGroup';
 import { Components, Theme, alpha } from '@mui/material/styles';
-import * as React from 'react';
+import React from 'react';
 
 // import { DeleteIcon, ExpandMoreIcon } from '@finda-co/icons';
 import { brand, gray } from '../themePrimitives';

@@ -1,7 +1,7 @@
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import * as React from 'react';
+import React from 'react';
 
 import CustomDatePicker from './CustomDatePicker';
 import MenuButton from './MenuButton';

@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
-import * as React from 'react';
 
 interface LoadingIndicatorProps {
   message?: string;

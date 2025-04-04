@@ -27,12 +27,7 @@ export const router = createBrowserRouter([
           title: '首页',
           icon: <HomeIcon fontSize="small" />,
         },
-        lazy: async () => {
-          const { default: Component } = await import('./Home/index');
-          return {
-            Component,
-          };
-        },
+        lazy: () => import('./Home'),
       },
       {
         path: 'analytics',

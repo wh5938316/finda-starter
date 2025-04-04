@@ -13,7 +13,7 @@ import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import * as React from 'react';
+import React from 'react';
 
 export default function SecuritySettings() {
   const [showPassword, setShowPassword] = React.useState(false);

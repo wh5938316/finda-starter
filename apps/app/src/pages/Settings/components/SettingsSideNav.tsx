@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import * as React from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router';
 
 interface SettingsNavItem {

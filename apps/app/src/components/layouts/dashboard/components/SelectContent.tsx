@@ -16,7 +16,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
-import * as React from 'react';
+import React from 'react';
 
 const Avatar = styled(MuiAvatar)(({ theme }) => ({
   width: 28,

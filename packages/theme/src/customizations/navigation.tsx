@@ -4,7 +4,7 @@ import { dividerClasses } from '@mui/material/Divider';
 import { menuItemClasses } from '@mui/material/MenuItem';
 import { selectClasses } from '@mui/material/Select';
 import { Components, Theme, alpha } from '@mui/material/styles';
-import * as React from 'react';
+import React from 'react';
 
 import { brand, gray } from '../themePrimitives';
 

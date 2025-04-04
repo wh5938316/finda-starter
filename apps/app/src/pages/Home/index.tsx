@@ -44,7 +44,7 @@ const data: StatCardProps[] = [
   },
 ];
 
-export default function MainGrid() {
+const HomePage = () => {
   return (
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
       {/* cards */}
@@ -83,4 +83,6 @@ export default function MainGrid() {
       </Grid>
     </Box>
   );
-}
+};
+
+export const Component = HomePage;

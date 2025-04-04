@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useDrawingArea } from '@mui/x-charts/hooks';
-import * as React from 'react';
+import React from 'react';
 
 import { BrazilFlag, GlobeFlag, IndiaFlag, UsaFlag } from '../internals/components/CustomIcons';
 

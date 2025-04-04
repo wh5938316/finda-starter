@@ -21,7 +21,7 @@ import {
 } from '@mui/x-tree-view/useTreeItem2';
 import { animated, useSpring } from '@react-spring/web';
 import clsx from 'clsx';
-import * as React from 'react';
+import React from 'react';
 
 type Color = 'blue' | 'green';
 

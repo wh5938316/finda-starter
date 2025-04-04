@@ -4,14 +4,12 @@ import DefaultPropsProvider from '@mui/material/DefaultPropsProvider';
 import type { SvgIconProps } from '@mui/material/SvgIcon';
 import React from 'react';
 
-import {
-  CheckBoxOutlineBlankIcon,
-  CheckIcon,
-  CloseIcon,
-  ExpandMoreIcon,
-  RemoveIcon,
-  UnfoldMoreIcon,
-} from '@finda-co/icons';
+import CheckBoxOutlineBlankIcon from './icons/CheckBoxOutlineBlankIcon';
+import CheckIcon from './icons/CheckIcon';
+import CloseIcon from './icons/CloseIcon';
+import ExpandMoreIcon from './icons/ExpandMoreIcon';
+import RemoveIcon from './icons/RemoveIcon';
+import UnfoldMoreIcon from './icons/UnfoldMoreIcon';
 
 interface MuiProviderProps {
   children: React.ReactNode;

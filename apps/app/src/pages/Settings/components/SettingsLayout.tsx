@@ -6,7 +6,7 @@ import Card from '@mui/material/Card';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import * as React from 'react';
+import React from 'react';
 import { Outlet } from 'react-router';
 
 import SettingsSideNav from './SettingsSideNav';

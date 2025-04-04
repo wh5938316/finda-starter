@@ -9,7 +9,7 @@ import MuiMenuItem from '@mui/material/MenuItem';
 import { paperClasses } from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
-import * as React from 'react';
+import React from 'react';
 
 import MenuButton from './MenuButton';
 

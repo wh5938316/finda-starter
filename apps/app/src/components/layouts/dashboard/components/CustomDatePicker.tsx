@@ -10,7 +10,7 @@ import {
   FieldSection,
 } from '@mui/x-date-pickers/models';
 import dayjs, { Dayjs } from 'dayjs';
-import * as React from 'react';
+import React from 'react';
 
 interface ButtonFieldProps
   extends UseDateFieldProps<Dayjs, false>,

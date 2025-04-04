@@ -1,6 +1,7 @@
 import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import HomeIcon from '@mui/icons-material/Home';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
@@ -11,10 +12,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
-import * as React from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router';
-
-import { HomeIcon } from '@finda-co/icons';
 
 // 定义导航项接口
 interface NavItem {

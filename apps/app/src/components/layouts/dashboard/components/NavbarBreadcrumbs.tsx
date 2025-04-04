@@ -2,7 +2,7 @@ import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
 import Breadcrumbs, { breadcrumbsClasses } from '@mui/material/Breadcrumbs';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
-import * as React from 'react';
+import React from 'react';
 import { Link, useMatches } from 'react-router';
 
 import { HomeIcon } from '@finda-co/icons';
