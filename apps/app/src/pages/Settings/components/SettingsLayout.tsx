@@ -7,7 +7,7 @@ import SettingsSideNav from './SettingsSideNav';
 
 export default function SettingsLayout() {
   return (
-    <Box sx={{ width: '100%' }}>
+    <Container maxWidth="xl" sx={{ pt: 2 }}>
       <Stack direction="row" spacing={3} sx={{ width: '100%' }}>
         {/* 侧边导航 */}
         <SettingsSideNav />
@@ -28,6 +28,6 @@ export default function SettingsLayout() {
           </Container>
         </Box>
       </Stack>
-    </Box>
+    </Container>
   );
 }

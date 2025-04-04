@@ -1,4 +1,4 @@
-import { listItemIconClasses, tableRowClasses } from '@mui/material';
+import { listItemIconClasses, listSubheaderClasses, tableRowClasses } from '@mui/material';
 import { buttonBaseClasses } from '@mui/material/ButtonBase';
 import { chipClasses } from '@mui/material/Chip';
 import { iconButtonClasses } from '@mui/material/IconButton';
@@ -32,10 +32,6 @@ export const dataDisplayCustomizations: Components<Theme> = {
           fill: 'currentColor',
           color: 'inherit',
         },
-        // [`& .${typographyClasses.root}`]: {
-        //   fontSize: theme.typography.body2.fontSize,
-        //   fontWeight: 500,
-        // },
         [`& .${buttonBaseClasses.root}`]: {
           display: 'flex',
           gap: 8,

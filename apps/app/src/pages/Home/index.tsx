@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -46,7 +47,7 @@ const data: StatCardProps[] = [
 
 const HomePage = () => {
   return (
-    <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
+    <Container maxWidth="xl" sx={{ pt: 2 }}>
       {/* cards */}
       <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
         Overview
@@ -81,7 +82,7 @@ const HomePage = () => {
           </Stack>
         </Grid>
       </Grid>
-    </Box>
+    </Container>
   );
 };
 

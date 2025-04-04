@@ -21,21 +21,11 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           //   ? `rgba(${theme.vars.palette.background.defaultChannel} / 1)`
           //   : alpha(theme.palette.background.default, 1),
           overflow: 'auto',
+          paddingTop: '64px',
         })}
       >
-        <Stack
-          spacing={2}
-          sx={{
-            position: 'relative',
-            alignItems: 'center',
-            mx: 3,
-            pb: 5,
-            mt: { xs: 8, md: 8 },
-          }}
-        >
-          <Header />
-          {children}
-        </Stack>
+        <Header />
+        {children}
       </Box>
     </Box>
   );

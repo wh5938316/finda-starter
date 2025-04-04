@@ -77,8 +77,12 @@ export default function SettingsSideNav() {
   return (
     <Box
       sx={{
+        pt: 2,
         width: 280,
         flexShrink: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
         overflow: 'hidden',
         bgcolor: 'background.body',
       }}

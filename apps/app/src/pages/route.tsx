@@ -7,6 +7,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+import MessageIcon from '@mui/icons-material/Message';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PaymentIcon from '@mui/icons-material/Payment';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
@@ -81,6 +82,14 @@ export const router = createBrowserRouter([
             Component: () => <div>客户管理页面（待实现）</div>,
           };
         },
+      },
+      {
+        path: 'messages',
+        handle: {
+          title: '消息',
+          icon: <MessageIcon fontSize="small" />,
+        },
+        lazy: () => import('./Messages'),
       },
       {
         path: 'tasks',
@@ -167,17 +176,14 @@ export const router = createBrowserRouter([
               return { Component };
             },
           },
-          // {
-          //   path: 'workspace/billing',
-          //   handle: {
-          //     title: '账单与套餐',
-          //     icon: <PaymentIcon fontSize="small" />,
-          //   },
-          //   lazy: async () => {
-          //     const { default: Component } = await import('./Settings/Workspace/Billing');
-          //     return { Component };
-          //   },
-          // },
+          {
+            path: 'workspace/billing',
+            handle: {
+              title: '账单与套餐',
+              icon: <PaymentIcon fontSize="small" />,
+            },
+            lazy: () => import('./Settings/Workspace/Billing'),
+          },
           {
             path: 'workspace/team',
             handle: {

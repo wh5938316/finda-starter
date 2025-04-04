@@ -3,6 +3,7 @@ import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+import MessageIcon from '@mui/icons-material/Message';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import List from '@mui/material/List';
@@ -36,6 +37,12 @@ const mainNavItems: NavItem[] = [
     icon: <AnalyticsRoundedIcon />,
     path: '/analytics',
     tooltip: '查看数据分析',
+  },
+  {
+    text: '消息',
+    icon: <MessageIcon />,
+    path: '/messages',
+    tooltip: '查看消息',
   },
   {
     text: '客户管理',
