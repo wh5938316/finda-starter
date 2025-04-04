@@ -2,6 +2,7 @@
 import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import DesktopMacIcon from '@mui/icons-material/DesktopMac';
+import DeviceUnknownIcon from '@mui/icons-material/DeviceUnknown';
 import GroupIcon from '@mui/icons-material/Group';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import HomeIcon from '@mui/icons-material/Home';
@@ -128,6 +129,14 @@ export const router = createBrowserRouter([
                 Component,
               };
             },
+          },
+          {
+            path: 'security/recent-devices',
+            handle: {
+              title: '设备管理',
+              icon: <DeviceUnknownIcon fontSize="small" />,
+            },
+            lazy: () => import('./Settings/DeviceManagement'),
           },
           {
             // 默认重定向到个人资料页
