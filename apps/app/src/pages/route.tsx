@@ -1,9 +1,12 @@
 // eslint-disable-next-line no-restricted-imports
 import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
+import DesktopMacIcon from '@mui/icons-material/DesktopMac';
+import GroupIcon from '@mui/icons-material/Group';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+import PaymentIcon from '@mui/icons-material/Payment';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import PersonIcon from '@mui/icons-material/Person';
 import SecurityIcon from '@mui/icons-material/Security';
@@ -133,6 +136,39 @@ export const router = createBrowserRouter([
               return {
                 Component: () => <Navigate to="/settings/profile" replace />,
               };
+            },
+          },
+          {
+            path: 'workspace/general',
+            handle: {
+              title: '工作区常规设置',
+              icon: <DesktopMacIcon fontSize="small" />,
+            },
+            lazy: async () => {
+              const { default: Component } = await import('./Settings/Workspace/General');
+              return { Component };
+            },
+          },
+          // {
+          //   path: 'workspace/billing',
+          //   handle: {
+          //     title: '账单与套餐',
+          //     icon: <PaymentIcon fontSize="small" />,
+          //   },
+          //   lazy: async () => {
+          //     const { default: Component } = await import('./Settings/Workspace/Billing');
+          //     return { Component };
+          //   },
+          // },
+          {
+            path: 'workspace/team',
+            handle: {
+              title: '团队成员',
+              icon: <GroupIcon fontSize="small" />,
+            },
+            lazy: async () => {
+              const { default: Component } = await import('./Settings/Workspace/Team');
+              return { Component };
             },
           },
         ],
