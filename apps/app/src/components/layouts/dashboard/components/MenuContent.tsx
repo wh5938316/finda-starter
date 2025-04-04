@@ -1,5 +1,6 @@
 import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
+import FlagIcon from '@mui/icons-material/Flag';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
@@ -7,6 +8,7 @@ import MessageIcon from '@mui/icons-material/Message';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
+import WorkIcon from '@mui/icons-material/Work';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -50,6 +52,18 @@ const mainNavItems: NavItem[] = [
     icon: <NotificationsIcon />,
     path: '/notifications',
     tooltip: '查看通知',
+  },
+  {
+    text: '引导演示',
+    icon: <FlagIcon />,
+    path: '/guide',
+    tooltip: '查看引导演示',
+  },
+  {
+    text: '项目创建',
+    icon: <WorkIcon />,
+    path: '/project-creation',
+    tooltip: '创建项目',
   },
   {
     text: '客户管理',

@@ -26,6 +26,7 @@
     "dayjs": "^1.11.13",
     "material-ui-confirm": "^3.0.18",
     "material-ui-popup-state": "^5.3.3",
+    "motion": "^12.6.3",
     "mui-chips-input": "^4.0.1",
     "notistack": "^2.0.8",
     "react": "^19.1.0",

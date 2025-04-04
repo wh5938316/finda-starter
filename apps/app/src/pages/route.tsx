@@ -3,6 +3,7 @@ import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import DesktopMacIcon from '@mui/icons-material/DesktopMac';
 import DeviceUnknownIcon from '@mui/icons-material/DeviceUnknown';
+import FlagIcon from '@mui/icons-material/Flag';
 import GroupIcon from '@mui/icons-material/Group';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import HomeIcon from '@mui/icons-material/Home';
@@ -14,6 +15,7 @@ import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import PersonIcon from '@mui/icons-material/Person';
 import SecurityIcon from '@mui/icons-material/Security';
 import SettingsIcon from '@mui/icons-material/Settings';
+import WorkIcon from '@mui/icons-material/Work';
 import { Navigate, Outlet, ScrollRestoration, createBrowserRouter } from 'react-router';
 
 import AuthLayout from '@/components/layouts/auth';
@@ -90,6 +92,14 @@ export const router = createBrowserRouter([
             Component: () => <div>客户管理页面（待实现）</div>,
           };
         },
+      },
+      {
+        path: 'guide',
+        handle: {
+          title: '引导演示',
+          icon: <FlagIcon fontSize="small" />,
+        },
+        lazy: () => import('./Guide'),
       },
       {
         path: 'messages',
@@ -228,6 +238,14 @@ export const router = createBrowserRouter([
             Component: () => <div>反馈建议页面（待实现）</div>,
           };
         },
+      },
+      {
+        path: 'project-creation',
+        handle: {
+          title: '创建项目',
+          icon: <WorkIcon fontSize="small" />,
+        },
+        lazy: () => import('./ProjectCreation'),
       },
     ],
   },

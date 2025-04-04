@@ -697,7 +697,7 @@ export const inputsCustomizations: Components<Theme> = {
     styleOverrides: {
       root: {
         [`& .${formControlLabelClasses.root}`]: {
-          marginLeft: -9,
+          marginLeft: 0,
         },
       },
     },
