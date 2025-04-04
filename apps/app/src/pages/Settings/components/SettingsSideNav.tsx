@@ -47,11 +47,6 @@ const settingsNavGroups: SettingsNavGroup[] = [
         path: '/settings/notifications',
         icon: <NotificationsIcon />,
       },
-      {
-        title: '语言设置',
-        path: '/settings/language',
-        icon: <LanguageIcon />,
-      },
     ],
   },
   {

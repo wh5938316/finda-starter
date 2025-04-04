@@ -7,6 +7,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import PaymentIcon from '@mui/icons-material/Payment';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import PersonIcon from '@mui/icons-material/Person';
@@ -137,6 +138,14 @@ export const router = createBrowserRouter([
               icon: <DeviceUnknownIcon fontSize="small" />,
             },
             lazy: () => import('./Settings/DeviceManagement'),
+          },
+          {
+            path: 'notifications',
+            handle: {
+              title: '通知设置',
+              icon: <NotificationsIcon fontSize="small" />,
+            },
+            lazy: () => import('./Settings/Notifications'),
           },
           {
             // 默认重定向到个人资料页
