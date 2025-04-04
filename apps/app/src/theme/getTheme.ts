@@ -9,10 +9,10 @@ import {
   dataGridCustomizations,
   datePickersCustomizations,
   feedbackCustomizations,
-  // treeViewCustomizations,
   inputsCustomizations,
   navigationCustomizations,
   surfacesCustomizations,
+  treeViewCustomizations,
 } from './customizations';
 // import type {} from '@mui/x-data-grid/themeAugmentation';
 // import type {} from '@mui/x-tree-view/themeAugmentation';
@@ -33,7 +33,7 @@ export default function getTheme(mode: PaletteMode): CssVarsThemeOptions {
       ...chartsCustomizations,
       ...dataGridCustomizations,
       ...datePickersCustomizations,
-      // ...treeViewCustomizations,
+      ...treeViewCustomizations,
       ...inputsCustomizations,
       ...inputsCustomizations,
       ...dataDisplayCustomizations,

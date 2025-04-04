@@ -189,7 +189,8 @@ export default function CustomizedTreeView() {
           defaultSelectedItems={['1.1', '1.1.1']}
           sx={{
             m: '0 -8px',
-            pb: '8px',
+            // p: '8px 0',
+            pb: 1,
             height: 'fit-content',
             flexGrow: 1,
             overflowY: 'auto',
