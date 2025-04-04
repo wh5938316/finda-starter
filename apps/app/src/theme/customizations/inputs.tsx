@@ -1,6 +1,3 @@
-// import CheckBoxOutlineBlankRoundedIcon from '@mui/icons-material/CheckBoxOutlineBlankRounded';
-// import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-// import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import {
   buttonClasses,
   formControlLabelClasses,
@@ -11,13 +8,10 @@ import {
 } from '@mui/material';
 import { autocompleteClasses } from '@mui/material/Autocomplete';
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
-import { SvgIconProps, svgIconClasses } from '@mui/material/SvgIcon';
+import { svgIconClasses } from '@mui/material/SvgIcon';
 import { toggleButtonClasses } from '@mui/material/ToggleButton';
 import { toggleButtonGroupClasses } from '@mui/material/ToggleButtonGroup';
 import { Components, Theme, alpha } from '@mui/material/styles';
-import React from 'react';
-
-import { CheckBoxOutlineBlankIcon, CheckIcon, RemoveIcon } from '@finda-co/icons';
 
 // import { DeleteIcon, ExpandMoreIcon } from '@finda-co/icons';
 import { brand, gray } from '../themePrimitives';
@@ -420,7 +414,7 @@ export const inputsCustomizations: Components<Theme> = {
   MuiCheckbox: {
     styleOverrides: {
       root: ({ theme }) => ({
-        margin: 10,
+        margin: 0,
         height: 16,
         width: 16,
         borderRadius: 5,

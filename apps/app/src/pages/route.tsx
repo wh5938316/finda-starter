@@ -10,9 +10,33 @@ import SecurityIcon from '@mui/icons-material/Security';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Navigate, Outlet, ScrollRestoration, createBrowserRouter } from 'react-router';
 
+import AuthLayout from '@/components/layouts/auth';
 import DashboardLayout from '@/components/layouts/dashboard';
 
 export const router = createBrowserRouter([
+  {
+    path: 'auth',
+    element: (
+      <AuthLayout>
+        <Outlet />
+      </AuthLayout>
+    ),
+    children: [
+      {
+        path: 'login',
+        lazy: () => import('./Auth/Login'),
+      },
+      {
+        path: 'register',
+        lazy: () => import('./Auth/Register'),
+      },
+      {
+        // 默认重定向到登录页
+        index: true,
+        element: <Navigate to="/auth/login" replace />,
+      },
+    ],
+  },
   {
     element: (
       <DashboardLayout>
