@@ -39,7 +39,7 @@ importers:
         specifier: ^0.0.10
         version: 0.0.10
       '@dnd-kit/react':
-        specifier: ^0.0.10
+        specifier: 0.0.10
         version: 0.0.10(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@emotion/react':
         specifier: latest

@@ -19,16 +19,13 @@ const ColumnContainer = styled(Paper)(({ theme }) => ({
   flexDirection: 'column',
   gap: theme.spacing(1),
   padding: theme.spacing(2),
-  minWidth: 280,
-  maxWidth: 320,
+  minWidth: 320,
+  maxWidth: 400,
   minHeight: 400,
   backgroundColor: alpha(theme.palette.background.paper, 0.6),
   borderRadius: theme.shape.borderRadius,
   transition: 'box-shadow 0.2s ease-in-out',
   border: `1px solid ${theme.palette.divider}`,
-  '&:hover': {
-    boxShadow: theme.shadows[2],
-  },
 }));
 
 // 获取每个列对应的图标和颜色
@@ -103,9 +100,9 @@ export function Column({ children, id, activeId }: ColumnProps) {
   return (
     <ColumnContainer
       elevation={0}
-      ref={ref}
       style={style}
       sx={{
+        position: 'relative',
         transition: 'all 0.2s ease',
       }}
     >
@@ -143,7 +140,17 @@ export function Column({ children, id, activeId }: ColumnProps) {
           <MoreVertIcon fontSize="small" />
         </IconButton>
       </Box>
-      <Box className="droppable-container">
+      <Box
+        ref={ref}
+        sx={{
+          flex: 1,
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+          height: '100%',
+        }}
+      >
         {children}
 
         {/* 显示列为空时的占位符 */}
@@ -165,21 +172,6 @@ export function Column({ children, id, activeId }: ColumnProps) {
               拖放任务到此处
             </Typography>
           </Card>
-        )}
-
-        {/* 显示拖拽时的目标占位符 */}
-        {isDropTarget && activeId && (
-          <Card
-            sx={{
-              borderRadius: 2,
-              height: 160,
-              border: '2px dashed',
-              borderColor: columnInfo.color,
-              backgroundColor: alpha(columnInfo.color, 0.05),
-              boxShadow: 'none',
-              mt: 2,
-            }}
-          />
         )}
       </Box>
     </ColumnContainer>

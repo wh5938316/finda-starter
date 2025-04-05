@@ -11,6 +11,7 @@ import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
+import dayjs from 'dayjs';
 import React from 'react';
 
 interface ItemProps {
@@ -20,47 +21,43 @@ interface ItemProps {
   isActive?: boolean;
 }
 
-const priorityColors = {
-  Urgent: '#f44336',
-  Normal: '#ff9800',
-  Low: '#4caf50',
-};
+// 优先级对应的MUI颜色
+const priorityColorMap = {
+  Urgent: 'error',
+  Normal: 'warning',
+  Low: 'success',
+} as const;
 
 const getTaskData = (id: string) => {
   const priorities = ['Urgent', 'Normal', 'Low'];
   const taskTypes = ['Homepage', 'Marketing', 'Tech work', 'Animation', 'Logo', 'Contact'];
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
 
+  // 根据ID计算一个确定性哈希值，使相同ID总是产生相同结果
   const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
 
+  // 生成优先级和任务类型
   const priority = priorities[hash % 3];
   const taskType = taskTypes[hash % 6];
-  const month = monthNames[hash % 12];
-  const day = (hash % 28) + 1;
-  const year = "'24";
+
+  // 生成评论数和任务代码
   const commentCount = hash % 15;
   const taskCode = `MDS-${(hash % 100) + 1}`;
+
+  // 使用dayjs生成日期
+  // 为了确保日期相对合理，用当前时间作为基准，加上基于hash的随机天数
+  const today = dayjs();
+  const daysToAdd = hash % 180; // 最多6个月时间跨度
+  const dueDate = today.add(daysToAdd, 'day');
+  const formattedDate = dueDate.format("MMM D, 'YY"); // 例如：Jan 15, '24
 
   return {
     taskCode,
     priority,
     title: id,
     type: taskType,
-    dueDate: `${month} ${day}, ${year}`,
+    dueDate: formattedDate,
     commentCount,
+    rawDueDate: dueDate, // 保留原始dayjs对象，以便后续需要
   };
 };
 
@@ -80,7 +77,8 @@ export function Item({ id, index, column, isActive }: ItemProps) {
   const style = isDragging
     ? {
         transition: '0.2s ease',
-        transform: 'rotate(-4deg) scale(1.05)',
+        transform: 'rotate(-4deg)',
+        // transform: 'rotate(-4deg) scale(1)',
         zIndex: 1000,
         opacity: 0.9,
         position: 'relative' as const,
@@ -88,45 +86,19 @@ export function Item({ id, index, column, isActive }: ItemProps) {
       }
     : undefined;
 
-  const priorityColor =
-    priorityColors[taskData.priority as keyof typeof priorityColors] || '#757575';
-
-  // 如果是活动拖拽项，返回占位UI
-  if (isActive) {
-    return (
-      <div
-        style={{
-          marginBottom: '16px',
-          height: '160px', // 占位高度
-        }}
-      >
-        <Card
-          sx={{
-            borderRadius: 2,
-            height: '100%',
-            border: '2px dashed',
-            borderColor: 'divider',
-            backgroundColor: alpha('#f5f5f5', 0.7),
-            boxShadow: 'none',
-          }}
-        />
-      </div>
-    );
-  }
-
   // 普通拖拽项
   return (
-    <div
+    <Box
       ref={ref}
-      style={{
-        cursor: 'grab',
-        touchAction: 'none',
-        marginBottom: '16px',
+      sx={{
+        position: 'relative',
       }}
     >
       <Card
         style={style}
         sx={{
+          cursor: 'grab',
+          touchAction: 'none',
           borderRadius: 2,
           boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
           '&:hover': { boxShadow: '0 3px 8px rgba(0,0,0,0.15)' },
@@ -147,10 +119,12 @@ export function Item({ id, index, column, isActive }: ItemProps) {
             <Chip
               label={taskData.priority}
               size="small"
+              color={
+                priorityColorMap[taskData.priority as keyof typeof priorityColorMap] || undefined
+              }
+              variant="outlined"
               sx={{
                 height: 22,
-                bgcolor: alpha(priorityColor, 0.1),
-                color: priorityColor,
                 fontWeight: 500,
                 fontSize: '0.75rem',
                 borderRadius: 1,
@@ -223,6 +197,6 @@ export function Item({ id, index, column, isActive }: ItemProps) {
           </Box>
         </CardContent>
       </Card>
-    </div>
+    </Box>
   );
 }

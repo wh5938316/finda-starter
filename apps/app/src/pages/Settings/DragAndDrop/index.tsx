@@ -85,12 +85,13 @@ const DragAndDropDemo = () => {
 
   // 处理拖拽开始
   const handleDragStart = (event: any) => {
-    const { active } = event;
-    setActiveId(active.id);
+    const { operation } = event;
+    setActiveId(operation.source.id);
   };
 
   // 处理拖拽结束时的操作
   const handleDragOver = (event: any) => {
+    // console.log(event)
     setItems((currentItems) => move(currentItems, event));
   };
 
@@ -100,13 +101,13 @@ const DragAndDropDemo = () => {
   };
 
   return (
-    <Container maxWidth="xl">
+    <Container
+      maxWidth="xl"
+      sx={{
+        py: 2,
+      }}
+    >
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-        <Link to="/settings">
-          <IconButton sx={{ mr: 1 }}>
-            <ArrowBackIcon />
-          </IconButton>
-        </Link>
         <Typography variant="h4" fontWeight="bold">
           任务管理看板
         </Typography>
@@ -152,16 +153,17 @@ const DragAndDropDemo = () => {
       </Stack>
 
       {/* 拖拽区域 */}
-      <Box sx={{ mb: 4, overflow: 'auto', pb: 2 }}>
+      <Box sx={{ mb: 4, pb: 2 }}>
         <DragDropProvider
           onDragStart={handleDragStart}
           onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
         >
-          <Stack
-            direction="row"
-            spacing={2}
+          <Box
             sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 2,
               mb: 4,
               flexWrap: 'nowrap',
               minWidth: 'fit-content',
@@ -174,7 +176,7 @@ const DragAndDropDemo = () => {
                 ))}
               </Column>
             ))}
-          </Stack>
+          </Box>
         </DragDropProvider>
       </Box>
 
