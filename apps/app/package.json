@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dnd-kit/abstract": "^0.0.10",
+    "@dnd-kit/helpers": "^0.0.10",
+    "@dnd-kit/react": "^0.0.10",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
     "@finda-co/icons": "workspace:*",

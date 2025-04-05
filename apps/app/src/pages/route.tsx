@@ -3,6 +3,7 @@ import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import DesktopMacIcon from '@mui/icons-material/DesktopMac';
 import DeviceUnknownIcon from '@mui/icons-material/DeviceUnknown';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import FlagIcon from '@mui/icons-material/Flag';
 import GroupIcon from '@mui/icons-material/Group';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
@@ -115,11 +116,7 @@ export const router = createBrowserRouter([
           title: '任务列表',
           icon: <AssignmentRoundedIcon fontSize="small" />,
         },
-        lazy: async () => {
-          return {
-            Component: () => <div>任务列表页面（待实现）</div>,
-          };
-        },
+        lazy: () => import('./Settings/DragAndDrop'),
       },
       {
         path: 'settings',

@@ -1,3 +1,4 @@
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import GroupIcon from '@mui/icons-material/Group';
 import LanguageIcon from '@mui/icons-material/Language';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -46,6 +47,11 @@ const settingsNavGroups: SettingsNavGroup[] = [
         title: '通知设置',
         path: '/settings/notifications',
         icon: <NotificationsIcon />,
+      },
+      {
+        title: '拖拽排序演示',
+        path: '/settings/drag-and-drop',
+        icon: <DragIndicatorIcon />,
       },
     ],
   },
