@@ -3,7 +3,7 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
 import React from 'react';
 
-import NotificationExample from '../../components/notification/example';
+import NotificationExample from '../../components/toaster/example';
 
 // 通知示例页面
 const NotificationExamplePage = () => {
