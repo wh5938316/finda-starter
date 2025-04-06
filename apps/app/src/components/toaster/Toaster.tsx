@@ -1,6 +1,9 @@
 'use client';
 
-import { Box, Button } from '@mui/material';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Badge, Box, Button, IconButton } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -17,7 +20,7 @@ export interface ToasterProps {
   expandOnHover?: boolean; // 鼠标悬停时是否自动展开
 }
 
-// 固定的 toasts 列表容器
+// 固定的 toasts 列表容器 - 更新为浅色样式
 const ToasterContainer = styled(Box, {
   name: 'MuiToaster',
   slot: 'root',
@@ -41,6 +44,34 @@ const ToasterContainer = styled(Box, {
     },
   };
 });
+
+// 展开按钮 - 添加浅色样式
+const ExpandButton = styled(Button, {
+  name: 'MuiToaster',
+  slot: 'expandButton',
+})(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  color: theme.palette.text.primary,
+  boxShadow: theme.shadows[1],
+  '&:hover': {
+    backgroundColor: theme.palette.background.default,
+    boxShadow: theme.shadows[2],
+  },
+}));
+
+// 通知图标按钮 - 浅色样式
+const NotificationIconButton = styled(IconButton, {
+  name: 'MuiToaster',
+  slot: 'notificationIcon',
+})(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  color: theme.palette.primary.main,
+  boxShadow: theme.shadows[1],
+  '&:hover': {
+    backgroundColor: theme.palette.background.default,
+    boxShadow: theme.shadows[2],
+  },
+}));
 
 // 默认 toast 高度
 const DEFAULT_TOAST_HEIGHT = 80;
@@ -93,22 +124,6 @@ const Toaster: React.FC<ToasterProps> = ({
     }
   };
 
-  // 在展开状态下计算容器高度
-  // useEffect(() => {
-  //   if (expanded && toasts.length > 0) {
-  //     // 更新每个 toast 的高度
-  //     const heightsWithGap = toasts.map((toast) => {
-  //       return getToastHeight(toast.id) + gap;
-  //     });
-
-  //     // 计算总高度
-  //     const totalHeight = heightsWithGap.reduce((sum, height) => sum + height, 0);
-  //     setContainerHeight(totalHeight);
-  //   } else {
-  //     setContainerHeight(100); // 折叠状态下固定高度
-  //   }
-  // }, [expanded, toasts.length, gap]);
-
   // 获取ref回调函数
   const getRefCallback = (id: string) => (element: HTMLDivElement | null) => {
     toastRefs.current[id] = element;
@@ -119,12 +134,20 @@ const Toaster: React.FC<ToasterProps> = ({
     return toasts.sort((a, b) => b.createdAt - a.createdAt).slice(0, visibleToasts + 1);
   }, [toasts, visibleToasts]);
 
+  // 计算容器高度
   const containerHeight = useMemo(() => {
+    if (!sortedToasts.length) return 0;
+
     if (expanded) {
-      return sortedToasts.length * getToastHeight(sortedToasts[0].id);
+      const totalHeight = sortedToasts.reduce((sum, toast, index) => {
+        const height = getToastHeight(toast.id) || DEFAULT_TOAST_HEIGHT;
+        // 最后一个toast不添加gap
+        return sum + height + (index < sortedToasts.length - 1 ? gap : 0);
+      }, 0);
+      return totalHeight;
     }
 
-    return 100;
+    return 100; // 折叠状态下固定高度
   }, [expanded, sortedToasts, gap]);
 
   return (
@@ -137,18 +160,34 @@ const Toaster: React.FC<ToasterProps> = ({
       >
         {/* 展开/折叠按钮 */}
         {toasts.length > 1 && expand && (
-          <Button
-            variant="contained"
-            size="small"
+          <Box
             sx={{
-              alignSelf: position.includes('right') ? 'flex-end' : 'flex-start',
-              mb: position.includes('bottom') ? 1 : 0,
-              mt: position.includes('top') ? 1 : 0,
+              display: 'flex',
+              justifyContent: position.includes('right') ? 'flex-end' : 'flex-start',
+              mb: 1,
             }}
-            onClick={handleExpandToggle}
           >
-            {expanded ? '折叠' : '展开'} ({toasts.length})
-          </Button>
+            {expanded ? (
+              <ExpandButton
+                variant="text"
+                size="small"
+                startIcon={<ExpandLessIcon />}
+                onClick={handleExpandToggle}
+              >
+                折叠 ({toasts.length})
+              </ExpandButton>
+            ) : (
+              <Badge badgeContent={toasts.length} color="primary">
+                <NotificationIconButton
+                  size="small"
+                  onClick={handleExpandToggle}
+                  aria-label="展开通知"
+                >
+                  <NotificationsIcon />
+                </NotificationIconButton>
+              </Badge>
+            )}
+          </Box>
         )}
 
         {/* Toast 列表 */}
@@ -156,7 +195,7 @@ const Toaster: React.FC<ToasterProps> = ({
           sx={{
             position: 'relative',
             width: '356px',
-            height: expanded ? `${containerHeight}px` : '100px', // 使用计算的容器高度
+            height: `${containerHeight}px`, // 使用计算的容器高度
             transition: 'height 0.3s ease',
             [theme.breakpoints.down('sm')]: {
               width: 'calc(100vw - 32px)',
@@ -164,7 +203,7 @@ const Toaster: React.FC<ToasterProps> = ({
           }}
         >
           {/* 渲染排序后的toasts */}
-          {sortedToasts.slice(0, visibleToasts + 1).map((toast, index) => (
+          {sortedToasts.map((toast, index) => (
             <Toast
               key={toast.id}
               id={toast.id}
@@ -176,6 +215,7 @@ const Toaster: React.FC<ToasterProps> = ({
               position={position}
               component={toast.component}
               onDismiss={() => dismissToast(toast.id)}
+              actions={toast.actions} // 传递操作按钮
               // 使用函数引用回调代替直接的ref属性
               // @ts-ignore - 类型问题暂时忽略
               ref={(element) => getRefCallback(toast.id)(element)}

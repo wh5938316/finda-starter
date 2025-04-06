@@ -2,6 +2,10 @@
 
 import React, { createContext, useContext, useMemo, useReducer } from 'react';
 
+import { ToastAction } from './Toast';
+
+// 导入 ToastAction 接口
+
 // Toast 类型定义
 export type ToastType =
   | 'message'
@@ -12,7 +16,9 @@ export type ToastType =
   | 'promise'
   | 'loading'
   | 'custom'
-  | 'headless';
+  | 'headless'
+  | 'update' // 新增：更新类型
+  | 'delete'; // 新增：删除类型
 
 // Toast 项类型
 export interface Toast {
@@ -30,6 +36,8 @@ export interface Toast {
   promiseStatus?: 'pending' | 'fulfilled' | 'rejected';
   // 用于 custom toast
   component?: React.ReactNode;
+  // 用于操作按钮
+  actions?: ToastAction[];
 }
 
 // Toaster 上下文状态
@@ -91,6 +99,14 @@ interface ToasterContextValue extends ToasterState {
     options?: Partial<Omit<Toast, 'id' | 'createdAt' | 'component' | 'type'>>,
   ) => string;
   headless: (options: Omit<Toast, 'id' | 'createdAt' | 'type'>) => string;
+  update: (
+    message: React.ReactNode,
+    options?: Partial<Omit<Toast, 'id' | 'createdAt' | 'message' | 'type'>>,
+  ) => string;
+  deleteToast: (
+    message: React.ReactNode,
+    options?: Partial<Omit<Toast, 'id' | 'createdAt' | 'message' | 'type'>>,
+  ) => string;
 }
 
 // 创建上下文
@@ -284,6 +300,16 @@ export function ToasterProvider({ children }: { children: React.ReactNode }) {
       return addToast({ ...options, type: 'headless' });
     };
 
+    // 新增便捷方法 - update toast
+    const update = (message: React.ReactNode, options = {}) => {
+      return addToast({ message, type: 'update', ...options });
+    };
+
+    // 新增便捷方法 - delete toast
+    const deleteToast = (message: React.ReactNode, options = {}) => {
+      return addToast({ message, type: 'delete', ...options });
+    };
+
     return {
       toasts: state.toasts,
       addToast,
@@ -300,6 +326,8 @@ export function ToasterProvider({ children }: { children: React.ReactNode }) {
       promise,
       custom,
       headless,
+      update, // 新增
+      deleteToast, // 新增
     };
   }, [state]);
 

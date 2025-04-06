@@ -3,11 +3,13 @@
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
+import SyncIcon from '@mui/icons-material/Sync';
 import WarningIcon from '@mui/icons-material/Warning';
-import { Box, CircularProgress, IconButton, Paper, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, IconButton, Paper, Typography } from '@mui/material';
 import { keyframes, styled, useTheme } from '@mui/material/styles';
 import React, { forwardRef } from 'react';
 
@@ -66,10 +68,18 @@ const swipeInDown = keyframes`
 `;
 
 // 扩展 ToastType，添加额外的类型
-type ExtendedToastType = ToastType | 'info' | 'warning' | 'default';
+type ExtendedToastType = ToastType | 'info' | 'warning' | 'default' | 'update' | 'delete';
 
 // 默认 toast 高度
 const DEFAULT_TOAST_HEIGHT = 80;
+
+// 操作按钮接口
+export interface ToastAction {
+  label: string;
+  onClick: () => void;
+  variant?: 'text' | 'outlined' | 'contained';
+  color?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
+}
 
 // Toast 组件属性
 export interface ToastProps {
@@ -82,8 +92,9 @@ export interface ToastProps {
   position: string;
   component?: React.ReactNode;
   onDismiss?: (id: string | number) => void;
+  actions?: ToastAction[]; // 新增：操作按钮
 
-  // 新增位置计算相关属性
+  // 位置计算相关属性
   index: number;
   totalToasts: number;
   expanded: boolean;
@@ -93,7 +104,7 @@ export interface ToastProps {
   toasts?: ToastInterface[];
 }
 
-// Toast 项样式
+// Toast 项样式 - 更新为浅色设计
 const ToastItemStyled = styled(Paper, {
   name: 'MuiToast',
   slot: 'root',
@@ -109,7 +120,7 @@ const ToastItemStyled = styled(Paper, {
 
   return {
     width: '356px',
-    boxShadow: theme.shadows[3],
+    boxShadow: theme.shadows[2],
     overflow: 'hidden',
     position: 'absolute', // 始终使用绝对定位
     transition: theme.transitions.create(['transform', 'opacity'], {
@@ -120,6 +131,7 @@ const ToastItemStyled = styled(Paper, {
     '--swipe-amount-y': '0px', // 默认滑动起始位置
     right: 0,
     left: 0,
+    backgroundColor: theme.palette.background.paper, // 浅色背景
 
     // 不同类型的边框样式
     ...(ownerState.type === 'success' && {
@@ -152,6 +164,12 @@ const ToastItemStyled = styled(Paper, {
     ...(ownerState.type === 'default' && {
       borderLeft: `4px solid ${theme.palette.grey[500]}`,
     }),
+    ...(ownerState.type === 'update' && {
+      borderLeft: `4px solid ${theme.palette.info.main}`,
+    }),
+    ...(ownerState.type === 'delete' && {
+      borderLeft: `4px solid ${theme.palette.warning.main}`,
+    }),
 
     // 新通知滑入动画
     ...(ownerState.isNew && {
@@ -165,8 +183,7 @@ const ToastItemStyled = styled(Paper, {
     }),
 
     '&:hover': {
-      boxShadow: theme.shadows[6],
-      transform: 'translateY(-2px)',
+      boxShadow: theme.shadows[4],
     },
 
     [theme.breakpoints.down('sm')]: {
@@ -175,44 +192,31 @@ const ToastItemStyled = styled(Paper, {
   };
 });
 
-// Toast 内容样式
+// Toast 内容样式 - 更新为浅色设计
 const ToastContentStyled = styled('div', {
   name: 'MuiToast',
   slot: 'content',
 })<{ ownerState: { type: ExtendedToastType } }>(({ theme, ownerState }) => {
-  // 不同类型背景色
-  const getBackgroundColor = (type: ExtendedToastType) => {
-    switch (type) {
-      case 'success':
-        return theme.palette.success.light;
-      case 'error':
-        return theme.palette.error.light;
-      case 'warning':
-        return theme.palette.warning.light;
-      case 'info':
-      case 'message':
-        return theme.palette.info.light;
-      case 'loading':
-      case 'promise':
-        return theme.palette.background.paper;
-      case 'action':
-        return theme.palette.primary.light;
-      case 'cancel':
-        return theme.palette.grey[200];
-      default:
-        return theme.palette.background.paper;
-    }
-  };
-
+  // 浅色设计不需要特殊背景色，使用白色或浅灰色背景
   return {
     padding: theme.spacing(2),
-    backgroundColor: getBackgroundColor(ownerState.type),
+    backgroundColor: theme.palette.background.paper,
     display: 'flex',
-    alignItems: 'center',
+    flexDirection: 'column',
     position: 'relative',
-    minHeight: '64px',
+    width: '100%',
   };
 });
+
+// 顶部内容区域（图标+消息）
+const HeaderContent = styled(Box, {
+  name: 'MuiToast',
+  slot: 'header',
+})(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'flex-start',
+  marginBottom: theme.spacing(1),
+}));
 
 // 图标容器
 const IconContainer = styled(Box, {
@@ -224,6 +228,7 @@ const IconContainer = styled(Box, {
   justifyContent: 'center',
   marginRight: theme.spacing(2),
   flexShrink: 0,
+  marginTop: '2px',
 }));
 
 // 内容区域
@@ -237,6 +242,17 @@ const ContentArea = styled(Box, {
   gap: theme.spacing(0.5),
 }));
 
+// 按钮容器
+const ActionsContainer = styled(Box, {
+  name: 'MuiToast',
+  slot: 'actions',
+})(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'flex-end',
+  gap: theme.spacing(1),
+  marginTop: theme.spacing(1),
+}));
+
 // 关闭按钮
 const CloseButton = styled(IconButton, {
   name: 'MuiToast',
@@ -246,6 +262,7 @@ const CloseButton = styled(IconButton, {
   top: theme.spacing(1),
   right: theme.spacing(1),
   padding: theme.spacing(0.5),
+  color: theme.palette.text.secondary,
 }));
 
 // 获取类型对应的图标
@@ -267,6 +284,10 @@ const getIconByType = (type: ExtendedToastType) => {
       return <DoneIcon color="primary" />;
     case 'cancel':
       return <CancelIcon color="action" />;
+    case 'update':
+      return <SyncIcon color="info" />;
+    case 'delete':
+      return <DeleteIcon color="warning" />;
     default:
       return null;
   }
@@ -302,6 +323,7 @@ const Toast = forwardRef<HTMLDivElement, ToastProps>(
       position,
       component,
       onDismiss,
+      actions = [], // 默认为空数组
       index,
       totalToasts,
       expanded,
@@ -312,10 +334,12 @@ const Toast = forwardRef<HTMLDivElement, ToastProps>(
     },
     ref,
   ) => {
-    const theme = useTheme();
     const isBottom = position.includes('bottom');
 
-    const handleDismiss = () => {
+    const handleDismiss = (e?: React.MouseEvent) => {
+      if (e) {
+        e.stopPropagation(); // 防止点击关闭按钮时触发整个toast的点击事件
+      }
       if (onDismiss) {
         onDismiss(id);
       }
@@ -341,7 +365,6 @@ const Toast = forwardRef<HTMLDivElement, ToastProps>(
         zIndex: totalToasts - index,
         bottom: isBottom ? 0 : 'auto',
         top: !isBottom ? 0 : 'auto',
-        opacity: index < visibleToasts ? 1 : 0,
       } as React.CSSProperties;
 
       // 展开/折叠特定样式
@@ -351,9 +374,27 @@ const Toast = forwardRef<HTMLDivElement, ToastProps>(
           transform: `translateY(${isBottom ? '-' : ''}${yOffset}px)`,
         };
       } else {
+        // 折叠状态下的样式
+        // 获取前一个toast的高度（考虑到toasts是按创建时间从新到旧排序的）
+        let height;
+        if (index === 0) {
+          // 第一个toast使用默认高度或通过getToastHeight获取
+          height = getToastHeight ? getToastHeight(id.toString()) : DEFAULT_TOAST_HEIGHT;
+        } else if (toasts.length > index - 1) {
+          // 不是第一个toast，使用前一个toast的高度
+          const previousToastId = toasts[index - 1]?.id;
+          height =
+            previousToastId && getToastHeight
+              ? getToastHeight(previousToastId.toString())
+              : DEFAULT_TOAST_HEIGHT;
+        } else {
+          height = DEFAULT_TOAST_HEIGHT;
+        }
+
         return {
           ...style,
           transform: `translateY(${isBottom ? '-' : ''}${index * 16}px) scale(${1 - index * 0.05})`,
+          height: `${height}px`, // 设置高度为前一个toast的高度
         };
       }
     };
@@ -398,23 +439,44 @@ const Toast = forwardRef<HTMLDivElement, ToastProps>(
         ref={ref}
         ownerState={{ isNew, isExiting, position, type }}
         style={getToastStyle()}
-        onClick={handleDismiss}
       >
         <ToastContentStyled ownerState={{ type }}>
-          <IconContainer>{getIconByType(type)}</IconContainer>
-          <ContentArea>
-            <Typography variant="body1" fontWeight="500">
-              {message}
-            </Typography>
-            {description && (
-              <Typography variant="body2" color="text.secondary">
-                {description}
+          <HeaderContent>
+            <IconContainer>{getIconByType(type)}</IconContainer>
+            <ContentArea>
+              <Typography variant="body1" fontWeight="500">
+                {message}
               </Typography>
-            )}
-          </ContentArea>
-          <CloseButton size="small" onClick={handleDismiss}>
-            <CloseIcon fontSize="small" />
-          </CloseButton>
+              {description && (
+                <Typography variant="body2" color="text.secondary">
+                  {description}
+                </Typography>
+              )}
+            </ContentArea>
+            <CloseButton size="small" onClick={handleDismiss}>
+              <CloseIcon fontSize="small" />
+            </CloseButton>
+          </HeaderContent>
+
+          {/* 添加操作按钮 */}
+          {actions.length > 0 && (
+            <ActionsContainer>
+              {actions.map((action, actionIndex) => (
+                <Button
+                  key={actionIndex}
+                  variant={action.variant || 'contained'}
+                  color={action.color || 'primary'}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    action.onClick();
+                  }}
+                  size="small"
+                >
+                  {action.label}
+                </Button>
+              ))}
+            </ActionsContainer>
+          )}
         </ToastContentStyled>
       </ToastItemStyled>
     );
