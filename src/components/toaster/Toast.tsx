@@ -9,8 +9,8 @@ import ErrorIcon from '@mui/icons-material/Error';
 import InfoIcon from '@mui/icons-material/Info';
 import SyncIcon from '@mui/icons-material/Sync';
 import WarningIcon from '@mui/icons-material/Warning';
-import { Box, Button, CircularProgress, IconButton, Paper, Typography } from '@mui/material';
-import { keyframes, styled, useTheme } from '@mui/material/styles';
+import { Button, CircularProgress, IconButton } from '@mui/material';
+import { keyframes, styled, useThemeProps } from '@mui/material/styles';
 import React, { forwardRef } from 'react';
 
 import { Toast as ToastInterface, ToastType } from './ToasterContext';
@@ -92,7 +92,7 @@ export interface ToastProps {
   position: string;
   component?: React.ReactNode;
   onDismiss?: (id: string | number) => void;
-  actions?: ToastAction[]; // 新增：操作按钮
+  actions?: ToastAction[]; // 操作按钮
 
   // 位置计算相关属性
   index: number;
@@ -102,18 +102,18 @@ export interface ToastProps {
   visibleToasts: number;
   getToastHeight?: (id: string) => number;
   toasts?: ToastInterface[];
-  // 新增高度回调函数
   onHeightChange?: (id: string | number, height: number) => void;
-  // 新增获取前一个toast id的函数
   getFirstToastId: () => string;
 }
 
-// Toast 项样式 - 更新为浅色设计
-const ToastItemStyled = styled(Paper, {
+// 拆分为位置容器和外观组件
+
+// 1. 最外层位置容器 - 只负责位置、动画等，不涉及外观
+const ToastPositioner = styled('div', {
   name: 'MuiToast',
-  slot: 'root',
+  slot: 'positioner',
 })<{
-  ownerState: { isNew?: boolean; isExiting?: boolean; position: string; type: ExtendedToastType };
+  ownerState: { isNew?: boolean; isExiting?: boolean; position: string };
 }>(({ theme, ownerState }) => {
   const [vertical] = ownerState.position.split('-');
   const isTop = vertical === 'top';
@@ -124,56 +124,14 @@ const ToastItemStyled = styled(Paper, {
 
   return {
     width: '356px',
-    boxShadow: theme.shadows[2],
-    overflow: 'hidden',
-    position: 'absolute', // 始终使用绝对定位
+    position: 'absolute', // 绝对定位用于位置控制
     transition: theme.transitions.create(['transform', 'opacity'], {
       duration: 400,
     }),
-    cursor: 'pointer',
-    borderRadius: theme.shape.borderRadius,
     '--swipe-amount-y': '0px', // 默认滑动起始位置
     right: 0,
     left: 0,
-    backgroundColor: theme.palette.background.paper, // 浅色背景
     opacity: 0,
-    // 不同类型的边框样式
-    ...(ownerState.type === 'success' && {
-      borderLeft: `4px solid ${theme.palette.success.main}`,
-    }),
-    ...(ownerState.type === 'error' && {
-      borderLeft: `4px solid ${theme.palette.error.main}`,
-    }),
-    ...(ownerState.type === 'warning' && {
-      borderLeft: `4px solid ${theme.palette.warning.main}`,
-    }),
-    ...(ownerState.type === 'info' && {
-      borderLeft: `4px solid ${theme.palette.info.main}`,
-    }),
-    ...(ownerState.type === 'message' && {
-      borderLeft: `4px solid ${theme.palette.primary.main}`,
-    }),
-    ...(ownerState.type === 'loading' && {
-      borderLeft: `4px solid ${theme.palette.info.main}`,
-    }),
-    ...(ownerState.type === 'promise' && {
-      borderLeft: `4px solid ${theme.palette.info.main}`,
-    }),
-    ...(ownerState.type === 'action' && {
-      borderLeft: `4px solid ${theme.palette.primary.main}`,
-    }),
-    ...(ownerState.type === 'cancel' && {
-      borderLeft: `4px solid ${theme.palette.grey[500]}`,
-    }),
-    ...(ownerState.type === 'default' && {
-      borderLeft: `4px solid ${theme.palette.grey[500]}`,
-    }),
-    ...(ownerState.type === 'update' && {
-      borderLeft: `4px solid ${theme.palette.info.main}`,
-    }),
-    ...(ownerState.type === 'delete' && {
-      borderLeft: `4px solid ${theme.palette.warning.main}`,
-    }),
 
     // 新通知滑入动画
     ...(ownerState.isNew && {
@@ -186,35 +144,84 @@ const ToastItemStyled = styled(Paper, {
       pointerEvents: 'none', // 禁用鼠标事件
     }),
 
-    '&:hover': {
-      boxShadow: theme.shadows[4],
-    },
-
     [theme.breakpoints.down('sm')]: {
       width: 'calc(100vw - 32px)',
     },
   };
 });
 
-// Toast 内容样式 - 更新为浅色设计
-const ToastContentStyled = styled('div', {
+// 2. Toast外观容器 - 负责Toast的视觉样式
+const ToastRoot = styled('div', {
+  name: 'MuiToast',
+  slot: 'root',
+})<{
+  ownerState: { type: ExtendedToastType };
+}>(({ theme, ownerState }) => ({
+  boxShadow: theme.shadows[2],
+  overflow: 'hidden',
+  cursor: 'pointer',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.background.paper,
+  width: '100%',
+
+  // 不同类型的边框样式
+  ...(ownerState.type === 'success' && {
+    borderLeft: `4px solid ${theme.palette.success.main}`,
+  }),
+  ...(ownerState.type === 'error' && {
+    borderLeft: `4px solid ${theme.palette.error.main}`,
+  }),
+  ...(ownerState.type === 'warning' && {
+    borderLeft: `4px solid ${theme.palette.warning.main}`,
+  }),
+  ...(ownerState.type === 'info' && {
+    borderLeft: `4px solid ${theme.palette.info.main}`,
+  }),
+  ...(ownerState.type === 'message' && {
+    borderLeft: `4px solid ${theme.palette.primary.main}`,
+  }),
+  ...(ownerState.type === 'loading' && {
+    borderLeft: `4px solid ${theme.palette.info.main}`,
+  }),
+  ...(ownerState.type === 'promise' && {
+    borderLeft: `4px solid ${theme.palette.info.main}`,
+  }),
+  ...(ownerState.type === 'action' && {
+    borderLeft: `4px solid ${theme.palette.primary.main}`,
+  }),
+  ...(ownerState.type === 'cancel' && {
+    borderLeft: `4px solid ${theme.palette.grey[500]}`,
+  }),
+  ...(ownerState.type === 'default' && {
+    borderLeft: `4px solid ${theme.palette.grey[500]}`,
+  }),
+  ...(ownerState.type === 'update' && {
+    borderLeft: `4px solid ${theme.palette.info.main}`,
+  }),
+  ...(ownerState.type === 'delete' && {
+    borderLeft: `4px solid ${theme.palette.warning.main}`,
+  }),
+
+  '&:hover': {
+    boxShadow: theme.shadows[4],
+  },
+}));
+
+// 3. Toast内容容器
+const ToastContent = styled('div', {
   name: 'MuiToast',
   slot: 'content',
-})<{ ownerState: { type: ExtendedToastType } }>(({ theme, ownerState }) => {
-  // 浅色设计不需要特殊背景色，使用白色或浅灰色背景
-  return {
-    padding: theme.spacing(2),
-    backgroundColor: theme.palette.background.paper,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing(1),
-    position: 'relative',
-    width: '100%',
-  };
-});
+})(({ theme }) => ({
+  padding: theme.spacing(2),
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(1),
+  position: 'relative',
+  width: '100%',
+}));
 
-// 顶部内容区域（图标+消息）
-const HeaderContent = styled(Box, {
+// 4. 标题区域（图标+消息）
+const ToastHeader = styled('div', {
   name: 'MuiToast',
   slot: 'header',
 })(({ theme }) => ({
@@ -222,8 +229,8 @@ const HeaderContent = styled(Box, {
   alignItems: 'flex-start',
 }));
 
-// 图标容器
-const IconContainer = styled(Box, {
+// 5. 图标容器
+const ToastIcon = styled('div', {
   name: 'MuiToast',
   slot: 'icon',
 })(({ theme }) => ({
@@ -235,10 +242,10 @@ const IconContainer = styled(Box, {
   marginTop: '2px',
 }));
 
-// 内容区域
-const ContentArea = styled(Box, {
+// 6. 内容区域
+const ToastMessage = styled('div', {
   name: 'MuiToast',
-  slot: 'contentArea',
+  slot: 'message',
 })(({ theme }) => ({
   flex: 1,
   display: 'flex',
@@ -246,8 +253,8 @@ const ContentArea = styled(Box, {
   gap: theme.spacing(0.5),
 }));
 
-// 按钮容器
-const ActionsContainer = styled(Box, {
+// 7. 按钮容器
+const ToastActions = styled('div', {
   name: 'MuiToast',
   slot: 'actions',
 })(({ theme }) => ({
@@ -257,8 +264,8 @@ const ActionsContainer = styled(Box, {
   marginTop: theme.spacing(1),
 }));
 
-// 关闭按钮
-const CloseButton = styled(IconButton, {
+// 8. 关闭按钮
+const ToastCloseButton = styled(IconButton, {
   name: 'MuiToast',
   slot: 'closeButton',
 })(({ theme }) => ({
@@ -267,6 +274,33 @@ const CloseButton = styled(IconButton, {
   right: theme.spacing(1),
   padding: theme.spacing(0.5),
   color: theme.palette.text.secondary,
+}));
+
+// 9. 文本元素
+const ToastTitle = styled('div', {
+  name: 'MuiToast',
+  slot: 'title',
+})(({ theme }) => ({
+  fontWeight: 500,
+  fontSize: '0.875rem',
+  lineHeight: 1.5,
+}));
+
+const ToastDescription = styled('div', {
+  name: 'MuiToast',
+  slot: 'description',
+})(({ theme }) => ({
+  fontSize: '0.75rem',
+  lineHeight: 1.5,
+  color: theme.palette.text.secondary,
+}));
+
+// 11. Headless 容器
+const ToastHeadlessContainer = styled('div', {
+  name: 'MuiToast',
+  slot: 'headless',
+})(({ theme }) => ({
+  position: 'absolute',
 }));
 
 // 获取类型对应的图标
@@ -304,7 +338,6 @@ const calculateExpandedPosition = (
   gap: number,
   getToastHeight?: (id: string) => number,
 ): number => {
-  // 计算当前 toast 前面所有 toast 的高度总和
   let totalOffset = 0;
   for (let i = 0; i < index; i++) {
     const toast = toasts[i];
@@ -315,176 +348,151 @@ const calculateExpandedPosition = (
 };
 
 // Toast 组件
-const Toast = forwardRef<HTMLDivElement, ToastProps>(
-  (
-    {
-      id,
-      message,
-      description,
-      type = 'message' as ExtendedToastType,
-      isNew,
-      isExiting,
-      position,
-      component,
-      onDismiss,
-      actions = [], // 默认为空数组
-      index,
-      totalToasts,
-      expanded,
-      gap,
-      visibleToasts,
-      getToastHeight,
-      toasts = [],
-      onHeightChange,
-      getFirstToastId,
-    },
-    ref,
-  ) => {
-    const [mounted, setMounted] = React.useState(false);
-    const isBottom = position.includes('bottom');
-    // 添加内部ref用于测量高度
-    const toastRef = React.useRef<HTMLDivElement>(null);
+const Toast = forwardRef<HTMLDivElement, ToastProps>(function Toast(inProps, ref) {
+  const props = useThemeProps({ props: inProps, name: 'MuiToast' });
+  const {
+    id,
+    message,
+    description,
+    type = 'message' as ExtendedToastType,
+    isNew,
+    isExiting,
+    position,
+    component,
+    onDismiss,
+    actions = [],
+    index,
+    totalToasts,
+    expanded,
+    gap,
+    visibleToasts,
+    getToastHeight,
+    toasts = [],
+    onHeightChange,
+    getFirstToastId,
+  } = props;
 
-    React.useEffect(() => {
-      setMounted(true);
-    }, []);
+  const [mounted, setMounted] = React.useState(false);
+  const isBottom = position.includes('bottom');
+  const toastRef = React.useRef<HTMLDivElement>(null);
 
-    // 使用useEffect在组件加载后测量和更新高度
-    React.useEffect(() => {
-      const toastNode = toastRef.current;
-      if (toastNode) {
-        const height = toastNode.getBoundingClientRect().height;
-        // 将高度传回Toaster
-        if (onHeightChange) {
-          onHeightChange(id, height);
-        }
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // 测量和更新高度
+  React.useEffect(() => {
+    const toastNode = toastRef.current;
+    if (toastNode) {
+      const height = toastNode.getBoundingClientRect().height;
+      if (onHeightChange) {
+        onHeightChange(id, height);
       }
-    }, [id, onHeightChange]); // 依赖项包括可能影响高度的属性
+    }
+  }, [id, onHeightChange, message, description, actions.length]);
 
-    const handleDismiss = (e?: React.MouseEvent) => {
-      if (e) {
-        e.stopPropagation(); // 防止点击关闭按钮时触发整个toast的点击事件
-      }
-      if (onDismiss) {
-        onDismiss(id);
-      }
-    };
+  const handleDismiss = (e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    if (onDismiss) {
+      onDismiss(id);
+    }
+  };
 
-    // 计算样式
-    const getToastStyle = (): React.CSSProperties => {
-      // 根据位置计算滑动初始值
-      let swipeAmountY;
-      let yOffset;
+  // 计算样式
+  const getToastStyle = (): React.CSSProperties => {
+    let swipeAmountY;
+    let yOffset;
 
-      if (expanded) {
-        yOffset = calculateExpandedPosition(index, toasts, gap, getToastHeight);
-        swipeAmountY = `${isBottom ? '-' : ''}${yOffset}px`;
-      } else {
-        swipeAmountY = `${isBottom ? '-' : ''}${index * 30}%`;
-      }
+    if (expanded) {
+      yOffset = calculateExpandedPosition(index, toasts, gap, getToastHeight);
+      swipeAmountY = `${isBottom ? '-' : ''}${yOffset}px`;
+    } else {
+      swipeAmountY = `${isBottom ? '-' : ''}${index * 30}%`;
+    }
 
-      // 通用样式
-      const style = {
-        '--gap': `${gap}px`,
-        '--swipe-amount-y': swipeAmountY,
-        '--y': mounted ? '0px' : '-100%',
-        '--scale': '1',
-        zIndex: totalToasts - index,
-        bottom: isBottom ? 0 : 'auto',
-        top: !isBottom ? 0 : 'auto',
-        opacity: mounted ? (index < visibleToasts ? 1 : 0) : 0,
-        transform: 'translateY(var(--y)) scale(var(--scale))',
+    // 通用样式
+    const style = {
+      '--gap': `${gap}px`,
+      '--swipe-amount-y': swipeAmountY,
+      '--y': mounted ? '0px' : '-100%',
+      '--scale': '1',
+      zIndex: totalToasts - index,
+      bottom: isBottom ? 0 : 'auto',
+      top: !isBottom ? 0 : 'auto',
+      opacity: mounted ? (index < visibleToasts ? 1 : 0) : 0,
+      transform: 'translateY(var(--y)) scale(var(--scale))',
+    } as React.CSSProperties;
+
+    // 展开/折叠特定样式
+    if (expanded) {
+      return {
+        ...style,
+        '--y': mounted ? `${isBottom ? '-' : ''}${yOffset}px` : '100%',
       } as React.CSSProperties;
-
-      // 展开/折叠特定样式
-      if (expanded) {
-        return {
-          ...style,
-          '--y': mounted ? `${isBottom ? '-' : ''}${yOffset}px` : '100%',
-        } as React.CSSProperties;
+    } else {
+      // 折叠状态下的样式
+      let height;
+      if (index === 0) {
+        height = 'auto';
       } else {
-        // 折叠状态下的样式
-        let height;
-        if (index === 0) {
-          height = 'auto';
-        } else {
-          const firstToastId = getFirstToastId();
-          height = firstToastId && getToastHeight ? getToastHeight(firstToastId) : 'auto';
-        }
-
-        return {
-          ...style,
-          '--y': mounted ? `${isBottom ? '-' : ''}${index * 16}px` : '100%',
-          '--scale': `calc(1 - ${index * 0.05})`,
-          height: typeof height === 'number' ? `${height}px` : height, // 设置高度为前一个toast的高度
-        } as React.CSSProperties;
+        const firstToastId = getFirstToastId();
+        height = firstToastId && getToastHeight ? getToastHeight(firstToastId) : 'auto';
       }
-    };
 
-    console.log(id, getToastStyle().height);
-
-    // 自定义组件渲染
-    if (type === 'custom' && component) {
-      return (
-        <ToastItemStyled
-          ref={toastRef}
-          ownerState={{ isNew, isExiting, position, type }}
-          style={getToastStyle()}
-          onClick={handleDismiss}
-        >
-          {component}
-        </ToastItemStyled>
-      );
+      return {
+        ...style,
+        '--y': mounted ? `${isBottom ? '-' : ''}${index * 16}px` : '100%',
+        '--scale': `calc(1 - ${index * 0.05})`,
+        height: typeof height === 'number' ? `${height}px` : height,
+      } as React.CSSProperties;
     }
+  };
 
-    // 无样式 headless 组件渲染
-    if (type === 'headless') {
-      return (
-        <Box
-          ref={toastRef}
-          style={{
-            ...getToastStyle(),
-            position: 'absolute',
-            animation: isNew
-              ? `${position.includes('top') ? swipeInDown : swipeInUp} 300ms ease-out forwards`
-              : isExiting
-                ? `${position.includes('top') ? swipeOutUp : swipeOutDown} 300ms ease-out forwards`
-                : 'none',
-          }}
-        >
-          {message}
-        </Box>
-      );
-    }
-
-    // 标准 Toast 组件渲染
+  // 自定义组件渲染
+  if (type === 'custom' && component) {
     return (
-      <ToastItemStyled
+      <ToastPositioner
         ref={toastRef}
-        ownerState={{ isNew, isExiting, position, type }}
+        ownerState={{ isNew, isExiting, position }}
         style={getToastStyle()}
       >
-        <ToastContentStyled ownerState={{ type }}>
-          <HeaderContent>
-            <IconContainer>{getIconByType(type)}</IconContainer>
-            <ContentArea>
-              <Typography variant="body1" fontWeight="500">
-                {message}
-              </Typography>
-              {description && (
-                <Typography variant="body2" color="text.secondary">
-                  {description}
-                </Typography>
-              )}
-            </ContentArea>
-            <CloseButton size="small" onClick={handleDismiss}>
-              <CloseIcon fontSize="small" />
-            </CloseButton>
-          </HeaderContent>
+        {component}
+      </ToastPositioner>
+    );
+  }
 
-          {/* 添加操作按钮 */}
+  // 无样式 headless 组件渲染
+  if (type === 'headless') {
+    return (
+      <ToastHeadlessContainer ref={toastRef} style={getToastStyle()}>
+        {message}
+      </ToastHeadlessContainer>
+    );
+  }
+
+  // 标准 Toast 组件渲染
+  const positionerProps = { isNew, isExiting, position };
+  const rootProps = { type };
+
+  return (
+    <ToastPositioner ref={toastRef} ownerState={positionerProps} style={getToastStyle()}>
+      <ToastRoot ownerState={rootProps} onClick={handleDismiss}>
+        <ToastContent>
+          <ToastHeader>
+            <ToastIcon>{getIconByType(type)}</ToastIcon>
+            <ToastMessage>
+              <ToastTitle>{message}</ToastTitle>
+              {description && <ToastDescription>{description}</ToastDescription>}
+            </ToastMessage>
+            <ToastCloseButton size="small" onClick={handleDismiss}>
+              <CloseIcon fontSize="small" />
+            </ToastCloseButton>
+          </ToastHeader>
+
           {actions.length > 0 && (
-            <ActionsContainer>
+            <ToastActions>
               {actions.map((action, actionIndex) => (
                 <Button
                   key={actionIndex}
@@ -499,14 +507,13 @@ const Toast = forwardRef<HTMLDivElement, ToastProps>(
                   {action.label}
                 </Button>
               ))}
-            </ActionsContainer>
+            </ToastActions>
           )}
-        </ToastContentStyled>
-      </ToastItemStyled>
-    );
-  },
-);
+        </ToastContent>
+      </ToastRoot>
+    </ToastPositioner>
+  );
+});
 
-Toast.displayName = 'Toast';
-
+// 增加组件类型定义
 export default Toast;

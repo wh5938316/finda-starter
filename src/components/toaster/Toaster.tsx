@@ -166,17 +166,18 @@ const Toaster: React.FC<ToasterProps> = ({
     if (!sortedToasts.length) return 0;
 
     if (expanded) {
-      const totalHeight = sortedToasts.reduce((sum, toast, index) => {
-        const height = getToastHeight(toast.id) || DEFAULT_TOAST_HEIGHT;
-        // 最后一个toast不添加gap
-        return sum + height + (index < sortedToasts.length - 1 ? gap : 0);
-      }, 0);
-      return totalHeight;
+      return 'auto';
+      // const totalHeight = sortedToasts.reduce((sum, toast, index) => {
+      //   const height = getToastHeight(toast.id) || DEFAULT_TOAST_HEIGHT;
+      //   // 最后一个toast不添加gap
+      //   return sum + height + (index < sortedToasts.length - 1 ? gap : 0);
+      // }, 0);
+      // return totalHeight;
     }
 
     const totalHeight = (sortedToasts[0].height ?? 0) + 16 * (visibleToasts - 1);
 
-    return totalHeight;
+    return `${totalHeight}px`;
   }, [expanded, sortedToasts, gap, toastHeights]); // 添加toastHeights依赖
 
   // 从toastHeights中清理已不存在的toast高度
@@ -234,7 +235,7 @@ const Toaster: React.FC<ToasterProps> = ({
           sx={{
             position: 'relative',
             width: '356px',
-            height: `${containerHeight}px`, // 使用计算的容器高度
+            height: containerHeight, // 使用计算的容器高度
             transition: 'height 0.3s ease',
             [theme.breakpoints.down('sm')]: {
               width: 'calc(100vw - 32px)',
