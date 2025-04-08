@@ -323,13 +323,22 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
   // 获取Toast样式
   const getToastStyle = React.useCallback(
     (index: number, toast: ToastData): React.CSSProperties => {
+      // 计算实际位置索引，考虑是否有标记为删除的toast
+      let effectiveIndex = index;
+      if (isExpanded) {
+        // 根据实际位置计算，不考虑已标记为删除的toast
+        const visibleToasts = toasts.filter((t) => !t.delete);
+        effectiveIndex = visibleToasts.indexOf(toast);
+        if (effectiveIndex === -1) effectiveIndex = index;
+      }
+
       // 滑动动画的起始值
       let swipeAmountY;
       if (isExpanded) {
-        const yOffset = calculatePosition(index);
+        const yOffset = calculatePosition(effectiveIndex);
         swipeAmountY = `${isBottom ? '-' : ''}${yOffset}px`;
       } else {
-        swipeAmountY = `${isBottom ? '-' : ''}${index * 16}px`;
+        swipeAmountY = `${isBottom ? '-' : ''}${effectiveIndex * 16}px`;
       }
 
       // 基础样式
@@ -349,7 +358,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
 
       // 根据展开状态设置不同的样式
       if (isExpanded) {
-        const yOffset = calculatePosition(index);
+        const yOffset = calculatePosition(effectiveIndex);
         return {
           ...baseStyle,
           transform: `translateY(${isBottom ? '-' : ''}${yOffset}px)`,
@@ -362,28 +371,28 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
           }),
           // 删除元素的样式
           ...(toast.delete && {
-            animation: `${isTop ? swipeOutUp : swipeOutDown} 0.3s forwards`,
+            animation: `${isTop ? swipeOutUp : swipeOutDown} 0.25s forwards`,
           }),
         };
       } else {
         return {
           ...baseStyle,
-          transform: `translateY(${isBottom ? '-' : ''}${index * 16}px) scale(${1 - index * 0.05})`,
+          transform: `translateY(${isBottom ? '-' : ''}${effectiveIndex * 16}px) scale(${1 - effectiveIndex * 0.05})`,
           // 新元素添加初始样式
           ...(!toast.height && {
             opacity: 0,
             transform: isTop
-              ? `translateY(calc(${isBottom ? '-' : ''}${index * 16}px - 100%)) scale(${1 - index * 0.05})`
-              : `translateY(calc(${isBottom ? '-' : ''}${index * 16}px + 100%)) scale(${1 - index * 0.05})`,
+              ? `translateY(calc(${isBottom ? '-' : ''}${effectiveIndex * 16}px - 100%)) scale(${1 - effectiveIndex * 0.05})`
+              : `translateY(calc(${isBottom ? '-' : ''}${effectiveIndex * 16}px + 100%)) scale(${1 - effectiveIndex * 0.05})`,
           }),
           // 删除元素的样式
           ...(toast.delete && {
-            animation: `${isTop ? swipeOutUp : swipeOutDown} 0.3s forwards`,
+            animation: `${isTop ? swipeOutUp : swipeOutDown} 0.25s forwards`,
           }),
         };
       }
     },
-    [isExpanded, calculatePosition, isBottom, isTop, maxVisible, toasts.length, gap],
+    [isExpanded, calculatePosition, isBottom, isTop, maxVisible, toasts, gap],
   );
 
   // 获取动画
@@ -420,9 +429,21 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
     console.log('处理关闭Toast请求:', toast.id);
 
     // 先标记为删除状态，让它开始动画
-    setToasts((prevToasts) =>
-      prevToasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)),
-    );
+    setToasts((prevToasts) => {
+      const updatedToasts = prevToasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t));
+
+      // 重新计算所有toast的位置，确保上方的toast立即重新定位
+      const deletedIndex = prevToasts.findIndex((t) => t.id === toast.id);
+      if (deletedIndex !== -1) {
+        // 通知布局已更改，触发重新渲染
+        setTimeout(() => {
+          // 强制更新以重新计算位置
+          setToasts([...updatedToasts]);
+        }, 0);
+      }
+
+      return updatedToasts;
+    });
 
     // 通知事件系统
     try {

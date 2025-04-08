@@ -152,7 +152,7 @@ const ToastRoot = styled('li', {
   overflow: 'anywhere',
   listStyle: 'none',
   transition: theme.transitions.create(['transform', 'opacity'], {
-    duration: 300,
+    duration: 200,
     easing: theme.transitions.easing.easeOut,
   }),
   cursor: 'default',
@@ -165,13 +165,14 @@ const ToastRoot = styled('li', {
     height: 'calc(var(--gap) + 1px)',
     bottom: '100%',
     width: '100%',
-    pointerEvents: 'none', // 确保不会干扰鼠标事件
+    pointerEvents: 'none',
   },
 
   // 删除状态
   ...(ownerState.isDeleting && {
     pointerEvents: 'none',
-    animation: `${animation} 0.3s forwards`,
+    animation: `${animation} 0.25s forwards`,
+    willChange: 'transform, opacity',
   }),
 }));
 
