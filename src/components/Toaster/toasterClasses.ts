@@ -8,32 +8,32 @@ export interface ToasterClasses {
   root: string;
   /** 应用于容器元素 */
   container: string;
-  /** 应用于底部右侧位置的根元素 */
-  positionBottomRight: string;
-  /** 应用于底部左侧位置的根元素 */
-  positionBottomLeft: string;
-  /** 应用于顶部右侧位置的根元素 */
-  positionTopRight: string;
-  /** 应用于顶部左侧位置的根元素 */
+  /** 应用于位置为top-left的根元素 */
   positionTopLeft: string;
+  /** 应用于位置为top-right的根元素 */
+  positionTopRight: string;
+  /** 应用于位置为bottom-left的根元素 */
+  positionBottomLeft: string;
+  /** 应用于位置为bottom-right的根元素 */
+  positionBottomRight: string;
   /** 应用于展开状态的根元素 */
   expanded: string;
 }
 
 export type ToasterClassKey = keyof ToasterClasses;
 
-export function getToasterUtilityClass(slot: string): string {
+// 生成类名前缀为'MuiToaster'的工具类
+export function getToasterUtilityClass(slot: string) {
   return generateUtilityClass('MuiToaster', slot);
 }
 
-const toasterClasses: ToasterClasses = generateUtilityClasses('MuiToaster', [
+// 根据ToasterClasses接口生成所有类名
+export const toasterClasses: ToasterClasses = generateUtilityClasses('MuiToaster', [
   'root',
   'container',
-  'positionBottomRight',
-  'positionBottomLeft',
-  'positionTopRight',
   'positionTopLeft',
+  'positionTopRight',
+  'positionBottomLeft',
+  'positionBottomRight',
   'expanded',
 ]);
-
-export default toasterClasses;

@@ -1,84 +1,16 @@
-'use client';
-
 import { Portal } from '@mui/material';
-import { keyframes, styled, useThemeProps } from '@mui/material/styles';
+import { styled, useThemeProps } from '@mui/material/styles';
 import { unstable_composeClasses as composeClasses } from '@mui/utils';
 import * as React from 'react';
+import ReactDOM from 'react-dom';
 
 import Toast from './Toast';
-import ToasterContext from './ToasterContext';
+import { ToastData, ToastToDismiss, ToasterEvents } from './ToasterEvents';
+import { swipeInDown, swipeInUp, swipeOutDown, swipeOutUp } from './toaster-animations';
 import { getToasterUtilityClass } from './toasterClasses';
-
-// 定义动画
-// 向上滑出动画
-const swipeOutUp = keyframes`
-  from {
-    transform: translateY(var(--swipe-amount-y));
-    opacity: 1;
-  }
-
-  to {
-    transform: translateY(calc(var(--swipe-amount-y) - 100%));
-    opacity: 0;
-  }
-`;
-
-// 向下滑出动画
-const swipeOutDown = keyframes`
-  from {
-    transform: translateY(var(--swipe-amount-y));
-    opacity: 1;
-  }
-
-  to {
-    transform: translateY(calc(var(--swipe-amount-y) + 100%));
-    opacity: 0;
-  }
-`;
-
-// 向上滑入动画
-const swipeInUp = keyframes`
-  from {
-    transform: translateY(calc(var(--swipe-amount-y) + 100%));
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(var(--swipe-amount-y));
-    opacity: 1;
-  }
-`;
-
-// 向下滑入动画
-const swipeInDown = keyframes`
-  from {
-    transform: translateY(calc(var(--swipe-amount-y) - 100%));
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(var(--swipe-amount-y));
-    opacity: 1;
-  }
-`;
 
 // 定义 Toaster 位置类型
 export type ToasterPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
-
-// Toast 数据类型
-export interface ToastData {
-  id: number;
-  message: React.ReactNode;
-  description?: React.ReactNode;
-  type?: 'info' | 'success' | 'warning' | 'error' | 'default';
-  duration?: number;
-  onClose?: () => void;
-  delete?: boolean;
-  height?: number;
-}
-
-// Toast 待删除类型
-export type ToastToDismiss = { id: number; dismiss: boolean };
 
 // 组件属性类型
 export interface ToasterProps {
@@ -107,21 +39,40 @@ export interface ToasterProps {
    */
   maxVisible?: number;
   /**
-   * 自定义 Toast 组件
+   * Toast默认持续时间(毫秒)
+   * @default 5000
    */
-  slotToast?: React.ElementType;
+  duration?: number;
   /**
-   * Toast 组件的属性
+   * 子元素
    */
-  slotToastProps?: Record<string, any>;
+  children?: React.ReactNode;
+}
+
+// Toaster组件slots
+export interface ToasterSlots {
   /**
-   * 自定义容器组件
+   * 根元素
+   * @default 'div'
    */
-  slotContainer?: React.ElementType;
+  root?: React.ElementType;
   /**
-   * 容器组件的属性
+   * 容器元素
+   * @default 'div'
    */
-  slotContainerProps?: Record<string, any>;
+  container?: React.ElementType;
+  /**
+   * Toast元素
+   * @default Toast
+   */
+  toast?: React.ElementType;
+}
+
+// Toaster组件slot属性
+export interface ToasterSlotProps {
+  root?: Record<string, any>;
+  container?: Record<string, any>;
+  toast?: Record<string, any>;
 }
 
 // 所有组件Slots的类型
@@ -156,6 +107,7 @@ const ToasterRoot = styled('div', {
     zIndex: theme.zIndex.snackbar,
     display: 'flex',
     flexDirection: 'column',
+    overflow: 'visible',
 
     ...(vertical === 'top' ? { top: 24 } : { bottom: 24 }),
     ...(horizontal === 'left' ? { left: 24 } : { right: 24 }),
@@ -192,33 +144,119 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
     gap = 16,
     expand = true,
     maxVisible = 3,
-    slotToast: ToastComponent = Toast,
-    slotToastProps = {},
-    slotContainer: ContainerComponent = ToasterContainer,
-    slotContainerProps = {},
+    duration = 5000,
+    children,
     ...other
   } = props;
 
-  // 获取上下文
-  const context = React.useContext(ToasterContext);
-  if (!context) {
-    throw new Error('Toaster must be used within a ToasterProvider');
-  }
-
-  const { toasts, removeToast } = context;
-
+  // 状态管理
+  const [toasts, setToasts] = React.useState<ToastData[]>([]);
+  const [isHovered, setIsHovered] = React.useState(false);
   const [containerHeight, setContainerHeight] = React.useState<number>(0);
-  const toastRefs = React.useRef<Record<number, HTMLDivElement | null>>({});
   const isBottom = position.startsWith('bottom');
   const isTop = position.startsWith('top');
+
+  // 计算当前展开状态（根据prop和鼠标状态）
+  const isExpanded = expand || isHovered;
 
   const ownerState = {
     ...props,
     position,
-    expand,
+    expand: isExpanded,
   };
 
   const classes = useUtilityClasses(ownerState);
+
+  // 鼠标事件处理函数
+  const handleMouseEnter = React.useCallback(() => {
+    if (!expand) {
+      setIsHovered(true);
+    }
+  }, [expand]);
+
+  const handleMouseLeave = React.useCallback(() => {
+    setIsHovered(false);
+  }, []);
+
+  // 订阅事件系统
+  React.useEffect(() => {
+    // 处理Toast事件
+    const unsubscribe = ToasterEvents.subscribe((toast) => {
+      if ('dismiss' in toast) {
+        // 删除通知
+        requestAnimationFrame(() => {
+          setToasts((prevToasts) =>
+            prevToasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)),
+          );
+        });
+        return;
+      }
+
+      // 添加或更新通知
+      setTimeout(() => {
+        ReactDOM.flushSync(() => {
+          setToasts((prevToasts) => {
+            const existingToastIndex = prevToasts.findIndex((t) => t.id === toast.id);
+
+            // 更新现有通知
+            if (existingToastIndex !== -1) {
+              return [
+                ...prevToasts.slice(0, existingToastIndex),
+                { ...prevToasts[existingToastIndex], ...toast },
+                ...prevToasts.slice(existingToastIndex + 1),
+              ];
+            }
+
+            // 添加新通知
+            return [toast, ...prevToasts];
+          });
+        });
+      });
+    });
+
+    // 处理清除事件
+    const clearUnsubscribe = ToasterEvents.onClear(() => {
+      setToasts([]);
+    });
+
+    // 组件卸载时取消订阅
+    return () => {
+      unsubscribe();
+      clearUnsubscribe();
+    };
+  }, []);
+
+  // 处理通知自动关闭
+  React.useEffect(() => {
+    const timeouts: number[] = [];
+
+    toasts.forEach((toast) => {
+      if (!toast.delete && !isHovered) {
+        const toastDuration = toast.duration || duration;
+        const timeout = setTimeout(() => {
+          ToasterEvents.dismiss(toast.id);
+        }, toastDuration);
+
+        timeouts.push(timeout);
+      }
+    });
+
+    return () => {
+      timeouts.forEach(clearTimeout);
+    };
+  }, [toasts, duration, isHovered]);
+
+  // 更新Toast高度
+  const updateToastHeight = React.useCallback((id: number, height: number) => {
+    setToasts((prevToasts) =>
+      prevToasts.map((toast) => (toast.id === id ? { ...toast, height } : toast)),
+    );
+  }, []);
+
+  // 删除已标记为删除的通知
+  const removeDeletedToasts = React.useCallback((id: number) => {
+    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
+  }, []);
 
   // 计算容器高度
   React.useEffect(() => {
@@ -227,53 +265,41 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
       return;
     }
 
-    if (expand) {
-      const totalHeight = toasts.reduce((sum, toast) => {
+    if (isExpanded) {
+      // 只计算前 maxVisible 个toast的高度
+      const visibleToasts = [...toasts]
+        .sort((a, b) => {
+          const posA = a.position || 0;
+          const posB = b.position || 0;
+          return posB - posA;
+        })
+        .slice(0, maxVisible);
+
+      const totalHeight = visibleToasts.reduce((sum, toast) => {
         const height = toast.height || 0;
         return sum + height + gap;
       }, 0);
 
-      setContainerHeight(Math.max(totalHeight, 100));
+      setContainerHeight(Math.max(totalHeight - gap, 0));
     } else {
       // 折叠模式下，容器高度为最上面那个toast的高度
-      const firstToast = toasts.sort((a, b) => b.id - a.id)[0];
-      setContainerHeight(firstToast?.height || 100);
+      const firstToast = toasts.sort((a, b) => {
+        const posA = a.position || 0;
+        const posB = b.position || 0;
+        return posB - posA;
+      })[0];
+      setContainerHeight(firstToast?.height || 0);
     }
-  }, [toasts, expand, gap]);
-
-  // 更新Toast高度
-  const updateToastHeight = React.useCallback((id: number, height: number) => {
-    // 我们不再直接修改toasts状态，而是在ToastProvider中处理
-    // 这里只获取DOM元素的高度信息
-  }, []);
-
-  // 创建ref回调
-  const getRefCallback = React.useCallback(
-    (toast: ToastData) => (element: HTMLDivElement | null) => {
-      if (element && !toast.height) {
-        toastRefs.current[toast.id] = element;
-        // 更新Toast高度
-        toast.height = element.clientHeight;
-
-        // 为新元素添加一个微小的延迟，确保初始样式能被应用
-        if (!toast.delete) {
-          // 强制重绘DOM以开始过渡动画
-          setTimeout(() => {
-            if (element) {
-              element.style.opacity = '1';
-              element.style.transform = 'translateY(0)';
-            }
-          }, 50);
-        }
-      }
-    },
-    [],
-  );
+  }, [toasts, isExpanded, gap, maxVisible]);
 
   // 计算Toast位置
   const calculatePosition = React.useCallback(
     (index: number): number => {
-      const sortedToasts = [...toasts].sort((a, b) => b.id - a.id);
+      const sortedToasts = [...toasts].sort((a, b) => {
+        const posA = a.position || 0;
+        const posB = b.position || 0;
+        return posB - posA;
+      });
 
       let totalOffset = 0;
       for (let i = 0; i < index; i++) {
@@ -291,7 +317,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
     (index: number, toast: ToastData): React.CSSProperties => {
       // 滑动动画的起始值
       let swipeAmountY;
-      if (expand) {
+      if (isExpanded) {
         const yOffset = calculatePosition(index);
         swipeAmountY = `${isBottom ? '-' : ''}${yOffset}px`;
       } else {
@@ -310,10 +336,11 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
         top: !isBottom ? 0 : 'auto',
         opacity: index < maxVisible ? 1 : 0,
         transition: 'opacity 300ms, transform 300ms',
+        pointerEvents: index < maxVisible ? 'auto' : 'none', // 超出可见数量的toast无法点击
       } as React.CSSProperties;
 
       // 根据展开状态设置不同的样式
-      if (expand) {
+      if (isExpanded) {
         const yOffset = calculatePosition(index);
         return {
           ...baseStyle,
@@ -324,6 +351,10 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
             transform: isTop
               ? `translateY(calc(${isBottom ? '-' : ''}${yOffset}px - 100%))`
               : `translateY(calc(${isBottom ? '-' : ''}${yOffset}px + 100%))`,
+          }),
+          // 删除元素的样式
+          ...(toast.delete && {
+            animation: `${isTop ? swipeOutUp : swipeOutDown} 0.3s forwards`,
           }),
         };
       } else {
@@ -337,17 +368,41 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
               ? `translateY(calc(${isBottom ? '-' : ''}${index * 16}px - 100%)) scale(${1 - index * 0.05})`
               : `translateY(calc(${isBottom ? '-' : ''}${index * 16}px + 100%)) scale(${1 - index * 0.05})`,
           }),
+          // 删除元素的样式
+          ...(toast.delete && {
+            animation: `${isTop ? swipeOutUp : swipeOutDown} 0.3s forwards`,
+          }),
         };
       }
     },
-    [expand, calculatePosition, isBottom, isTop, maxVisible, toasts.length, gap],
+    [isExpanded, calculatePosition, isBottom, isTop, maxVisible, toasts.length, gap],
   );
 
   // 获取动画
-  const getAnimation = React.useCallback((toast: ToastData, index: number): string | undefined => {
-    // 我们将不使用keyframe动画，而是使用CSS transition
-    return undefined;
-  }, []);
+  const getAnimation = React.useCallback(
+    (toast: ToastData, index: number): string | undefined => {
+      if (toast.delete) {
+        return isTop ? swipeOutUp.toString() : swipeOutDown.toString();
+      }
+
+      if (!toast.height) {
+        return isTop ? swipeInDown.toString() : swipeInUp.toString();
+      }
+
+      return undefined;
+    },
+    [isTop],
+  );
+
+  // 处理动画结束
+  // const handleAnimationEnd = React.useCallback(
+  //   (toast: ToastData) => {
+  //     if (toast.delete) {
+  //       removeDeletedToasts(toast.id);
+  //     }
+  //   },
+  //   [removeDeletedToasts],
+  // );
 
   return (
     <Portal>
@@ -355,39 +410,48 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
         ref={ref}
         className={`${classes.root} ${className || ''}`}
         ownerState={ownerState}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         {...other}
       >
-        <ContainerComponent
+        <ToasterContainer
           ownerState={ownerState}
           className={classes.container}
           style={{ height: `${containerHeight}px` }}
-          {...slotContainerProps}
         >
           {toasts
-            .sort((a, b) => b.id - a.id)
+            .sort((a, b) => {
+              const posA = a.position || 0;
+              const posB = b.position || 0;
+              return posB - posA;
+            })
+            // 只渲染 maxVisible + 1 个toast，多一个用于显示消失动画
+            .slice(0, maxVisible + 1)
             .map((toast, index) => (
-              <ToastComponent
+              <Toast
                 key={toast.id}
-                ref={getRefCallback(toast)}
                 style={getToastStyle(index, toast)}
                 message={toast.message}
                 description={toast.description}
                 type={toast.type}
                 onClose={() => {
                   toast.onClose?.();
-                  removeToast(toast.id);
+                  ToasterEvents.dismiss(toast.id);
                 }}
                 animation={getAnimation(toast, index)}
                 ownerState={{
-                  ...toast,
+                  id: toast.id,
                   position,
                   isNew: !toast.height,
                   isDeleting: toast.delete,
+                  message: toast.message,
                 }}
-                {...slotToastProps}
+                onHeightChange={updateToastHeight}
+                // onAnimationEnd={() => handleAnimationEnd(toast)}
               />
             ))}
-        </ContainerComponent>
+        </ToasterContainer>
+        {children}
       </ToasterRoot>
     </Portal>
   );

@@ -1,16 +1,15 @@
-'use client';
-
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, IconButton, Paper, PaperProps, Typography } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import { styled, useThemeProps } from '@mui/material/styles';
 import { unstable_composeClasses as composeClasses } from '@mui/utils';
 import * as React from 'react';
 
 import { ToasterPosition } from './Toaster';
+import { ToastData } from './ToasterEvents';
 import { getToastUtilityClass } from './toastClasses';
 
 // Toast属性接口
-export interface ToastProps extends Omit<PaperProps, 'ref'> {
+export interface ToastProps {
   /**
    * 通知内容
    */
@@ -29,6 +28,14 @@ export interface ToastProps extends Omit<PaperProps, 'ref'> {
    */
   onClose?: () => void;
   /**
+   * CSS样式
+   */
+  style?: React.CSSProperties;
+  /**
+   * 自定义类名
+   */
+  className?: string;
+  /**
    * 自定义动画
    */
   animation?: string;
@@ -37,20 +44,62 @@ export interface ToastProps extends Omit<PaperProps, 'ref'> {
    */
   ownerState?: ToastOwnerState;
   /**
-   * 自定义图标组件
+   * 通知高度变化回调函数
    */
-  slotIcon?: React.ElementType;
-  /**
-   * 图标组件的属性
-   */
-  slotIconProps?: Record<string, any>;
+  onHeightChange?: (id: number, height: number) => void;
 }
 
 // Toast内部状态接口
-export interface ToastOwnerState extends ToastProps {
-  position: ToasterPosition;
+export interface ToastOwnerState extends Omit<ToastProps, 'ownerState'> {
+  position?: ToasterPosition;
+  id?: number;
   isNew?: boolean;
   isDeleting?: boolean;
+  height?: number;
+}
+
+// Toast组件slots
+export interface ToastSlots {
+  /**
+   * 根元素
+   * @default 'li'
+   */
+  root?: React.ElementType;
+  /**
+   * 内容容器元素
+   * @default 'div'
+   */
+  content?: React.ElementType;
+  /**
+   * 消息元素
+   * @default Typography
+   */
+  message?: React.ElementType;
+  /**
+   * 描述元素
+   * @default Typography
+   */
+  description?: React.ElementType;
+  /**
+   * 关闭按钮元素
+   * @default IconButton
+   */
+  closeButton?: React.ElementType;
+  /**
+   * 关闭图标
+   * @default CloseIcon
+   */
+  closeIcon?: React.ElementType;
+}
+
+// Toast组件slot属性
+export interface ToastSlotProps {
+  root?: Record<string, any>;
+  content?: Record<string, any>;
+  message?: Record<string, any>;
+  description?: Record<string, any>;
+  closeButton?: Record<string, any>;
+  closeIcon?: Record<string, any>;
 }
 
 // 获取组件样式类
@@ -89,15 +138,15 @@ const getBackgroundColor = (type: string | undefined, theme: any) => {
 };
 
 // Toast根元素样式
-const ToastRoot = styled(Paper, {
+const ToastRoot = styled('li', {
   name: 'MuiToast',
   slot: 'Root',
   shouldForwardProp: (prop) => prop !== 'ownerState' && prop !== 'animation',
 })<{ ownerState: ToastOwnerState; animation?: string }>(({ theme, ownerState, animation }) => ({
   width: '100%',
   position: 'absolute',
-  boxShadow: theme.shadows[3],
-  overflow: 'hidden',
+  overflow: 'anywhere',
+  listStyle: 'none',
   transition: theme.transitions.create(['transform', 'opacity'], {
     duration: 300,
     easing: theme.transitions.easing.easeOut,
@@ -115,12 +164,6 @@ const ToastRoot = styled(Paper, {
     pointerEvents: 'none', // 确保不会干扰鼠标事件
   },
 
-  // 悬停效果
-  '&:hover': {
-    boxShadow: theme.shadows[6],
-    transform: 'translateY(-2px)',
-  },
-
   // 删除状态
   ...(ownerState.isDeleting && {
     pointerEvents: 'none',
@@ -128,7 +171,7 @@ const ToastRoot = styled(Paper, {
 }));
 
 // 通知内容样式
-const ToastContent = styled(Box, {
+const ToastContent = styled('div', {
   name: 'MuiToast',
   slot: 'Content',
 })<{ ownerState: ToastOwnerState }>(({ theme, ownerState }) => ({
@@ -138,6 +181,13 @@ const ToastContent = styled(Box, {
   flexDirection: 'column',
   gap: theme.spacing(0.5),
   position: 'relative',
+  boxShadow: theme.shadows[3],
+  borderRadius: theme.shape.borderRadius,
+
+  // 悬停效果
+  '&:hover': {
+    boxShadow: theme.shadows[6],
+  },
 }));
 
 // 通知消息样式
@@ -167,40 +217,52 @@ const CloseButton = styled(IconButton, {
   padding: theme.spacing(0.5),
 }));
 
-const Toast = React.forwardRef<HTMLDivElement, ToastProps>(function Toast(inProps, ref) {
+const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps, ref) {
   const props = useThemeProps({ props: inProps, name: 'MuiToast' });
+  const toastRef = React.useRef<HTMLDivElement>(null);
   const {
     message,
     description,
-    type = 'default',
     onClose,
     animation,
     ownerState: ownerStateProp,
-    slotIcon: IconComponent,
-    slotIconProps = {},
+    style,
+    className,
     ...other
   } = props;
 
   const ownerState = {
     ...props,
-    type,
     ...ownerStateProp,
   };
 
   const classes = useUtilityClasses(ownerState as ToastOwnerState);
 
+  // 通知元素被挂载后，测量并报告高度
+  React.useEffect(() => {
+    const toastNode = toastRef.current;
+    if (toastNode && ownerState.id && ownerState.isNew === true) {
+      const height = toastNode.getBoundingClientRect().height;
+      if (typeof ownerState.onHeightChange === 'function') {
+        ownerState.onHeightChange(ownerState.id, height);
+      }
+    }
+  }, [ownerState]);
+
   return (
     <ToastRoot
       ref={ref}
-      elevation={3}
-      className={classes.root}
+      className={`${classes.root} ${className || ''}`}
       ownerState={ownerState as ToastOwnerState}
       animation={animation}
+      style={style}
       {...other}
     >
-      <ToastContent className={classes.content} ownerState={ownerState as ToastOwnerState}>
-        {IconComponent && <IconComponent {...slotIconProps} />}
-
+      <ToastContent
+        ref={toastRef}
+        className={classes.content}
+        ownerState={ownerState as ToastOwnerState}
+      >
         <ToastMessage variant="body1" className={classes.message}>
           {message}
         </ToastMessage>

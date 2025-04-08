@@ -1,145 +1,136 @@
-'use client';
-
-import { Box, Button, Divider, FormControlLabel, Stack, Switch, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import * as React from 'react';
 
-import ToastButton from './ToastButton';
-import Toaster from './Toaster';
-import { useToast } from './useToast';
+import Toaster, { ToasterPosition, toaster } from './index';
 
 export default function ToasterDemo() {
-  const [expand, setExpand] = React.useState(true);
-  const toast = useToast();
+  const [position, setPosition] = React.useState<ToasterPosition>('bottom-right');
+  const [expand, setExpand] = React.useState<boolean>(true);
 
-  // 显示不同类型的通知
-  const showToasts = () => {
-    toast.success('操作成功完成', {
-      description: '您的请求已成功处理',
-      duration: 3000,
-    });
+  // 显示一条通知
+  const showToast = (type?: 'info' | 'success' | 'warning' | 'error' | 'default') => {
+    const message = `这是一条${getTypeText(type)}通知`;
+    const description = '这是通知的描述文本，可以包含更多详细信息。';
 
-    setTimeout(() => {
-      toast.error('发生错误', {
-        description: '处理请求时出现问题',
-        duration: 3000,
-      });
-    }, 1000);
-
-    setTimeout(() => {
-      toast.warning('请注意', {
-        description: '这个操作可能有风险',
-        duration: 3000,
-      });
-    }, 2000);
-
-    setTimeout(() => {
-      toast.info('新消息通知', {
-        description: '您有新的消息待查看',
-        duration: 3000,
-      });
-    }, 3000);
+    if (type && type !== 'default') {
+      toaster[type](message, { description });
+    } else {
+      toaster.toast({ message, description, type });
+    }
   };
 
-  // 显示长时间通知
-  const showPersistentToast = () => {
-    const id = toast.info('这是一个持久通知', {
-      description: '这个通知不会自动消失，需要手动关闭',
-    });
-
-    // 10秒后自动关闭
-    setTimeout(() => {
-      toast.remove(id);
-    }, 10000);
-  };
-
-  // 显示大量通知
-  const showMultipleToasts = () => {
-    for (let i = 0; i < 5; i++) {
-      setTimeout(() => {
-        toast.info(`通知 ${i + 1}`, {
-          description: `这是第 ${i + 1} 个通知`,
-          duration: 3000,
-        });
-      }, i * 500);
+  // 获取类型文本
+  const getTypeText = (type?: string) => {
+    switch (type) {
+      case 'info':
+        return '信息';
+      case 'success':
+        return '成功';
+      case 'warning':
+        return '警告';
+      case 'error':
+        return '错误';
+      default:
+        return '默认';
     }
   };
 
   return (
-    <Box sx={{ p: 4 }}>
+    <div style={{ padding: 24 }}>
       <Typography variant="h4" gutterBottom>
-        Toaster 组件示例
+        Toaster 组件演示
       </Typography>
 
-      <FormControlLabel
-        control={<Switch checked={expand} onChange={(e) => setExpand(e.target.checked)} />}
-        label="展开通知"
-      />
+      <Typography variant="h6" gutterBottom>
+        显示不同类型的通知
+      </Typography>
 
-      <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
-        <Button variant="contained" onClick={showToasts}>
-          显示不同类型通知
+      <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+        <Button variant="contained" onClick={() => showToast('default')}>
+          默认通知
         </Button>
-
-        <Button variant="outlined" onClick={showPersistentToast}>
-          显示持久通知
+        <Button variant="contained" color="info" onClick={() => showToast('info')}>
+          信息通知
         </Button>
-
-        <Button variant="outlined" color="secondary" onClick={showMultipleToasts}>
-          显示多个通知
+        <Button variant="contained" color="success" onClick={() => showToast('success')}>
+          成功通知
+        </Button>
+        <Button variant="contained" color="warning" onClick={() => showToast('warning')}>
+          警告通知
+        </Button>
+        <Button variant="contained" color="error" onClick={() => showToast('error')}>
+          错误通知
         </Button>
       </Stack>
 
-      <Divider sx={{ my: 4 }} />
-
-      <Typography variant="h5" gutterBottom>
-        ToastButton 组件示例
+      <Typography variant="h6" gutterBottom>
+        通知位置
       </Typography>
 
-      <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-        <ToastButton
-          variant="contained"
-          color="success"
-          toastType="success"
-          message="保存成功"
-          duration={4000000}
-          description="您的数据已成功保存"
+      <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+        <Button
+          variant={position === 'top-left' ? 'contained' : 'outlined'}
+          onClick={() => setPosition('top-left')}
         >
-          成功通知按钮
-        </ToastButton>
-
-        <ToastButton
-          variant="contained"
-          color="error"
-          toastType="error"
-          message="操作失败"
-          description="处理您的请求时发生错误"
+          左上角
+        </Button>
+        <Button
+          variant={position === 'top-right' ? 'contained' : 'outlined'}
+          onClick={() => setPosition('top-right')}
         >
-          错误通知按钮
-        </ToastButton>
-
-        <ToastButton
-          variant="contained"
-          color="warning"
-          toastType="warning"
-          message="注意"
-          description="此操作可能会有风险"
+          右上角
+        </Button>
+        <Button
+          variant={position === 'bottom-left' ? 'contained' : 'outlined'}
+          onClick={() => setPosition('bottom-left')}
         >
-          警告通知按钮
-        </ToastButton>
-
-        <ToastButton
-          variant="contained"
-          color="info"
-          toastType="info"
-          message="提示信息"
-          description="有新的功能可用"
+          左下角
+        </Button>
+        <Button
+          variant={position === 'bottom-right' ? 'contained' : 'outlined'}
+          onClick={() => setPosition('bottom-right')}
         >
-          信息通知按钮
-        </ToastButton>
+          右下角
+        </Button>
       </Stack>
 
-      {/* Toaster组件 */}
-      <Toaster position="bottom-right" expand={expand} gap={16} maxVisible={3} />
-    </Box>
+      <Typography variant="h6" gutterBottom>
+        显示模式
+      </Typography>
+
+      <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+        <Button variant={expand ? 'contained' : 'outlined'} onClick={() => setExpand(true)}>
+          展开模式
+        </Button>
+        <Button variant={!expand ? 'contained' : 'outlined'} onClick={() => setExpand(false)}>
+          堆叠模式
+        </Button>
+      </Stack>
+
+      <Typography variant="h6" gutterBottom>
+        其他操作
+      </Typography>
+
+      <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+        <Button variant="outlined" onClick={() => toaster.clear()}>
+          清除所有通知
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            const id = toaster.toast({
+              message: '这条通知将持续10秒',
+              description: '除非你手动关闭它',
+              duration: 10000,
+            });
+            console.log('通知ID:', id);
+          }}
+        >
+          长时间通知
+        </Button>
+      </Stack>
+    </div>
   );
 }
