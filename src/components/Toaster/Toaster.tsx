@@ -395,14 +395,15 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
   );
 
   // 处理动画结束
-  // const handleAnimationEnd = React.useCallback(
-  //   (toast: ToastData) => {
-  //     if (toast.delete) {
-  //       removeDeletedToasts(toast.id);
-  //     }
-  //   },
-  //   [removeDeletedToasts],
-  // );
+  const handleAnimationEnd = React.useCallback(
+    (toast: ToastData) => {
+      console.log(toast);
+      if (toast.delete) {
+        removeDeletedToasts(toast.id);
+      }
+    },
+    [removeDeletedToasts],
+  );
 
   return (
     <Portal>
@@ -447,7 +448,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
                   message: toast.message,
                 }}
                 onHeightChange={updateToastHeight}
-                // onAnimationEnd={() => handleAnimationEnd(toast)}
+                onAnimationEnd={() => handleAnimationEnd(toast)}
               />
             ))}
         </ToasterContainer>

@@ -47,6 +47,10 @@ export interface ToastProps {
    * 通知高度变化回调函数
    */
   onHeightChange?: (id: number, height: number) => void;
+  /**
+   * 动画结束回调函数
+   */
+  onAnimationEnd?: () => void;
 }
 
 // Toast内部状态接口
@@ -228,6 +232,7 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
     ownerState: ownerStateProp,
     style,
     className,
+    onAnimationEnd,
     ...other
   } = props;
 
@@ -256,6 +261,7 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
       ownerState={ownerState as ToastOwnerState}
       animation={animation}
       style={style}
+      onAnimationEnd={onAnimationEnd}
       {...other}
     >
       <ToastContent
