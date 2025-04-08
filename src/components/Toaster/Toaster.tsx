@@ -446,8 +446,8 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
                   isNew: !toast.height,
                   isDeleting: toast.delete,
                   message: toast.message,
+                  onHeightChange: updateToastHeight,
                 }}
-                onHeightChange={updateToastHeight}
                 onAnimationEnd={() => handleAnimationEnd(toast)}
               />
             ))}

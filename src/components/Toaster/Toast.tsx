@@ -233,6 +233,7 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
     style,
     className,
     onAnimationEnd,
+    onHeightChange,
     ...other
   } = props;
 
