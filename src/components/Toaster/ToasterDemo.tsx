@@ -91,8 +91,8 @@ export default function ToasterDemo() {
       }, 3000);
     });
 
-    toaster.promise(uploadPromise, {
-      loading: '正在上传文件...',
+    // 直接传递Promise实例
+    toaster.promise('正在上传文件...', uploadPromise, {
       success: (data) => `文件 ${data.fileName} (${data.fileSize}) 上传成功`,
       error: (err) => `上传失败: ${err.message}`,
     });
