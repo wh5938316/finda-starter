@@ -171,6 +171,7 @@ const ToastRoot = styled('li', {
   // 删除状态
   ...(ownerState.isDeleting && {
     pointerEvents: 'none',
+    animation: `${animation} 0.3s forwards`,
   }),
 }));
 
@@ -255,6 +256,24 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
     }
   }, [ownerState]);
 
+  // 处理动画结束事件
+  const handleAnimationEnd = React.useCallback(
+    (e: React.AnimationEvent<HTMLLIElement>) => {
+      console.log(
+        'Toast动画结束:',
+        ownerState.id,
+        '类型:',
+        e.animationName,
+        '删除状态:',
+        ownerState.isDeleting,
+      );
+      if (onAnimationEnd) {
+        onAnimationEnd();
+      }
+    },
+    [onAnimationEnd, ownerState.id, ownerState.isDeleting],
+  );
+
   return (
     <ToastRoot
       ref={ref}
@@ -262,7 +281,7 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
       ownerState={ownerState as ToastOwnerState}
       animation={animation}
       style={style}
-      onAnimationEnd={onAnimationEnd}
+      onAnimationEnd={handleAnimationEnd}
       {...other}
     >
       <ToastContent
@@ -284,7 +303,11 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
           <CloseButton
             size="small"
             aria-label="关闭通知"
-            onClick={onClose}
+            onClick={(e) => {
+              e.stopPropagation(); // 防止事件冒泡
+              console.log('点击了关闭按钮，Toast ID:', ownerState.id);
+              onClose();
+            }}
             className={classes.closeButton}
           >
             <CloseIcon fontSize="small" />

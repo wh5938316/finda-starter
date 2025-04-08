@@ -182,36 +182,44 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
   React.useEffect(() => {
     // 处理Toast事件
     const unsubscribe = ToasterEvents.subscribe((toast) => {
+      console.log('Toast event received:', toast); // 添加日志
+
+      // 检查是否为dismiss事件
       if ('dismiss' in toast) {
-        // 删除通知
+        console.log('Dismiss event detected for toast id:', toast.id); // 添加日志
+
+        // 标记toast为删除状态
         requestAnimationFrame(() => {
-          setToasts((prevToasts) =>
-            prevToasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)),
-          );
+          setToasts((prevToasts) => {
+            console.log('Current toasts:', prevToasts); // 添加日志
+            return prevToasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t));
+          });
         });
         return;
       }
 
-      // 添加或更新通知
-      setTimeout(() => {
-        ReactDOM.flushSync(() => {
-          setToasts((prevToasts) => {
-            const existingToastIndex = prevToasts.findIndex((t) => t.id === toast.id);
+      // 处理添加或更新通知
+      if ('message' in toast) {
+        setTimeout(() => {
+          ReactDOM.flushSync(() => {
+            setToasts((prevToasts) => {
+              const existingToastIndex = prevToasts.findIndex((t) => t.id === toast.id);
 
-            // 更新现有通知
-            if (existingToastIndex !== -1) {
-              return [
-                ...prevToasts.slice(0, existingToastIndex),
-                { ...prevToasts[existingToastIndex], ...toast },
-                ...prevToasts.slice(existingToastIndex + 1),
-              ];
-            }
+              // 更新现有通知
+              if (existingToastIndex !== -1) {
+                return [
+                  ...prevToasts.slice(0, existingToastIndex),
+                  { ...prevToasts[existingToastIndex], ...toast },
+                  ...prevToasts.slice(existingToastIndex + 1),
+                ];
+              }
 
-            // 添加新通知
-            return [toast, ...prevToasts];
+              // 添加新通知
+              return [toast as ToastData, ...prevToasts];
+            });
           });
         });
-      });
+      }
     });
 
     // 处理清除事件
@@ -382,6 +390,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
   const getAnimation = React.useCallback(
     (toast: ToastData, index: number): string | undefined => {
       if (toast.delete) {
+        console.log('为Toast应用删除动画:', toast.id);
         return isTop ? swipeOutUp.toString() : swipeOutDown.toString();
       }
 
@@ -397,13 +406,36 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
   // 处理动画结束
   const handleAnimationEnd = React.useCallback(
     (toast: ToastData) => {
-      console.log(toast);
+      console.log('动画结束，Toast:', toast.id, '删除状态:', toast.delete);
       if (toast.delete) {
+        console.log('从列表中移除Toast:', toast.id);
         removeDeletedToasts(toast.id);
       }
     },
     [removeDeletedToasts],
   );
+
+  // 加强版的删除Toast处理函数
+  const handleCloseToast = React.useCallback((toast: ToastData) => {
+    console.log('处理关闭Toast请求:', toast.id);
+
+    // 先标记为删除状态，让它开始动画
+    setToasts((prevToasts) =>
+      prevToasts.map((t) => (t.id === toast.id ? { ...t, delete: true } : t)),
+    );
+
+    // 通知事件系统
+    try {
+      if (toast.onClose) {
+        toast.onClose();
+      }
+    } catch (err) {
+      console.error('执行toast.onClose回调时出错:', err);
+    }
+
+    // 发送dismiss事件
+    ToasterEvents.dismiss(toast.id);
+  }, []);
 
   return (
     <Portal>
@@ -435,10 +467,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
                 message={toast.message}
                 description={toast.description}
                 type={toast.type}
-                onClose={() => {
-                  toast.onClose?.();
-                  ToasterEvents.dismiss(toast.id);
-                }}
+                onClose={() => handleCloseToast(toast)}
                 animation={getAnimation(toast, index)}
                 ownerState={{
                   id: toast.id,
