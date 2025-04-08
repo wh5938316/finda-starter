@@ -39,6 +39,7 @@ export default function ToasterDemo() {
 
   return (
     <div style={{ padding: 24 }}>
+      <Toaster position={position} expand={expand} />
       <Typography variant="h4" gutterBottom>
         Toaster 组件演示
       </Typography>

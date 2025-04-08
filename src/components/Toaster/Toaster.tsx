@@ -283,7 +283,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
       setContainerHeight(Math.max(totalHeight - gap, 0));
     } else {
       // 折叠模式下，容器高度为最上面那个toast的高度
-      const firstToast = toasts.sort((a, b) => {
+      const firstToast = [...toasts].sort((a, b) => {
         const posA = a.position || 0;
         const posB = b.position || 0;
         return posB - posA;
