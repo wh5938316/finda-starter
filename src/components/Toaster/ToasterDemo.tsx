@@ -63,15 +63,13 @@ export default function ToasterDemo() {
       async () => {
         // 模拟删除操作
         await wait(2000);
-        // 返回成功消息，将在当前toast中显示
-        return {
-          message: '文件已成功删除！',
-          type: 'success',
-        };
+        // 不需要返回任何内容，action方法会自动处理成功状态
       },
       {
         type: 'warning',
         description: '此操作无法撤销。',
+        success: '文件已成功删除！',
+        error: '删除失败，请重试',
         duration: 8000,
       },
     );
@@ -84,14 +82,16 @@ export default function ToasterDemo() {
       // 50%概率成功，50%概率失败
       setTimeout(() => {
         if (Math.random() > 0.5) {
+          console.log('上传成功');
           resolve({ fileName: 'document.pdf', fileSize: '2.4MB' });
         } else {
+          console.log('上传失败');
           reject(new Error('网络连接超时'));
         }
       }, 3000);
     });
 
-    // 直接传递Promise实例
+    // 直接传递Promise实例，注意参数顺序是message, promise, options
     toaster.promise('正在上传文件...', uploadPromise, {
       success: (data) => `文件 ${data.fileName} (${data.fileSize}) 上传成功`,
       error: (err) => `上传失败: ${err.message}`,

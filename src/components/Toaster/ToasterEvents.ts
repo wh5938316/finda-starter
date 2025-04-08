@@ -1,5 +1,3 @@
-import mitt from 'mitt';
-
 // 定义Toast数据类型
 export interface ToastData {
   id: number;
@@ -46,7 +44,6 @@ class ToasterEventSystem {
     const id = ++this.toastId;
     const newToast = { id, ...toast, position: Date.now() } as ToastData;
 
-    console.log('发送toast事件:', newToast);
     this.notifyListeners(newToast);
     return id;
   }
@@ -73,21 +70,62 @@ class ToasterEventSystem {
    * @param message 通知消息
    * @param actionLabel 按钮文本
    * @param actionClick 按钮点击处理函数
-   * @param options 其他选项
+   * @param options 其他选项，包括成功和失败时的消息
    * @returns Toast ID
    */
   action(
     message: React.ReactNode,
     actionLabel: string,
     actionClick: () => void | Promise<any>,
-    options?: Omit<ToastData, 'id' | 'message' | 'actionLabel' | 'actionClick'>,
+    options?: {
+      success?: React.ReactNode;
+      error?: React.ReactNode;
+      description?: React.ReactNode;
+      type?: 'info' | 'warning' | 'default';
+      duration?: number;
+      icon?: React.ReactNode;
+    },
   ): number {
-    return this.toast({
+    const id = this.toast({
       message,
       actionLabel,
-      actionClick,
-      ...options,
+      actionClick: async () => {
+        try {
+          const result = await actionClick();
+
+          // 操作成功，更新为成功状态
+          this.notifyListeners({
+            id,
+            message: options?.success || '操作成功',
+            type: 'success',
+            actionLabel: undefined, // 移除按钮
+            actionClick: undefined, // 移除点击处理函数
+            actionLoading: false,
+          } as ToastData);
+
+          return result;
+        } catch (error) {
+          // 操作失败，更新为错误状态
+          this.notifyListeners({
+            id,
+            message: options?.error || '操作失败',
+            description: error instanceof Error ? error.message : undefined,
+            type: 'error',
+            actionLabel: undefined, // 移除按钮
+            actionClick: undefined, // 移除点击处理函数
+            actionLoading: false,
+          } as ToastData);
+
+          throw error;
+        }
+      },
+      description: options?.description,
+      type: options?.type || 'default',
+      duration: options?.duration,
+      icon: options?.icon,
     });
+
+    return id;
   }
 
   /**
@@ -109,8 +147,8 @@ class ToasterEventSystem {
   ): number {
     const loadingMessage = options?.loading || message;
 
-    // 确保参数确实是Promise
-    if (!(promise instanceof Promise)) {
+    // 修改Promise检查的逻辑
+    if (typeof promise !== 'object' || typeof promise.then !== 'function') {
       console.error('ToasterEvents.promise: 参数必须是Promise实例');
       return this.error('操作失败：参数类型错误');
     }
@@ -165,15 +203,8 @@ class ToasterEventSystem {
         } as ToastData);
       });
 
-    // 返回一个函数，可以提前关闭通知
-    const close = () => {
-      isClosed = true;
-      this.dismiss(id);
-    };
-
-    // 将关闭函数附加到ID上
-    (id as any).close = close;
-
+    // 移除这个错误的部分，不再尝试给id添加close方法
+    // 直接返回id即可
     return id;
   }
 
@@ -183,7 +214,10 @@ class ToasterEventSystem {
    * @param options 其他选项
    * @returns Toast ID
    */
-  custom(content: React.ReactNode, options?: Omit<ToastData, 'id' | 'customContent'>): number {
+  custom(
+    content: React.ReactNode,
+    options?: Omit<ToastData, 'id' | 'message' | 'customContent'>,
+  ): number {
     return this.toast({
       message: '', // 自定义内容时，message可以为空
       customContent: content,
@@ -193,13 +227,11 @@ class ToasterEventSystem {
 
   // 删除指定ID的Toast
   dismiss(id: number) {
-    console.log('发送dismiss事件:', id);
     this.notifyListeners({ id, dismiss: true });
   }
 
   // 清除所有Toast
   clear() {
-    console.log('发送clear事件');
     this.notifyClearListeners();
   }
 
@@ -228,12 +260,10 @@ class ToasterEventSystem {
   // 订阅事件
   subscribe(callback: (data: ToastData | ToastToDismiss) => void) {
     this.listeners.push(callback);
-    console.log('新增toast订阅, 当前订阅数:', this.listeners.length);
 
     // 返回取消订阅函数
     return () => {
       this.listeners = this.listeners.filter((listener) => listener !== callback);
-      console.log('取消toast订阅, 剩余订阅数:', this.listeners.length);
     };
   }
 

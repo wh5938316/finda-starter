@@ -380,14 +380,6 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
   // 处理动画结束事件
   const handleAnimationEnd = React.useCallback(
     (e: React.AnimationEvent<HTMLLIElement>) => {
-      console.log(
-        'Toast动画结束:',
-        ownerState.id,
-        '类型:',
-        e.animationName,
-        '删除状态:',
-        ownerState.isDeleting,
-      );
       if (onAnimationEnd) {
         onAnimationEnd();
       }
@@ -420,7 +412,6 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
               aria-label="关闭通知"
               onClick={(e) => {
                 e.stopPropagation();
-                console.log('点击了关闭按钮，Toast ID:', ownerState.id);
                 onClose();
               }}
               className={classes.closeButton}
@@ -485,7 +476,6 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
             aria-label="关闭通知"
             onClick={(e) => {
               e.stopPropagation();
-              console.log('点击了关闭按钮，Toast ID:', ownerState.id);
               onClose();
             }}
             className={classes.closeButton}
