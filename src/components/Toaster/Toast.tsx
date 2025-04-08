@@ -84,6 +84,8 @@ export interface ToastOwnerState extends Omit<ToastProps, 'ownerState'> {
   isNew?: boolean;
   isDeleting?: boolean;
   height?: number;
+  isExpanded: boolean;
+  stackHeight?: number;
 }
 
 // Toast组件slots
@@ -203,7 +205,7 @@ const ToastRoot = styled('li', {
 })<{ ownerState: ToastOwnerState; animation?: string }>(({ theme, ownerState, animation }) => ({
   width: '100%',
   position: 'absolute',
-  overflow: 'anywhere',
+  overflow: 'visible',
   listStyle: 'none',
   transition: theme.transitions.create(['transform', 'opacity'], {
     duration: 200,
@@ -221,6 +223,8 @@ const ToastRoot = styled('li', {
     width: '100%',
     pointerEvents: 'none',
   },
+
+  height: ownerState.isExpanded ? 'auto' : (ownerState.stackHeight ?? 'auto'),
 
   // 删除状态
   ...(ownerState.isDeleting && {

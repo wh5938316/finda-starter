@@ -70,7 +70,6 @@ export default function ToasterDemo() {
         description: '此操作无法撤销。',
         success: '文件已成功删除！',
         error: '删除失败，请重试',
-        duration: 8000,
       },
     );
   };
@@ -127,7 +126,7 @@ export default function ToasterDemo() {
 
   return (
     <div style={{ padding: 24 }}>
-      <Toaster position={position} expand={expand} />
+      <Toaster position={position} expand={expand} duration={8000000} />
       <Typography variant="h4" gutterBottom>
         Toaster 组件演示
       </Typography>

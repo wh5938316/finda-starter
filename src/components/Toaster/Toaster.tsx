@@ -168,7 +168,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
   const isTop = position.startsWith('top');
 
   // 计算当前展开状态（根据prop和鼠标状态）
-  const isExpanded = expand || isHovered;
+  const isExpanded = React.useMemo(() => expand || isHovered, [expand, isHovered]);
 
   const ownerState = {
     ...props,
@@ -188,6 +188,22 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
   const handleMouseLeave = React.useCallback(() => {
     setIsHovered(false);
   }, []);
+
+  // 最前面的Toast的高度
+  const firstToastHeight = React.useMemo(() => {
+    if (toasts.length <= 0) {
+      return 0;
+    }
+    // 排序后排出height未测量出的toast
+    const firstToast = toasts
+      .sort((a, b) => {
+        const posA = a.position || 0;
+        const posB = b.position || 0;
+        return posB - posA;
+      })
+      .filter((t) => t.height !== undefined)[0];
+    return firstToast?.height;
+  }, [toasts]);
 
   // 订阅事件系统
   React.useEffect(() => {
@@ -571,9 +587,12 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
                 ownerState={{
                   id: toast.id,
                   position,
+                  isExpanded,
                   isNew: !toast.height,
                   isDeleting: toast.delete,
                   message: toast.message,
+                  // 堆叠高度
+                  stackHeight: firstToastHeight,
                   onHeightChange: updateToastHeight,
                 }}
                 onAnimationEnd={() => handleAnimationEnd(toast)}
