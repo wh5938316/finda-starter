@@ -14,6 +14,16 @@ export interface ToastClasses {
   description: string;
   /** 应用于关闭按钮 */
   closeButton: string;
+  /** 应用于图标容器 */
+  iconContainer: string;
+  /** 应用于操作按钮 */
+  actionButton: string;
+  /** 应用于内容区域（图标和文本） */
+  contentArea: string;
+  /** 应用于文本区域 */
+  textArea: string;
+  /** 应用于自定义内容 */
+  customContent: string;
   /** 应用于信息类型Toast */
   typeInfo: string;
   /** 应用于成功类型Toast */
@@ -28,6 +38,14 @@ export interface ToastClasses {
   new: string;
   /** 应用于正在删除的Toast */
   deleting: string;
+  /** 应用于Promise类型处于加载状态的Toast */
+  promisePending: string;
+  /** 应用于Promise类型成功的Toast */
+  promiseFulfilled: string;
+  /** 应用于Promise类型失败的Toast */
+  promiseRejected: string;
+  /** 应用于操作按钮加载状态 */
+  actionLoading: string;
 }
 
 export type ToastClassKey = keyof ToastClasses;
@@ -44,6 +62,11 @@ export const toastClasses: ToastClasses = generateUtilityClasses('MuiToast', [
   'message',
   'description',
   'closeButton',
+  'iconContainer',
+  'actionButton',
+  'contentArea',
+  'textArea',
+  'customContent',
   'typeInfo',
   'typeSuccess',
   'typeWarning',
@@ -51,4 +74,8 @@ export const toastClasses: ToastClasses = generateUtilityClasses('MuiToast', [
   'typeDefault',
   'new',
   'deleting',
+  'promisePending',
+  'promiseFulfilled',
+  'promiseRejected',
+  'actionLoading',
 ]);

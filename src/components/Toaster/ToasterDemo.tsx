@@ -1,9 +1,19 @@
+import DeleteIcon from '@mui/icons-material/Delete';
+import DownloadIcon from '@mui/icons-material/Download';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 
 import Toaster, { ToasterPosition, toaster } from './index';
+
+// 模拟异步操作
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default function ToasterDemo() {
   const [position, setPosition] = React.useState<ToasterPosition>('bottom-right');
@@ -37,6 +47,84 @@ export default function ToasterDemo() {
     }
   };
 
+  // 显示带自定义图标的通知
+  const showCustomIconToast = () => {
+    toaster.info('这是带自定义图标的通知', {
+      icon: <PhotoCamera color="primary" />,
+      description: '您可以为任何类型的通知自定义图标。',
+    });
+  };
+
+  // 显示带操作按钮的通知
+  const showActionToast = () => {
+    toaster.action(
+      '您确定要删除这个文件吗？',
+      '删除',
+      async () => {
+        // 模拟删除操作
+        await wait(2000);
+        // 返回成功消息，将在当前toast中显示
+        return {
+          message: '文件已成功删除！',
+          type: 'success',
+        };
+      },
+      {
+        type: 'warning',
+        description: '此操作无法撤销。',
+        duration: 8000,
+      },
+    );
+  };
+
+  // 显示基于Promise的通知
+  const showPromiseToast = () => {
+    // 模拟文件上传
+    const uploadPromise = new Promise<{ fileName: string; fileSize: string }>((resolve, reject) => {
+      // 50%概率成功，50%概率失败
+      setTimeout(() => {
+        if (Math.random() > 0.5) {
+          resolve({ fileName: 'document.pdf', fileSize: '2.4MB' });
+        } else {
+          reject(new Error('网络连接超时'));
+        }
+      }, 3000);
+    });
+
+    toaster.promise(uploadPromise, {
+      loading: '正在上传文件...',
+      success: (data) => `文件 ${data.fileName} (${data.fileSize}) 上传成功`,
+      error: (err) => `上传失败: ${err.message}`,
+    });
+  };
+
+  // 显示自定义内容的通知
+  const showCustomToast = () => {
+    const CustomContent = (
+      <Card elevation={0} sx={{ width: '100%' }}>
+        <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
+          <Typography variant="subtitle1" gutterBottom fontWeight="bold">
+            新消息通知
+          </Typography>
+          <Divider sx={{ my: 1 }} />
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+            您有3条未读消息和2个新的任务需要处理。
+          </Typography>
+          <Stack direction="row" spacing={1} justifyContent="flex-end">
+            <Button size="small" variant="text">
+              忽略
+            </Button>
+            <Button size="small" variant="contained">
+              查看详情
+            </Button>
+          </Stack>
+        </CardContent>
+      </Card>
+    );
+
+    toaster.custom(CustomContent, { duration: 8000 });
+  };
+
   return (
     <div style={{ padding: 24 }}>
       <Toaster position={position} expand={expand} />
@@ -45,7 +133,7 @@ export default function ToasterDemo() {
       </Typography>
 
       <Typography variant="h6" gutterBottom>
-        显示不同类型的通知
+        基础通知类型
       </Typography>
 
       <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
@@ -63,6 +151,35 @@ export default function ToasterDemo() {
         </Button>
         <Button variant="contained" color="error" onClick={() => showToast('error')}>
           错误通知
+        </Button>
+      </Stack>
+
+      <Typography variant="h6" gutterBottom>
+        高级通知功能
+      </Typography>
+
+      <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+        <Button variant="outlined" onClick={showCustomIconToast} startIcon={<PhotoCamera />}>
+          自定义图标
+        </Button>
+        <Button
+          variant="outlined"
+          color="warning"
+          onClick={showActionToast}
+          startIcon={<DeleteIcon />}
+        >
+          操作按钮
+        </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={showPromiseToast}
+          startIcon={<DownloadIcon />}
+        >
+          Promise通知
+        </Button>
+        <Button variant="outlined" color="secondary" onClick={showCustomToast}>
+          自定义内容
         </Button>
       </Stack>
 

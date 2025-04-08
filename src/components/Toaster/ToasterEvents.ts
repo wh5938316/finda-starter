@@ -11,6 +11,15 @@ export interface ToastData {
   position?: number;
   delete?: boolean;
   height?: number;
+  // 新增属性
+  icon?: React.ReactNode;
+  actionLabel?: string;
+  actionClick?: () => void | Promise<any>;
+  actionLoading?: boolean;
+  customContent?: React.ReactNode;
+  // Promise相关属性
+  promisePending?: boolean;
+  promiseState?: 'pending' | 'fulfilled' | 'rejected';
 }
 
 // 定义要删除的Toast类型
@@ -57,6 +66,129 @@ class ToasterEventSystem {
 
   warning(message: React.ReactNode, options?: Omit<ToastData, 'id' | 'message' | 'type'>) {
     return this.toast({ message, type: 'warning', ...options });
+  }
+
+  /**
+   * 创建带操作按钮的Toast
+   * @param message 通知消息
+   * @param actionLabel 按钮文本
+   * @param actionClick 按钮点击处理函数
+   * @param options 其他选项
+   * @returns Toast ID
+   */
+  action(
+    message: React.ReactNode,
+    actionLabel: string,
+    actionClick: () => void | Promise<any>,
+    options?: Omit<ToastData, 'id' | 'message' | 'actionLabel' | 'actionClick'>,
+  ): number {
+    return this.toast({
+      message,
+      actionLabel,
+      actionClick,
+      ...options,
+    });
+  }
+
+  /**
+   * 创建基于Promise的Toast
+   * @param message 初始消息
+   * @param promise Promise对象
+   * @param options 配置选项，包括成功和失败时的消息
+   * @returns Toast ID
+   */
+  promise<T>(
+    message: React.ReactNode,
+    promise: Promise<T>,
+    options?: {
+      loading?: React.ReactNode;
+      success?: React.ReactNode | ((data: T) => React.ReactNode);
+      error?: React.ReactNode | ((error: any) => React.ReactNode);
+      type?: Omit<ToastData, 'id' | 'message'>;
+    },
+  ): number {
+    const loadingMessage = options?.loading || message;
+
+    // 确保参数确实是Promise
+    if (!(promise instanceof Promise)) {
+      console.error('ToasterEvents.promise: 参数必须是Promise实例');
+      return this.error('操作失败：参数类型错误');
+    }
+
+    const id = this.toast({
+      message: loadingMessage,
+      type: 'info',
+      promisePending: true,
+      promiseState: 'pending',
+      ...(options?.type || {}),
+    });
+
+    // 不允许自动关闭，直到Promise完成
+    let isClosed = false;
+
+    // 处理Promise完成
+    promise
+      .then((data) => {
+        if (isClosed) return;
+
+        let successMessage: React.ReactNode;
+        if (typeof options?.success === 'function') {
+          successMessage = (options.success as Function)(data);
+        } else {
+          successMessage = options?.success || '操作成功';
+        }
+
+        this.notifyListeners({
+          id,
+          message: successMessage,
+          type: 'success',
+          promisePending: false,
+          promiseState: 'fulfilled',
+        } as ToastData);
+      })
+      .catch((error) => {
+        if (isClosed) return;
+
+        let errorMessage: React.ReactNode;
+        if (typeof options?.error === 'function') {
+          errorMessage = (options.error as Function)(error);
+        } else {
+          errorMessage = options?.error || '操作失败';
+        }
+
+        this.notifyListeners({
+          id,
+          message: errorMessage,
+          type: 'error',
+          promisePending: false,
+          promiseState: 'rejected',
+        } as ToastData);
+      });
+
+    // 返回一个函数，可以提前关闭通知
+    const close = () => {
+      isClosed = true;
+      this.dismiss(id);
+    };
+
+    // 将关闭函数附加到ID上
+    (id as any).close = close;
+
+    return id;
+  }
+
+  /**
+   * 创建自定义内容的Toast
+   * @param content 自定义React节点
+   * @param options 其他选项
+   * @returns Toast ID
+   */
+  custom(content: React.ReactNode, options?: Omit<ToastData, 'id' | 'customContent'>): number {
+    return this.toast({
+      message: '', // 自定义内容时，message可以为空
+      customContent: content,
+      ...options,
+    });
   }
 
   // 删除指定ID的Toast

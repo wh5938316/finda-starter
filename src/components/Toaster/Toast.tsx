@@ -1,5 +1,9 @@
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
-import { IconButton, Typography } from '@mui/material';
+import ErrorIcon from '@mui/icons-material/Error';
+import InfoIcon from '@mui/icons-material/Info';
+import WarningIcon from '@mui/icons-material/Warning';
+import { Button, CircularProgress, IconButton, Typography } from '@mui/material';
 import { styled, useThemeProps } from '@mui/material/styles';
 import { unstable_composeClasses as composeClasses } from '@mui/utils';
 import * as React from 'react';
@@ -51,6 +55,26 @@ export interface ToastProps {
    * 动画结束回调函数
    */
   onAnimationEnd?: () => void;
+  /**
+   * 自定义图标
+   */
+  icon?: React.ReactNode;
+  /**
+   * 操作按钮文本
+   */
+  actionLabel?: string;
+  /**
+   * 操作按钮点击处理函数
+   */
+  actionClick?: () => void | Promise<any>;
+  /**
+   * 操作按钮是否处于加载状态
+   */
+  actionLoading?: boolean;
+  /**
+   * 自定义内容
+   */
+  customContent?: React.ReactNode;
 }
 
 // Toast内部状态接口
@@ -94,6 +118,16 @@ export interface ToastSlots {
    * @default CloseIcon
    */
   closeIcon?: React.ElementType;
+  /**
+   * 图标容器
+   * @default 'div'
+   */
+  iconContainer?: React.ElementType;
+  /**
+   * 操作按钮
+   * @default Button
+   */
+  actionButton?: React.ElementType;
 }
 
 // Toast组件slot属性
@@ -104,6 +138,8 @@ export interface ToastSlotProps {
   description?: Record<string, any>;
   closeButton?: Record<string, any>;
   closeIcon?: Record<string, any>;
+  iconContainer?: Record<string, any>;
+  actionButton?: Record<string, any>;
 }
 
 // 获取组件样式类
@@ -120,6 +156,8 @@ const useUtilityClasses = (ownerState: ToastOwnerState) => {
     message: ['message'],
     description: ['description'],
     closeButton: ['closeButton'],
+    iconContainer: ['iconContainer'],
+    actionButton: ['actionButton'],
   };
 
   return composeClasses(slots, getToastUtilityClass, {});
@@ -138,6 +176,22 @@ const getBackgroundColor = (type: string | undefined, theme: any) => {
       return theme.palette.warning.light;
     default:
       return theme.palette.background.paper;
+  }
+};
+
+// 获取通知类型对应的默认图标
+export const getDefaultIcon = (type?: string) => {
+  switch (type) {
+    case 'info':
+      return <InfoIcon color="info" />;
+    case 'success':
+      return <CheckCircleIcon color="success" />;
+    case 'warning':
+      return <WarningIcon color="warning" />;
+    case 'error':
+      return <ErrorIcon color="error" />;
+    default:
+      return null;
   }
 };
 
@@ -196,6 +250,37 @@ const ToastContent = styled('div', {
   },
 }));
 
+// 图标容器样式
+const ToastIconContainer = styled('div', {
+  name: 'MuiToast',
+  slot: 'IconContainer',
+})(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'flex-start',
+  marginRight: theme.spacing(1.5),
+}));
+
+// 内容区域样式（包含图标和文本）
+const ToastContentArea = styled('div', {
+  name: 'MuiToast',
+  slot: 'ContentArea',
+})(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'flex-start',
+  width: '100%',
+}));
+
+// 文本区域样式
+const ToastTextArea = styled('div', {
+  name: 'MuiToast',
+  slot: 'TextArea',
+})(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  flexGrow: 1,
+}));
+
 // 通知消息样式
 const ToastMessage = styled(Typography, {
   name: 'MuiToast',
@@ -223,6 +308,15 @@ const CloseButton = styled(IconButton, {
   padding: theme.spacing(0.5),
 }));
 
+// 操作按钮样式
+const ActionButton = styled(Button, {
+  name: 'MuiToast',
+  slot: 'ActionButton',
+})(({ theme }) => ({
+  alignSelf: 'flex-start',
+  marginTop: theme.spacing(1),
+}));
+
 const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps, ref) {
   const props = useThemeProps({ props: inProps, name: 'MuiToast' });
   const toastRef = React.useRef<HTMLDivElement>(null);
@@ -236,8 +330,31 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
     className,
     onAnimationEnd,
     onHeightChange,
+    type = 'default',
+    icon,
+    actionLabel,
+    actionClick,
+    actionLoading = false,
+    customContent,
     ...other
   } = props;
+
+  // 操作按钮点击处理
+  const [isActionLoading, setIsActionLoading] = React.useState(actionLoading);
+
+  const handleActionClick = React.useCallback(async () => {
+    if (!actionClick || isActionLoading) return;
+
+    try {
+      setIsActionLoading(true);
+      const result = await actionClick();
+      setIsActionLoading(false);
+      return result;
+    } catch (error) {
+      setIsActionLoading(false);
+      throw error;
+    }
+  }, [actionClick, isActionLoading]);
 
   const ownerState = {
     ...props,
@@ -245,6 +362,9 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
   };
 
   const classes = useUtilityClasses(ownerState as ToastOwnerState);
+
+  // 获取显示图标
+  const displayIcon = icon || getDefaultIcon(type);
 
   // 通知元素被挂载后，测量并报告高度
   React.useEffect(() => {
@@ -275,6 +395,44 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
     [onAnimationEnd, ownerState.id, ownerState.isDeleting],
   );
 
+  // 如果有自定义内容，则直接渲染
+  if (customContent) {
+    return (
+      <ToastRoot
+        ref={ref}
+        className={`${classes.root} ${className || ''}`}
+        ownerState={ownerState as ToastOwnerState}
+        animation={animation}
+        style={style}
+        onAnimationEnd={handleAnimationEnd}
+        {...other}
+      >
+        <ToastContent
+          ref={toastRef}
+          className={classes.content}
+          ownerState={ownerState as ToastOwnerState}
+        >
+          {customContent}
+
+          {onClose && (
+            <CloseButton
+              size="small"
+              aria-label="关闭通知"
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log('点击了关闭按钮，Toast ID:', ownerState.id);
+                onClose();
+              }}
+              className={classes.closeButton}
+            >
+              <CloseIcon fontSize="small" />
+            </CloseButton>
+          )}
+        </ToastContent>
+      </ToastRoot>
+    );
+  }
+
   return (
     <ToastRoot
       ref={ref}
@@ -290,14 +448,35 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
         className={classes.content}
         ownerState={ownerState as ToastOwnerState}
       >
-        <ToastMessage variant="body1" className={classes.message}>
-          {message}
-        </ToastMessage>
+        <ToastContentArea>
+          {displayIcon && (
+            <ToastIconContainer className={classes.iconContainer}>{displayIcon}</ToastIconContainer>
+          )}
 
-        {description && (
-          <ToastDescription variant="body2" className={classes.description}>
-            {description}
-          </ToastDescription>
+          <ToastTextArea>
+            <ToastMessage variant="body1" className={classes.message}>
+              {message}
+            </ToastMessage>
+
+            {description && (
+              <ToastDescription variant="body2" className={classes.description}>
+                {description}
+              </ToastDescription>
+            )}
+          </ToastTextArea>
+        </ToastContentArea>
+
+        {actionLabel && actionClick && (
+          <ActionButton
+            variant="contained"
+            size="small"
+            onClick={handleActionClick}
+            disabled={isActionLoading}
+            loading={isActionLoading}
+            className={classes.actionButton}
+          >
+            {actionLabel}
+          </ActionButton>
         )}
 
         {onClose && (
@@ -305,7 +484,7 @@ const Toast = React.forwardRef<HTMLLIElement, ToastProps>(function Toast(inProps
             size="small"
             aria-label="关闭通知"
             onClick={(e) => {
-              e.stopPropagation(); // 防止事件冒泡
+              e.stopPropagation();
               console.log('点击了关闭按钮，Toast ID:', ownerState.id);
               onClose();
             }}

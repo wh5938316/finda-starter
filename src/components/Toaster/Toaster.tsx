@@ -47,6 +47,10 @@ export interface ToasterProps {
    * 子元素
    */
   children?: React.ReactNode;
+  /**
+   * 自定义关闭按钮
+   */
+  closeButton?: React.ReactNode;
 }
 
 // Toaster组件slots
@@ -66,6 +70,11 @@ export interface ToasterSlots {
    * @default Toast
    */
   toast?: React.ElementType;
+  /**
+   * 关闭按钮
+   * @default 内置关闭按钮
+   */
+  closeButton?: React.ElementType;
 }
 
 // Toaster组件slot属性
@@ -73,6 +82,7 @@ export interface ToasterSlotProps {
   root?: Record<string, any>;
   container?: Record<string, any>;
   toast?: Record<string, any>;
+  closeButton?: Record<string, any>;
 }
 
 // 所有组件Slots的类型
@@ -146,6 +156,7 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
     maxVisible = 3,
     duration = 5000,
     children,
+    closeButton,
     ...other
   } = props;
 
@@ -239,7 +250,12 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
     const timeouts: number[] = [];
 
     toasts.forEach((toast) => {
-      if (!toast.delete && !isHovered) {
+      // 跳过以下情况：
+      // 1. 已标记为删除的toast
+      // 2. 用户当前正在悬停
+      // 3. 有正在进行的Promise
+      // 4. Action按钮处于loading状态
+      if (!toast.delete && !isHovered && !toast.promisePending && !toast.actionLoading) {
         const toastDuration = toast.duration || duration;
         const timeout = setTimeout(() => {
           ToasterEvents.dismiss(toast.id);
@@ -259,6 +275,59 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
     setToasts((prevToasts) =>
       prevToasts.map((toast) => (toast.id === id ? { ...toast, height } : toast)),
     );
+  }, []);
+
+  // 处理action按钮点击
+  const handleActionClick = React.useCallback(async (toast: ToastData) => {
+    if (!toast.actionClick) return;
+
+    try {
+      // 设置loading状态
+      setToasts((prevToasts) =>
+        prevToasts.map((t) => (t.id === toast.id ? { ...t, actionLoading: true } : t)),
+      );
+
+      // 执行action点击处理函数
+      const result = await toast.actionClick();
+
+      // 恢复loading状态并处理返回结果
+      setToasts((prevToasts) =>
+        prevToasts.map((t) => {
+          if (t.id === toast.id) {
+            // 如果action处理函数返回了对象，则使用它更新当前toast
+            if (result && typeof result === 'object') {
+              return {
+                ...t,
+                ...result,
+                actionLoading: false,
+              };
+            }
+            // 否则只是恢复loading状态
+            return { ...t, actionLoading: false };
+          }
+          return t;
+        }),
+      );
+
+      return result;
+    } catch (error) {
+      // 出错时更新toast为错误状态
+      setToasts((prevToasts) =>
+        prevToasts.map((t) => {
+          if (t.id === toast.id) {
+            return {
+              ...t,
+              actionLoading: false,
+              type: 'error',
+              message: '操作失败',
+              description: error instanceof Error ? error.message : '未知错误',
+            };
+          }
+          return t;
+        }),
+      );
+      throw error;
+    }
   }, []);
 
   // 删除已标记为删除的通知
@@ -502,6 +571,11 @@ const Toaster = React.forwardRef<HTMLDivElement, ToasterProps>(function Toaster(
                 message={toast.message}
                 description={toast.description}
                 type={toast.type}
+                icon={toast.icon}
+                actionLabel={toast.actionLabel}
+                actionClick={toast.actionClick ? () => handleActionClick(toast) : undefined}
+                actionLoading={toast.actionLoading}
+                customContent={toast.customContent}
                 onClose={() => handleCloseToast(toast)}
                 animation={getAnimation(toast, index)}
                 ownerState={{
