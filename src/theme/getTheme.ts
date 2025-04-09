@@ -12,6 +12,7 @@ import {
   inputsCustomizations,
   navigationCustomizations,
   surfacesCustomizations,
+  thirdPartCustomizations,
   treeViewCustomizations,
 } from './customizations';
 // import type {} from '@mui/x-data-grid/themeAugmentation';
@@ -35,11 +36,11 @@ export default function getTheme(mode: PaletteMode): CssVarsThemeOptions {
       ...datePickersCustomizations,
       ...treeViewCustomizations,
       ...inputsCustomizations,
-      ...inputsCustomizations,
       ...dataDisplayCustomizations,
       ...feedbackCustomizations,
       ...navigationCustomizations,
       ...surfacesCustomizations,
+      ...thirdPartCustomizations,
     },
   };
 }

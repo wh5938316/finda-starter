@@ -7,7 +7,9 @@ import React from 'react';
 import { MuiProvider, getTheme } from '@/theme';
 
 const theme = createTheme({
-  cssVariables: true,
+  cssVariables: {
+    colorSchemeSelector: 'class',
+  },
   ...getTheme('light'),
 });
 

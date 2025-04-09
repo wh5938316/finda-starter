@@ -1,34 +1,9 @@
+/// <reference types="material-ui-toaster/types" />
+
 import { OverridableStringUnion } from '@mui/types';
 import { ToasterProps } from '../components/Toaster/Toaster';
 import { ToastProps } from '../components/Toaster/Toast';
-
-declare module '@mui/material/styles' {
-  interface TypeBackground {
-    softBlack: string;
-    warmWhite: string;
-  }
-
-  interface ComponentsPropsList {
-    MuiToaster: ToasterProps;
-    MuiToast: ToastProps;
-  }
-
-  interface ComponentsOverrides {
-    MuiToaster: ComponentsOverridesReturnType['MuiToaster'];
-    MuiToast: ComponentsOverridesReturnType['MuiToast'];
-  }
-
-  interface ComponentsVariants {
-    MuiToaster: {
-      props: { position?: ToasterProps['position']; expand?: boolean };
-      style: React.CSSProperties;
-    }[];
-    MuiToast: {
-      props: { type?: ToastProps['type'] };
-      style: React.CSSProperties;
-    }[];
-  }
-}
+import { ToastClasses } from '../components/Toaster/toastClasses';
 
 declare module '@mui/material/styles/createPalette' {
   interface Theme {

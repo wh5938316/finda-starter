@@ -79,6 +79,19 @@ export const red = {
   900: 'hsl(0, 93%, 6%)',
 };
 
+export const blue = {
+  50: 'hsl(199, 94%, 94%)',
+  100: 'hsl(199, 92%, 85%)',
+  200: 'hsl(199, 92%, 74%)',
+  300: 'hsl(199, 91%, 64%)',
+  400: 'hsl(199, 92%, 56%)',
+  500: 'hsl(199, 97%, 48%)',
+  600: 'hsl(199, 97%, 45%)',
+  700: 'hsl(201, 98%, 41%)',
+  800: 'hsl(202, 98%, 37%)',
+  900: 'hsl(206, 99%, 31%)',
+};
+
 export const getDesignTokens = (mode: PaletteMode) => ({
   palette: {
     // mode,
@@ -93,17 +106,18 @@ export const getDesignTokens = (mode: PaletteMode) => ({
         main: brand[400],
         dark: brand[700],
       }),
+      ...brand,
     },
     info: {
-      light: brand[100],
-      main: brand[300],
-      dark: brand[600],
+      light: blue[200],
+      main: blue[400],
+      dark: blue[700],
       contrastText: gray[50],
       ...(mode === 'dark' && {
-        contrastText: brand[300],
-        light: brand[500],
-        main: brand[700],
-        dark: brand[900],
+        contrastText: blue[300],
+        light: blue[300],
+        main: blue[400],
+        dark: blue[700],
       }),
     },
     warning: {
@@ -135,6 +149,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
         main: green[500],
         dark: green[700],
       }),
+      ...green,
     },
     grey: {
       ...gray,
