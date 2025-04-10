@@ -1,6 +1,7 @@
 # Git Commit Convention
 
-This project uses the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification to ensure uniformity and readability of Git commit messages.
+This project uses the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+specification to ensure uniformity and readability of Git commit messages.
 
 ## Commit Message Format
 
@@ -19,7 +20,8 @@ Must be one of the following:
 - `feat`: A new feature
 - `fix`: A bug fix
 - `docs`: Documentation only changes (e.g., README, CHANGELOG, etc.)
-- `style`: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc.)
+- `style`: Changes that do not affect the meaning of the code (white-space, formatting, missing
+  semi-colons, etc.)
 - `refactor`: A code change that neither fixes a bug nor adds a feature
 - `perf`: A code change that improves performance
 - `test`: Adding missing tests or correcting existing tests
@@ -28,7 +30,8 @@ Must be one of the following:
 
 ### Scope (Optional)
 
-The scope can be anything specifying the place of the commit change. For example, component name, file name, module name, etc.
+The scope can be anything specifying the place of the commit change. For example, component name,
+file name, module name, etc.
 
 ### Examples
 
@@ -70,4 +73,5 @@ revert: revert to version 123abc
 
 ## Commitlint
 
-This project uses `commitlint` and `husky` to automatically check if commit messages comply with the convention. If they don't, the commit will be rejected.
+This project uses `commitlint` and `husky` to automatically check if commit messages comply with the
+convention. If they don't, the commit will be rejected.
