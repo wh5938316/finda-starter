@@ -28,6 +28,39 @@ npm run lint:fix
 
 This will attempt to automatically fix all fixable issues in JavaScript and TypeScript files.
 
+## Special Features
+
+### Unused Imports Detection
+
+The project is configured to automatically detect and remove unused imports. This helps keep the
+codebase clean and can improve performance by reducing unnecessary code.
+
+- When running `pnpm lint`, ESLint will warn about unused imports
+- When running `pnpm lint:fix`, ESLint will automatically remove unused imports
+- The pre-commit hook will automatically remove unused imports from staged files
+
+Example:
+
+```typescript
+// Before
+import React from 'react';
+import { Button, Typography } from '@mui/material';
+import { formatDate } from '../../utils/dateUtils';
+
+function MyComponent() {
+  // Only Button is used, Typography and formatDate are not
+  return <Button>Click me</Button>;
+}
+
+// After lint:fix
+import React from 'react';
+import { Button } from '@mui/material';
+
+function MyComponent() {
+  return <Button>Click me</Button>;
+}
+```
+
 ## Pre-commit Hook
 
 This project has a pre-commit hook that automatically runs ESLint (and Prettier) on staged files
