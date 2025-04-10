@@ -5,14 +5,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import * as React from 'react';
+import type * as React from 'react';
 
-interface ForgotPasswordProps {
+interface ForgotPasswordProperties {
   open: boolean;
   handleClose: () => void;
 }
 
-export default function ForgotPassword({ open, handleClose }: ForgotPasswordProps) {
+export default function ForgotPassword({ open, handleClose }: ForgotPasswordProperties) {
   return (
     <Dialog
       open={open}

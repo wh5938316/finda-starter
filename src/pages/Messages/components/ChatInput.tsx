@@ -5,11 +5,13 @@ import SendIcon from '@mui/icons-material/Send';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import TextField from '@mui/material/TextField';
+import type { ChangeEvent, KeyboardEvent } from 'react';
+import type * as React from 'react';
+import { useState } from 'react';
 
-interface ChatInputProps {
+interface ChatInputProperties {
   onSendMessage: (message: string) => void;
 }
 
@@ -20,7 +22,7 @@ const MessageInput = styled(Box)(({ theme }) => ({
   alignItems: 'center',
 }));
 
-const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
+const ChatInput: React.FC<ChatInputProperties> = ({ onSendMessage }) => {
   const [newMessage, setNewMessage] = useState('');
 
   const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) => {

@@ -11,30 +11,19 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import SaveIcon from '@mui/icons-material/Save';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import SecurityIcon from '@mui/icons-material/Security';
-import TimerIcon from '@mui/icons-material/Timer';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
 import Grid from '@mui/material/Grid';
-import MenuItem from '@mui/material/MenuItem';
-import Paper from '@mui/material/Paper';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
-import Stack from '@mui/material/Stack';
+import { alpha, styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { alpha, styled } from '@mui/material/styles';
-import React, { ChangeEvent, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import { useState } from 'react';
 
 // 样式组件
 const FormRow = styled('div')(({ theme }) => ({
@@ -117,7 +106,7 @@ const importanceLabels = {
 type NotificationChannel = 'email' | 'app' | 'browser' | 'mobile';
 type ImportanceLevel = 'all' | 'important' | 'none';
 
-const NotificationSettings = () => {
+function NotificationSettings() {
   // 通知渠道状态
   const [emailEnabled, setEmailEnabled] = useState(true);
   const [appEnabled, setAppEnabled] = useState(true);
@@ -166,20 +155,25 @@ const NotificationSettings = () => {
   // 通知重要性处理函数
   const handleImportanceChange = (channel: NotificationChannel, value: ImportanceLevel) => {
     switch (channel) {
-      case 'email':
+      case 'email': {
         setEmailImportance(value);
         break;
-      case 'app':
+      }
+      case 'app': {
         setAppImportance(value);
         break;
-      case 'browser':
+      }
+      case 'browser': {
         setBrowserImportance(value);
         break;
-      case 'mobile':
+      }
+      case 'mobile': {
         setMobileImportance(value);
         break;
-      default:
+      }
+      default: {
         break;
+      }
     }
   };
 
@@ -624,6 +618,6 @@ const NotificationSettings = () => {
       </Box>
     </Box>
   );
-};
+}
 
 export const Component = NotificationSettings;

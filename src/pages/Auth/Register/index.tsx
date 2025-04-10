@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import MuiCard from '@mui/material/Card';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
@@ -9,13 +8,12 @@ import FormLabel from '@mui/material/FormLabel';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
-import React from 'react';
+import * as React from 'react';
 
 import AuthCard from '../components/AuthCard';
 import { FacebookIcon, GoogleIcon, SitemarkIcon } from '../components/CustomIcons';
 
-const RegisterPage = () => {
+function RegisterPage() {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -24,13 +22,13 @@ const RegisterPage = () => {
   const [nameErrorMessage, setNameErrorMessage] = React.useState('');
 
   const validateInputs = () => {
-    const email = document.getElementById('email') as HTMLInputElement;
-    const password = document.getElementById('password') as HTMLInputElement;
-    const name = document.getElementById('name') as HTMLInputElement;
+    const email = document.querySelector('#email') as HTMLInputElement;
+    const password = document.querySelector('#password') as HTMLInputElement;
+    const name = document.querySelector('#name') as HTMLInputElement;
 
     let isValid = true;
 
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
+    if (!email.value || !/\S[^\s@]*@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
       setEmailErrorMessage('Please enter a valid email address.');
       isValid = false;
@@ -48,7 +46,7 @@ const RegisterPage = () => {
       setPasswordErrorMessage('');
     }
 
-    if (!name.value || name.value.length < 1) {
+    if (!name.value || name.value.length === 0) {
       setNameError(true);
       setNameErrorMessage('Name is required.');
       isValid = false;
@@ -171,6 +169,6 @@ const RegisterPage = () => {
       </Box>
     </AuthCard>
   );
-};
+}
 
 export const Component = RegisterPage;

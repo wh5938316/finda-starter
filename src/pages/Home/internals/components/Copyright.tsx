@@ -1,26 +1,24 @@
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import React from 'react';
 
-export default function Copyright(props: any) {
+export default function Copyright(properties: any) {
   return (
     <Typography
       variant="body2"
       align="center"
-      {...props}
+      {...properties}
       sx={[
         {
           color: 'text.secondary',
         },
-        ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
+        ...(Array.isArray(properties.sx) ? properties.sx : [properties.sx]),
       ]}
     >
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
         Sitemark
       </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
+      {new Date().getFullYear()}.
     </Typography>
   );
 }

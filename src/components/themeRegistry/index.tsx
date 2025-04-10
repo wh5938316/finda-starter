@@ -1,10 +1,10 @@
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { createTheme,ThemeProvider } from '@mui/material/styles';
 import { ConfirmProvider } from 'material-ui-confirm';
 import { SnackbarProvider } from 'notistack';
-import React from 'react';
+import type * as React from 'react';
 
-import { MuiProvider, getTheme } from '@/theme';
+import { getTheme,MuiProvider } from '@/theme';
 
 const theme = createTheme({
   cssVariables: {
@@ -13,7 +13,7 @@ const theme = createTheme({
   ...getTheme('light'),
 });
 
-export default function ThemeRegistry({ children }: React.PropsWithChildren<{}>) {
+export default function ThemeRegistry({ children }: React.PropsWithChildren) {
   return (
     <ThemeProvider theme={theme}>
       <MuiProvider>

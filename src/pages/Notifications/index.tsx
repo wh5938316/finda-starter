@@ -6,11 +6,12 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Toaster, { ToasterPosition, toaster } from 'material-ui-toaster';
+import type { ToasterPosition } from 'material-ui-toaster';
+import Toaster, { toaster } from 'material-ui-toaster';
 import * as React from 'react';
 
 // 模拟异步操作
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const wait = async (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default function NotificationExamplePage() {
   const [position, setPosition] = React.useState<ToasterPosition>('bottom-right');
@@ -31,16 +32,21 @@ export default function NotificationExamplePage() {
   // 获取类型文本
   const getTypeText = (type?: string) => {
     switch (type) {
-      case 'info':
+      case 'info': {
         return '信息';
-      case 'success':
+      }
+      case 'success': {
         return '成功';
-      case 'warning':
+      }
+      case 'warning': {
         return '警告';
-      case 'error':
+      }
+      case 'error': {
         return '错误';
-      default:
+      }
+      default: {
         return '默认';
+      }
     }
   };
 
@@ -90,7 +96,7 @@ export default function NotificationExamplePage() {
     // 直接传递Promise实例，注意参数顺序是message, promise, options
     toaster.promise('正在上传文件...', uploadPromise, {
       success: (data) => `文件 ${data.fileName} (${data.fileSize}) 上传成功`,
-      error: (err) => `上传失败: ${err.message}`,
+      error: (error) => `上传失败: ${error.message}`,
     });
   };
 
@@ -229,7 +235,7 @@ export default function NotificationExamplePage() {
         <Button variant={expand ? 'contained' : 'outlined'} onClick={() => setExpand(true)}>
           展开模式
         </Button>
-        <Button variant={!expand ? 'contained' : 'outlined'} onClick={() => setExpand(false)}>
+        <Button variant={expand ? 'outlined' : 'contained'} onClick={() => setExpand(false)}>
           堆叠模式
         </Button>
       </Stack>
@@ -248,7 +254,7 @@ export default function NotificationExamplePage() {
             const id = toaster.toast({
               message: '这条通知将持续10秒',
               description: '除非你手动关闭它',
-              duration: 10000,
+              duration: 10_000,
             });
             console.log('通知ID:', id);
           }}

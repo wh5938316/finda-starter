@@ -3,11 +3,11 @@ import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
 import { tabsClasses } from '@mui/material/Tabs';
 import MuiToolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
-import React from 'react';
+import * as React from 'react';
 
 import MenuButton from './MenuButton';
 import SideMenuMobile from './SideMenuMobile';

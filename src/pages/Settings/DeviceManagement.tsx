@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import { alpha, styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -18,8 +19,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import { alpha, styled } from '@mui/material/styles';
-import React from 'react';
 import { Link } from 'react-router';
 
 // 样式组件
@@ -34,13 +33,13 @@ const SettingsIcon = styled(Box)(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
-interface DeviceCardProps {
+interface DeviceCardProperties {
   current?: boolean;
 }
 
 const DeviceCard = styled(Paper, {
-  shouldForwardProp: (prop) => prop !== 'current',
-})<DeviceCardProps>(({ theme, current }) => ({
+  shouldForwardProp: (property) => property !== 'current',
+})<DeviceCardProperties>(({ theme, current }) => ({
   padding: theme.spacing(2.5),
   marginBottom: theme.spacing(2),
   borderRadius: theme.shape.borderRadius,
@@ -95,7 +94,7 @@ const devices = [
   },
 ];
 
-const DeviceManagement = () => {
+function DeviceManagement() {
   return (
     <Box>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -152,7 +151,7 @@ const DeviceManagement = () => {
                     >
                       {device.browser}
                     </Box>
-                    {device.current && <Chip label="活跃中" color="success" />}
+                    {device.current ? <Chip label="活跃中" color="success" /> : null}
                   </Box>
                   <Typography variant="body2">
                     {device.location} • IP: {device.ip}
@@ -249,6 +248,6 @@ const DeviceManagement = () => {
       </Box>
     </Box>
   );
-};
+}
 
 export const Component = DeviceManagement;

@@ -2,10 +2,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import { BarChart } from '@mui/x-charts/BarChart';
-import React from 'react';
 
 export default function PageViewsBarChart() {
   const theme = useTheme();

@@ -1,5 +1,4 @@
 import SvgIcon from '@mui/material/SvgIcon';
-import React from 'react';
 
 export function SitemarkIcon() {
   return (

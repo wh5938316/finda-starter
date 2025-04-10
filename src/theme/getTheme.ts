@@ -1,4 +1,4 @@
-import { CssVarsThemeOptions, PaletteMode, ThemeOptions } from '@mui/material/styles';
+import type { CssVarsThemeOptions, PaletteMode } from '@mui/material/styles';
 import type {} from '@mui/material/themeCssVarsAugmentation';
 
 // import type {} from '@mui/x-charts/themeAugmentation';

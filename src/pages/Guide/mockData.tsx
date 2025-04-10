@@ -13,7 +13,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import StarIcon from '@mui/icons-material/Star';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import SpacesIcon from '@mui/icons-material/ViewModule';
-import * as React from 'react';
+import type * as React from 'react';
 
 export interface StepItem {
   id: string;
@@ -141,10 +141,10 @@ export const prepareLaunchSteps: StepItem[] = [
 ];
 
 // 获取所有步骤ID数组
-export const getAllStepIds = () => {
+export function getAllStepIds() {
   return [
     ...gettingStartedSteps.map((step) => step.id),
     ...joinMovementSteps.map((step) => step.id),
     ...prepareLaunchSteps.map((step) => step.id),
   ];
-};
+}

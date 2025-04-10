@@ -1,24 +1,25 @@
 import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded';
 import Button from '@mui/material/Button';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { UseDateFieldProps } from '@mui/x-date-pickers/DateField';
+import type { UseDateFieldProps } from '@mui/x-date-pickers/DateField';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import {
+import type {
   BaseSingleInputFieldProps,
   DateValidationError,
   FieldSection,
 } from '@mui/x-date-pickers/models';
-import dayjs, { Dayjs } from 'dayjs';
-import React from 'react';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import * as React from 'react';
 
-interface ButtonFieldProps
+interface ButtonFieldProperties
   extends UseDateFieldProps<Dayjs, false>,
     BaseSingleInputFieldProps<Dayjs | null, Dayjs, FieldSection, false, DateValidationError> {
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function ButtonField(props: ButtonFieldProps) {
+function ButtonField(properties: ButtonFieldProperties) {
   const {
     setOpen,
     label,
@@ -26,7 +27,7 @@ function ButtonField(props: ButtonFieldProps) {
     disabled,
     InputProps: { ref } = {},
     inputProps: { 'aria-label': ariaLabel } = {},
-  } = props;
+  } = properties;
 
   return (
     <Button
@@ -36,7 +37,7 @@ function ButtonField(props: ButtonFieldProps) {
       ref={ref}
       aria-label={ariaLabel}
       size="small"
-      onClick={() => setOpen?.((prev) => !prev)}
+      onClick={() => setOpen?.((previous) => !previous)}
       startIcon={<CalendarTodayRoundedIcon fontSize="small" />}
       sx={{ minWidth: 'fit-content' }}
     >
@@ -53,7 +54,7 @@ export default function CustomDatePicker() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
         value={value}
-        label={value == null ? null : value.format('MMM DD, YYYY')}
+        label={value == undefined ? null : value.format('MMM DD, YYYY')}
         onChange={(newValue) => setValue(newValue)}
         slots={{ field: ButtonField }}
         slotProps={{

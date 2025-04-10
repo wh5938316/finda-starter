@@ -1,10 +1,8 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import DevicesIcon from '@mui/icons-material/Devices';
-import HistoryIcon from '@mui/icons-material/History';
 import LockIcon from '@mui/icons-material/Lock';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import SaveIcon from '@mui/icons-material/Save';
-import SecurityIcon from '@mui/icons-material/Security';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Box from '@mui/material/Box';
@@ -18,12 +16,11 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
+import { alpha, styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { alpha, styled } from '@mui/material/styles';
-import React from 'react';
+import * as React from 'react';
 import { Link } from 'react-router';
 
 // 样式组件
@@ -53,13 +50,13 @@ const SettingsIcon = styled(Box)(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
-interface DeviceCardProps {
+interface DeviceCardProperties {
   current?: boolean;
 }
 
 const DeviceCard = styled(Paper, {
-  shouldForwardProp: (prop) => prop !== 'current',
-})<DeviceCardProps>(({ theme, current }) => ({
+  shouldForwardProp: (property) => property !== 'current',
+})<DeviceCardProperties>(({ theme, current }) => ({
   padding: theme.spacing(2.5),
   marginBottom: theme.spacing(2),
   borderRadius: theme.shape.borderRadius,

@@ -1,5 +1,4 @@
 import { DataGrid } from '@mui/x-data-grid';
-import React from 'react';
 
 import { columns, rows } from '../internals/data/gridData';
 
@@ -9,7 +8,9 @@ export default function CustomizedDataGrid() {
       checkboxSelection
       rows={rows}
       columns={columns}
-      getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd')}
+      getRowClassName={(parameters) =>
+        parameters.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+      }
       initialState={{
         pagination: { paginationModel: { pageSize: 20 } },
       }}

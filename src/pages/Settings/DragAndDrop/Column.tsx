@@ -9,9 +9,9 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 import { alpha, styled } from '@mui/material/styles';
-import React from 'react';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
 
 // 样式组件
 const ColumnContainer = styled(Paper)(({ theme }) => ({
@@ -29,53 +29,58 @@ const ColumnContainer = styled(Paper)(({ theme }) => ({
 }));
 
 // 获取每个列对应的图标和颜色
-const getColumnIcon = (id: string) => {
+function getColumnIcon(id: string) {
   switch (id) {
-    case 'A':
+    case 'A': {
       return {
         icon: <FolderIcon fontSize="small" />,
         color: '#607d8b',
         name: 'Backlog',
         count: 24,
       };
-    case 'B':
+    }
+    case 'B': {
       return {
         icon: <BoltIcon fontSize="small" />,
         color: '#ff9800',
         name: 'In progress',
         count: 4,
       };
-    case 'C':
+    }
+    case 'C': {
       return {
         icon: <VerifiedIcon fontSize="small" />,
         color: '#e91e63',
         name: 'Validation',
         count: 7,
       };
-    case 'D':
+    }
+    case 'D': {
       return {
         icon: <TaskAltIcon fontSize="small" />,
         color: '#4caf50',
         name: 'Done',
         count: 13,
       };
-    default:
+    }
+    default: {
       return {
         icon: <FolderIcon fontSize="small" />,
         color: '#9e9e9e',
         name: id,
         count: React.Children.count(id),
       };
+    }
   }
-};
+}
 
-interface ColumnProps {
+interface ColumnProperties {
   children: React.ReactNode;
   id: string;
   activeId?: string | null;
 }
 
-export function Column({ children, id, activeId }: ColumnProps) {
+export function Column({ children, id, activeId }: ColumnProperties) {
   // 简化使用useDroppable钩子
   const { ref, isDropTarget } = useDroppable({
     id,
@@ -154,7 +159,7 @@ export function Column({ children, id, activeId }: ColumnProps) {
         {children}
 
         {/* 显示列为空时的占位符 */}
-        {isEmpty && (
+        {isEmpty ? (
           <Card
             sx={{
               borderRadius: 2,
@@ -172,7 +177,7 @@ export function Column({ children, id, activeId }: ColumnProps) {
               拖放任务到此处
             </Typography>
           </Card>
-        )}
+        ) : null}
       </Box>
     </ColumnContainer>
   );

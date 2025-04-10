@@ -1,8 +1,8 @@
-import { Theme, SxProps } from '@mui/material/styles';
-import { } from '@mui/material/themeCssVarsAugmentation';
+import type { SxProps, Theme } from '@mui/material/styles';
+import '@mui/material/themeCssVarsAugmentation';
 
 declare module '@mui/material-pigment-css' {
-  interface ThemeArgs {
+  interface ThemeArguments {
     theme: Theme;
   }
 }
@@ -12,7 +12,7 @@ declare global {
     interface HTMLAttributes {
       sx?: SxProps<Theme>;
     }
-    interface SVGProps {
+    interface SVGProperties {
       sx?: SxProps<Theme>;
     }
   }

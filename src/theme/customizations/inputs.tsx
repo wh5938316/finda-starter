@@ -8,15 +8,15 @@ import {
 } from '@mui/material';
 import { autocompleteClasses } from '@mui/material/Autocomplete';
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
+import type { Components, Theme } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
 import { svgIconClasses } from '@mui/material/SvgIcon';
 import { toggleButtonClasses } from '@mui/material/ToggleButton';
 import { toggleButtonGroupClasses } from '@mui/material/ToggleButtonGroup';
-import { Components, Theme, alpha } from '@mui/material/styles';
 
 import { brand, gray } from '../themePrimitives';
 
-/* eslint-disable import/prefer-default-export */
-export const inputsCustomizations: Components<Theme> = {
+const inputsCustomizations: Components<Theme> = {
   MuiButtonBase: {
     styleOverrides: {
       root: ({ theme }) => ({
@@ -578,15 +578,10 @@ export const inputsCustomizations: Components<Theme> = {
         fontSize: theme.typography.body1.fontSize,
         marginBottom: 6,
         '&.Mui-focused': {
-          color: `${theme.palette.text.primary}`,
+          color: theme.palette.text.primary,
           transform: 'none',
         },
       }),
-    },
-  },
-  MuiTextField: {
-    styleOverrides: {
-      root: ({ theme }) => ({}),
     },
   },
   MuiAutocomplete: {
@@ -702,3 +697,5 @@ export const inputsCustomizations: Components<Theme> = {
     },
   },
 };
+
+export default inputsCustomizations;

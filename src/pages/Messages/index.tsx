@@ -6,7 +6,7 @@ import ChatBody from './components/ChatBody';
 import ChatInput from './components/ChatInput';
 import ChatSidebar from './components/ChatSidebar';
 import { conversations, messages } from './components/mockData';
-import { Message } from './components/types';
+import type { Message } from './components/types';
 
 const AppContainer = styled(Box)(({ theme }) => ({
   height: 'calc(100vh - 64px)',
@@ -25,13 +25,13 @@ const MessageContainer = styled(Box)(({ theme }) => ({
   boxShadow: theme.shadows[1],
 }));
 
-const MessagesPage = () => {
+function MessagesPage() {
   const [selectedConversation, setSelectedConversation] = React.useState(1);
   const [messageList, setMessageList] = React.useState(messages);
 
   const handleSendMessage = (newMessage: string) => {
     if (newMessage.trim() !== '') {
-      const newMessageObj: Message = {
+      const newMessageObject: Message = {
         id: messageList.length + 1,
         sender: { id: 999, name: '我', avatar: '/avatars/me.jpg' },
         content: newMessage,
@@ -40,13 +40,13 @@ const MessagesPage = () => {
         isCurrentUser: true,
       };
 
-      setMessageList([...messageList, newMessageObj]);
+      setMessageList([...messageList, newMessageObject]);
 
       // 模拟消息发送状态更新
       setTimeout(() => {
-        setMessageList((prev) =>
-          prev.map((msg) =>
-            msg.id === newMessageObj.id ? { ...msg, status: 'sent' as const } : msg,
+        setMessageList((previous) =>
+          previous.map((message) =>
+            message.id === newMessageObject.id ? { ...message, status: 'sent' as const } : message,
           ),
         );
       }, 1000);
@@ -75,6 +75,6 @@ const MessagesPage = () => {
       </MessageContainer>
     </AppContainer>
   );
-};
+}
 
 export const Component = MessagesPage;

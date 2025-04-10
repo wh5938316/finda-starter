@@ -6,18 +6,17 @@ import Divider from '@mui/material/Divider';
 import Drawer, { drawerClasses } from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import React from 'react';
 
 import CardAlert from './CardAlert';
 import MenuButton from './MenuButton';
 import MenuContent from './MenuContent';
 
-interface SideMenuMobileProps {
+interface SideMenuMobileProperties {
   open: boolean | undefined;
   toggleDrawer: (newOpen: boolean) => () => void;
 }
 
-export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobileProps) {
+export default function SideMenuMobile({ open, toggleDrawer }: SideMenuMobileProperties) {
   return (
     <Drawer
       anchor="right"

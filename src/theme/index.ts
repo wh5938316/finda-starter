@@ -1,4 +1,2 @@
-import getTheme from './getTheme';
-import MuiProvider from './muiProvider';
-
-export { getTheme, MuiProvider };
+export { default as getTheme } from './getTheme';
+export { default as MuiProvider } from './muiProvider';

@@ -3,10 +3,9 @@ import InsightsRoundedIcon from '@mui/icons-material/InsightsRounded';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import React from 'react';
 
 export default function HighlightedCard() {
   const theme = useTheme();

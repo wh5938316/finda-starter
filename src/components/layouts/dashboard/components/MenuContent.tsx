@@ -16,7 +16,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
-import React from 'react';
+import type * as React from 'react';
 import { Link, useLocation } from 'react-router';
 
 // 定义导航项接口

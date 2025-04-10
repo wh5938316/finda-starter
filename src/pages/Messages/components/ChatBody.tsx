@@ -4,15 +4,14 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
 import { alpha, styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
-import * as React from 'react';
 
 import MessageBubble from './MessageBubble';
-import { Conversation, Message } from './types';
+import type { Conversation, Message } from './types';
 
-interface ChatBodyProps {
+interface ChatBodyProperties {
   selectedConversation: number;
   conversations: Conversation[];
   messages: Message[];
@@ -39,7 +38,7 @@ const ChatMessages = styled(Box)(({ theme }) => ({
   backgroundColor: alpha(theme.palette.background.default, 0.5),
 }));
 
-const ChatBody = ({ selectedConversation, conversations, messages }: ChatBodyProps) => {
+function ChatBody({ selectedConversation, conversations, messages }: ChatBodyProperties) {
   const menuPopupState = usePopupState({ variant: 'popover', popupId: 'chat-menu-popup' });
   const selectedConversationData = conversations.find((c) => c.id === selectedConversation);
 
@@ -78,6 +77,6 @@ const ChatBody = ({ selectedConversation, conversations, messages }: ChatBodyPro
       </ChatMessages>
     </ChatContainer>
   );
-};
+}
 
 export default ChatBody;

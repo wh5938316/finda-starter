@@ -1,13 +1,13 @@
+import type { Components, Theme } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
 import { tooltipClasses } from '@mui/material/Tooltip';
-import { Components, Theme, alpha } from '@mui/material/styles';
 
 import { gray, green, orange } from '../themePrimitives';
 
-/* eslint-disable import/prefer-default-export */
-export const feedbackCustomizations: Components<Theme> = {
+const feedbackCustomizations: Components<Theme> = {
   MuiAlert: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: () => ({
         borderRadius: 8,
         fontWeight: 400,
         variants: [
@@ -90,7 +90,7 @@ export const feedbackCustomizations: Components<Theme> = {
           {
             props: { variant: 'card' },
             style: {
-              ['--mui-palette-Tooltip-bg']: theme.palette.background.paper,
+              '--mui-palette-Tooltip-bg': theme.palette.background.paper,
               fontSize: 'unset',
               fontWeight: 'unset',
               padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
@@ -109,3 +109,5 @@ export const feedbackCustomizations: Components<Theme> = {
     },
   },
 };
+
+export default feedbackCustomizations;

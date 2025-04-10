@@ -6,13 +6,11 @@ import ColorLensIcon from '@mui/icons-material/ColorLens';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import DownloadIcon from '@mui/icons-material/Download';
-import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import LanguageIcon from '@mui/icons-material/Language';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import PersonIcon from '@mui/icons-material/Person';
 import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
 import SaveIcon from '@mui/icons-material/Save';
-import ScheduleIcon from '@mui/icons-material/Schedule';
 import TranslateIcon from '@mui/icons-material/Translate';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import Avatar from '@mui/material/Avatar';
@@ -24,7 +22,6 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
 import Radio from '@mui/material/Radio';
@@ -32,12 +29,12 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
+import { alpha, styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { alpha, styled } from '@mui/material/styles';
-import React, { useState } from 'react';
+import type * as React from 'react';
+import { useState } from 'react';
 
 // 表单行组件
 const FormRow = styled('div')(({ theme }) => ({
@@ -67,7 +64,7 @@ const SettingsIcon = styled(Box)(({ theme }) => ({
 }));
 
 // 主题选择器组件
-interface ThemeOptionProps {
+interface ThemeOptionProperties {
   selected: boolean;
   onClick: () => void;
   sx?: any;
@@ -75,8 +72,8 @@ interface ThemeOptionProps {
 }
 
 const ThemeOption = styled(Box, {
-  shouldForwardProp: (prop) => prop !== 'selected',
-})<ThemeOptionProps>(({ theme, selected }) => ({
+  shouldForwardProp: (property) => property !== 'selected',
+})<ThemeOptionProperties>(({ theme, selected }) => ({
   width: 120,
   height: 80,
   borderRadius: theme.shape.borderRadius,

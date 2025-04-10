@@ -22,38 +22,29 @@ import StorageIcon from '@mui/icons-material/Storage';
 import WebIcon from '@mui/icons-material/Web';
 import {
   Avatar,
-  Badge,
-  Card,
-  CardContent,
-  Checkbox,
   Chip,
   Container,
   Divider,
   FormControl,
-  FormControlLabel,
-  FormGroup,
-  IconButton,
+  Grid as MuiGrid,
   InputAdornment,
   InputLabel,
   MenuItem,
-  Grid as MuiGrid,
-  OutlinedInput,
   Select,
   Stack,
   StepConnector,
-  TextField,
-  Tooltip,
   stepConnectorClasses,
+  TextField,
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Step from '@mui/material/Step';
-import StepContent from '@mui/material/StepContent';
+import type StepContent from '@mui/material/StepContent';
 import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { alpha, styled } from '@mui/material/styles';
 import * as React from 'react';
 
 // 使用MuiGrid组件但重命名为Grid以避免大量改动
@@ -116,10 +107,10 @@ const ProjectTypeCard = styled(Paper)(({ theme }) => ({
 }));
 
 // 自定义步骤图标
-const ColorlibStepIcon = (props: any) => {
-  const { active, completed, className, icon } = props;
+function ColorlibStepIcon(properties: any) {
+  const { active, completed, className, icon } = properties;
 
-  const icons: { [index: string]: React.ReactElement } = {
+  const icons: Record<string, React.ReactElement> = {
     1: <SearchIcon />,
     2: <PersonAddIcon />,
     3: <CodeIcon />,
@@ -132,7 +123,7 @@ const ColorlibStepIcon = (props: any) => {
       {completed ? <CheckIcon /> : icons[String(icon)]}
     </ColorlibStepIconRoot>
   );
-};
+}
 
 // 项目类型数据
 const projectTypes = [
@@ -169,11 +160,11 @@ const projectTypes = [
 ];
 
 // 定义步骤内容类型
-type StepContentFunc = (handleSelectType: (type: string) => void) => React.ReactNode;
-type StepContent = React.ReactNode | StepContentFunc;
+type StepContentFunction = (handleSelectType: (type: string) => void) => React.ReactNode;
+type StepContent = React.ReactNode | StepContentFunction;
 
 // 针对首个组件
-const TypeCards = ({ handleSelectType }: { handleSelectType: (type: string) => void }) => {
+function TypeCards({ handleSelectType }: { handleSelectType: (type: string) => void }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '16px' }}>
       {projectTypes.map((type, index) => (
@@ -218,14 +209,14 @@ const TypeCards = ({ handleSelectType }: { handleSelectType: (type: string) => v
       ))}
     </div>
   );
-};
+}
 
 // 步骤内容定义
-const steps: {
+const steps: Array<{
   label: string;
   description: string;
   content: StepContent;
-}[] = [
+}> = [
   {
     label: '选择项目类型',
     description: '选择您要创建的项目类型',
@@ -716,7 +707,7 @@ const steps: {
   },
 ];
 
-const ProjectCreationPage = () => {
+function ProjectCreationPage() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [projectType, setProjectType] = React.useState('');
 
@@ -729,11 +720,11 @@ const ProjectCreationPage = () => {
       return;
     }
     // 不是最后一步，继续下一步
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setActiveStep((previousActiveStep) => previousActiveStep + 1);
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    setActiveStep((previousActiveStep) => previousActiveStep - 1);
   };
 
   const handleReset = () => {
@@ -749,10 +740,10 @@ const ProjectCreationPage = () => {
     }, 100);
   };
 
-  const renderStepContent = (step: number) => {
-    const content = steps[step].content;
+  const renderStepContent = async (step: number) => {
+    const { content } = steps[step];
     if (step === 0) {
-      return (content as StepContentFunc)(handleSelectProjectType);
+      return (content as StepContentFunction)(handleSelectProjectType);
     }
     return content as React.ReactNode;
   };
@@ -819,6 +810,6 @@ const ProjectCreationPage = () => {
       </Paper>
     </Container>
   );
-};
+}
 
 export const Component = ProjectCreationPage;

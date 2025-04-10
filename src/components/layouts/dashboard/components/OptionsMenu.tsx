@@ -9,7 +9,6 @@ import MuiMenuItem from '@mui/material/MenuItem';
 import { paperClasses } from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
-import React from 'react';
 
 import MenuButton from './MenuButton';
 
@@ -21,7 +20,7 @@ export default function OptionsMenu() {
   const popupState = usePopupState({ variant: 'popover', popupId: 'optionsMenu' });
 
   return (
-    <React.Fragment>
+    <>
       <MenuButton
         aria-label="打开菜单"
         sx={{ borderColor: 'transparent' }}
@@ -74,6 +73,6 @@ export default function OptionsMenu() {
           </ListItemIcon>
         </MenuItem>
       </Menu>
-    </React.Fragment>
+    </>
   );
 }

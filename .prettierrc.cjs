@@ -8,10 +8,10 @@ module.exports = {
   semi: true,
   tabWidth: 2,
   trailingComma: 'all',
-  plugins: ["@trivago/prettier-plugin-sort-imports"],
+  plugins: ['@trivago/prettier-plugin-sort-imports'],
   overrides: [],
-  importOrder: ["<THIRD_PARTY_MODULES>", "^@finda-co/(.*)$", "^(@/.*|\\./.*|\\.*/.*)$"],
+  importOrder: ['<THIRD_PARTY_MODULES>', '^@finda-co/(.*)$', '^(@/.*|\\./.*|\\.*/.*)$'],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
-  importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
-};
+  importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
+}

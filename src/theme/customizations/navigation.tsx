@@ -3,13 +3,12 @@ import { buttonBaseClasses } from '@mui/material/ButtonBase';
 import { dividerClasses } from '@mui/material/Divider';
 import { menuItemClasses } from '@mui/material/MenuItem';
 import { selectClasses } from '@mui/material/Select';
-import { Components, Theme, alpha } from '@mui/material/styles';
-import React from 'react';
+import type { Components, Theme } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
 
 import { brand, gray } from '../themePrimitives';
 
-/* eslint-disable import/prefer-default-export */
-export const navigationCustomizations: Components<Theme> = {
+const navigationCustomizations: Components<Theme> = {
   MuiMenuItem: {
     styleOverrides: {
       root: ({ theme }) => ({
@@ -26,13 +25,6 @@ export const navigationCustomizations: Components<Theme> = {
       }),
     },
   },
-  // MuiBreadcrumbs: {
-  //   styleOverrides: {
-  //     li: {
-
-  //     },
-  //   },
-  // },
   MuiMenu: {
     styleOverrides: {
       list: {
@@ -193,7 +185,7 @@ export const navigationCustomizations: Components<Theme> = {
   },
   MuiTabs: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: () => ({
         minHeight: 'fit-content',
         padding: '0 16px',
       }),
@@ -321,3 +313,5 @@ export const navigationCustomizations: Components<Theme> = {
     },
   },
 };
+
+export default navigationCustomizations;

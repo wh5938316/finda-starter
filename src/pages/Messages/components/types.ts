@@ -1,12 +1,12 @@
-export interface MessageGroupProps {
+export interface MessageGroupProperties {
   isCurrentUser: boolean;
 }
 
-export interface MessageStatusIconProps {
+export interface MessageStatusIconProperties {
   status: 'sending' | 'sent' | 'read' | string;
 }
 
-export interface StyledListItemProps {
+export interface StyledListItemProperties {
   isSelected?: boolean;
 }
 

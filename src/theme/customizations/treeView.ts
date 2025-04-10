@@ -1,10 +1,10 @@
-import { Theme, alpha } from '@mui/material/styles';
+import type { Theme } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
 import type { TreeViewComponents } from '@mui/x-tree-view/themeAugmentation';
 
 import { brand, gray } from '../themePrimitives';
 
-/* eslint-disable import/prefer-default-export */
-export const treeViewCustomizations: TreeViewComponents<Theme> = {
+const treeViewCustomizations: TreeViewComponents<Theme> = {
   MuiTreeItem2: {
     styleOverrides: {
       root: ({ theme }) => ({
@@ -61,3 +61,5 @@ export const treeViewCustomizations: TreeViewComponents<Theme> = {
     },
   },
 };
+
+export default treeViewCustomizations;

@@ -1,11 +1,10 @@
-import { Theme } from '@mui/material/styles';
+import type { Theme } from '@mui/material/styles';
 import { axisClasses, chartsGridClasses, legendClasses } from '@mui/x-charts';
 import type { ChartsComponents } from '@mui/x-charts/themeAugmentation';
 
 import { gray } from '../themePrimitives';
 
-/* eslint-disable import/prefer-default-export */
-export const chartsCustomizations: ChartsComponents<Theme> = {
+const chartsCustomizations: ChartsComponents<Theme> = {
   MuiChartsAxis: {
     styleOverrides: {
       root: ({ theme }) => ({
@@ -81,3 +80,5 @@ export const chartsCustomizations: ChartsComponents<Theme> = {
     },
   },
 };
+
+export default chartsCustomizations;

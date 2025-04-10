@@ -3,19 +3,18 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import { areaElementClasses } from '@mui/x-charts/LineChart';
 import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
-import React from 'react';
 
-export type StatCardProps = {
+export interface StatCardProperties {
   title: string;
   value: string;
   interval: string;
   trend: 'up' | 'down' | 'neutral';
   data: number[];
-};
+}
 
 function getDaysInMonth(month: number, year: number) {
   const date = new Date(year, month, 0);
@@ -24,10 +23,10 @@ function getDaysInMonth(month: number, year: number) {
   });
   const daysInMonth = date.getDate();
   const days = [];
-  let i = 1;
+  let index = 1;
   while (days.length < daysInMonth) {
-    days.push(`${monthName} ${i}`);
-    i += 1;
+    days.push(`${monthName} ${index}`);
+    index += 1;
   }
   return days;
 }
@@ -43,7 +42,7 @@ function AreaGradient({ color, id }: { color: string; id: string }) {
   );
 }
 
-export default function StatCard({ title, value, interval, trend, data }: StatCardProps) {
+export default function StatCard({ title, value, interval, trend, data }: StatCardProperties) {
   const theme = useTheme();
   const daysInWeek = getDaysInMonth(4, 2024);
 

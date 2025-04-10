@@ -1,6 +1,5 @@
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import GroupIcon from '@mui/icons-material/Group';
-import LanguageIcon from '@mui/icons-material/Language';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import PaymentIcon from '@mui/icons-material/Payment';
 import PersonIcon from '@mui/icons-material/Person';
@@ -13,9 +12,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import React from 'react';
+import type * as React from 'react';
 import { Link, useLocation } from 'react-router';
 
 interface SettingsNavItem {

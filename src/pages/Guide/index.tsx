@@ -8,18 +8,14 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import * as React from 'react';
 
-import {
-  StepItem as StepItemType,
-  gettingStartedSteps,
-  joinMovementSteps,
-  prepareLaunchSteps,
-} from './mockData';
+import type { StepItem as StepItemType } from './mockData';
+import { gettingStartedSteps, joinMovementSteps, prepareLaunchSteps } from './mockData';
 
-interface StepItemProps {
+interface StepItemProperties {
   icon: React.ReactNode;
   title: string;
   description: string;
@@ -28,7 +24,14 @@ interface StepItemProps {
   onClick: () => void;
 }
 
-const StepItem = ({ icon, title, description, buttonText, completed, onClick }: StepItemProps) => {
+function StepItem({
+  icon,
+  title,
+  description,
+  buttonText,
+  completed,
+  onClick,
+}: StepItemProperties) {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', py: 2 }}>
       <Avatar
@@ -75,9 +78,9 @@ const StepItem = ({ icon, title, description, buttonText, completed, onClick }: 
       )}
     </Box>
   );
-};
+}
 
-const GuidePage = () => {
+function GuidePage() {
   const [expanded, setExpanded] = React.useState<string | false>('panel1');
   const [completedSteps, setCompletedSteps] = React.useState<Record<string, boolean>>({
     'create-community': true,
@@ -88,7 +91,7 @@ const GuidePage = () => {
   };
 
   const handleStepComplete = (stepId: string) => {
-    setCompletedSteps((prev) => ({ ...prev, [stepId]: true }));
+    setCompletedSteps((previous) => ({ ...previous, [stepId]: true }));
   };
 
   // 计算各部分剩余任务数
@@ -106,8 +109,8 @@ const GuidePage = () => {
   ).length;
 
   // 渲染步骤项
-  const renderStepItems = (steps: StepItemType[]) => {
-    return steps.map((step) => (
+  const renderStepItems = (steps: StepItemType[]) =>
+    steps.map((step) => (
       <StepItem
         key={step.id}
         icon={step.icon}
@@ -118,7 +121,6 @@ const GuidePage = () => {
         onClick={() => handleStepComplete(step.id)}
       />
     ));
-  };
 
   return (
     <Container maxWidth="md" sx={{ py: 8 }}>
@@ -279,6 +281,6 @@ const GuidePage = () => {
       </Box>
     </Container>
   );
-};
+}
 
 export const Component = GuidePage;

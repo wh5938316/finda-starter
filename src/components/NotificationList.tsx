@@ -1,8 +1,9 @@
 'use client';
 
-import { Box, Button, Paper, Stack, Typography } from '@mui/material';
+import { Box, Button, Paper, Typography } from '@mui/material';
 import { keyframes, styled, useTheme } from '@mui/material/styles';
-import React, { useEffect, useRef, useState } from 'react';
+import type * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // 向上滑出动画
 const swipeOutUp = keyframes`
@@ -71,7 +72,7 @@ interface NotificationItem {
 }
 
 // 通知列表属性
-interface NotificationListProps {
+interface NotificationListProperties {
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
   gap?: number;
   expand?: boolean;
@@ -165,20 +166,25 @@ const NotificationItemStyled = styled(Paper, {
 });
 
 // 不同类型通知的背景色
-const getBackgroundColor = (type: NotificationType | undefined, theme: any) => {
+function getBackgroundColor(type: NotificationType | undefined, theme: any) {
   switch (type) {
-    case 'success':
+    case 'success': {
       return theme.palette.success.light;
-    case 'error':
+    }
+    case 'error': {
       return theme.palette.error.light;
-    case 'info':
+    }
+    case 'info': {
       return theme.palette.info.light;
-    case 'warning':
+    }
+    case 'warning': {
       return theme.palette.warning.light;
-    default:
+    }
+    default: {
       return theme.palette.background.paper;
+    }
   }
-};
+}
 
 // 通知内容
 const NotificationContent = styled(Box, {
@@ -200,7 +206,7 @@ const demoNotifications: NotificationItem[] = [
 ];
 
 // 通知列表组件
-const NotificationList: React.FC<NotificationListProps> = ({
+const NotificationList: React.FC<NotificationListProperties> = ({
   position = 'bottom-right',
   gap = 14,
   expand = true,
@@ -211,7 +217,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
   const [notifications, setNotifications] = useState<NotificationItem[]>(demoNotifications);
   const [expanded, setExpanded] = useState(expandByDefault);
   const [containerHeight, setContainerHeight] = useState(100); // 容器高度
-  const notificationRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const notificationReferences = useRef<Record<string, HTMLDivElement | null>>({});
 
   // 在展开状态下计算容器高度
   useEffect(() => {
@@ -219,7 +225,8 @@ const NotificationList: React.FC<NotificationListProps> = ({
       // 更新每个通知的高度
       const heightsWithGap = notifications.map((notification) => {
         const height =
-          notificationRefs.current[notification.id]?.clientHeight || DEFAULT_NOTIFICATION_HEIGHT;
+          notificationReferences.current[notification.id]?.clientHeight ||
+          DEFAULT_NOTIFICATION_HEIGHT;
         return height + gap;
       });
 
@@ -228,9 +235,9 @@ const NotificationList: React.FC<NotificationListProps> = ({
       setContainerHeight(totalHeight);
 
       // 更新通知高度信息
-      setNotifications((prevNotifications) =>
-        prevNotifications.map((notification, index) => {
-          const element = notificationRefs.current[notification.id];
+      setNotifications((previousNotifications) =>
+        previousNotifications.map((notification) => {
+          const element = notificationReferences.current[notification.id];
           return {
             ...notification,
             height: element?.clientHeight || DEFAULT_NOTIFICATION_HEIGHT,
@@ -249,8 +256,8 @@ const NotificationList: React.FC<NotificationListProps> = ({
 
     // 计算当前通知前面所有通知的高度总和
     let totalOffset = 0;
-    for (let i = 0; i < index; i++) {
-      const notification = sortedNotifications[i];
+    for (let index_ = 0; index_ < index; index_++) {
+      const notification = sortedNotifications[index_];
       totalOffset += (notification.height || DEFAULT_NOTIFICATION_HEIGHT) + gap;
     }
 
@@ -265,8 +272,8 @@ const NotificationList: React.FC<NotificationListProps> = ({
     const isBottom = position.includes('bottom');
 
     // 使用ref保存DOM元素引用
-    const setRef = (element: HTMLDivElement | null) => {
-      notificationRefs.current[notification.id] = element;
+    const setReference = (element: HTMLDivElement | null) => {
+      notificationReferences.current[notification.id] = element;
     };
 
     // 根据位置计算滑动初始值（用于CSS变量）
@@ -289,11 +296,11 @@ const NotificationList: React.FC<NotificationListProps> = ({
         right: 0,
         left: 0,
         bottom: isBottom ? 0 : 'auto',
-        top: !isBottom ? 0 : 'auto',
+        top: isBottom ? 'auto' : 0,
         opacity: index < visibleNotifications ? 1 : 0, // 超过可见数量的隐藏
         // 基于计算的垂直位置
         transform: `translateY(${isBottom ? '-' : ''}${yOffset}px)`,
-        ref: setRef,
+        ref: setReference,
       } as React.CSSProperties;
     }
 
@@ -305,17 +312,17 @@ const NotificationList: React.FC<NotificationListProps> = ({
       right: 0,
       left: 0,
       bottom: isBottom ? 0 : 'auto',
-      top: !isBottom ? 0 : 'auto',
+      top: isBottom ? 'auto' : 0,
       // 同样修正transform: 使用index而非reverseIndex，这样最新通知(index=0)偏移量为0，显示在最前面
       transform: `translateY(${isBottom ? '-' : ''}${index * 16}px) scale(${1 - index * 0.05})`,
       opacity: index < visibleNotifications ? 1 : 0, // 超过可见数量的隐藏
-      ref: setRef,
+      ref: setReference,
     } as React.CSSProperties;
   };
 
   // 获取ref回调函数
-  const getRefCallback = (id: string | number) => (element: HTMLDivElement | null) => {
-    notificationRefs.current[id] = element;
+  const getReferenceCallback = (id: string | number) => (element: HTMLDivElement | null) => {
+    notificationReferences.current[id] = element;
   };
 
   return (
@@ -356,11 +363,11 @@ const NotificationList: React.FC<NotificationListProps> = ({
             .map((notification, index) => (
               <NotificationItemStyled
                 key={notification.id}
-                ref={getRefCallback(notification.id)}
+                ref={getReferenceCallback(notification.id)}
                 ownerState={{
                   isNew: notification.isNew,
                   isExiting: notification.isExiting,
-                  position: position,
+                  position,
                 }}
                 style={getNotificationStyle(index, notification)}
               >
@@ -368,11 +375,11 @@ const NotificationList: React.FC<NotificationListProps> = ({
                   <Typography variant="body1" fontWeight="500">
                     {notification.message}
                   </Typography>
-                  {notification.description && (
+                  {notification.description ? (
                     <Typography variant="body2" color="text.secondary">
                       {notification.description}
                     </Typography>
-                  )}
+                  ) : null}
                 </NotificationContent>
               </NotificationItemStyled>
             ))}

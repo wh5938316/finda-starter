@@ -4,7 +4,6 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
-import PaymentIcon from '@mui/icons-material/Payment';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import StarIcon from '@mui/icons-material/Star';
 import {
@@ -18,7 +17,6 @@ import {
   FormControlLabel,
   Grid,
   IconButton,
-  Paper,
   Stack,
   Switch,
   Table,
@@ -30,7 +28,7 @@ import {
   Typography,
 } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // 样式组件
 const SectionContainer = styled(Box)(({ theme }) => ({
@@ -143,7 +141,7 @@ const plans = [
   },
 ];
 
-const WorkspaceBilling = () => {
+function WorkspaceBilling() {
   const [autoRenew, setAutoRenew] = useState(true);
 
   return (
@@ -272,7 +270,7 @@ const WorkspaceBilling = () => {
                       <Typography variant="subtitle2">
                         {method.type === 'visa' ? 'Visa' : 'Mastercard'} **** {method.last4}
                       </Typography>
-                      {method.default && (
+                      {method.default ? (
                         <Chip
                           label="默认"
                           size="small"
@@ -280,7 +278,7 @@ const WorkspaceBilling = () => {
                           variant="outlined"
                           sx={{ ml: 1, height: 20 }}
                         />
-                      )}
+                      ) : null}
                     </Box>
                     <Typography variant="body2" color="text.secondary">
                       到期日: {method.expiry}
@@ -399,14 +397,14 @@ const WorkspaceBilling = () => {
                           }}
                         >
                           <Typography variant="h6">{plan.name}</Typography>
-                          {plan.popular && (
+                          {plan.popular ? (
                             <Chip
                               label="最受欢迎"
                               size="small"
                               color="primary"
                               sx={{ height: 20 }}
                             />
-                          )}
+                          ) : null}
                         </Box>
                       }
                       subheader={
@@ -451,6 +449,6 @@ const WorkspaceBilling = () => {
       </SectionContainer>
     </Box>
   );
-};
+}
 
 export const Component = WorkspaceBilling;

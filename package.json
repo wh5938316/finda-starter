@@ -1,26 +1,16 @@
 {
   "name": "app",
-  "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "prepare": "husky",
     "commitlint": "commitlint --config commitlint.config.cjs -e $GIT_PARAMS",
-    "lint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
-    "lint:fix": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{json,md}": [
-      "prettier --write"
-    ]
+    "dev": "vite",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "eslint --fix",
+    "prepare": "husky",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@dnd-kit/abstract": "^0.0.10",
@@ -61,20 +51,8 @@
     "@types/react-dom": "^19.1.1",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitejs/plugin-react-swc": "^3.8.1",
-    "eslint": "8.57.0",
-    "eslint-config-airbnb": "19.0.4",
-    "eslint-config-airbnb-base": "15.0.0",
-    "eslint-config-airbnb-typescript": "18.0.0",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-cypress": "2.15.1",
-    "eslint-plugin-import": "2.29.1",
-    "eslint-plugin-jsx-a11y": "6.8.0",
-    "eslint-plugin-react": "7.34.1",
-    "eslint-plugin-react-hooks": "4.6.0",
-    "eslint-plugin-react-prefer-function-component": "3.3.0",
-    "eslint-plugin-testing-library": "6.2.0",
-    "eslint-plugin-unicorn": "52.0.0",
-    "eslint-plugin-unused-imports": "^4.1.4",
+    "eslint": "9.24.0",
+    "eslint-config-hyoban": "4.0.2",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
     "typescript": "^5.8.2",
@@ -82,5 +60,13 @@
     "vite-plugin-pwa": "^1.0.0",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.1.1"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --ignore-path ./.gitignore --write "
+    ],
+    "*.{js,ts,cjs,mjs,jsx,tsx,json}": [
+      "eslint --fix"
+    ]
   }
 }

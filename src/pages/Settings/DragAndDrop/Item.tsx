@@ -1,7 +1,6 @@
 import { useSortable } from '@dnd-kit/react/sortable';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import LinkIcon from '@mui/icons-material/Link';
 import Avatar from '@mui/material/Avatar';
 import AvatarGroup from '@mui/material/AvatarGroup';
@@ -10,11 +9,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
-import { alpha } from '@mui/material/styles';
 import dayjs from 'dayjs';
-import React from 'react';
 
-interface ItemProps {
+interface ItemProperties {
   id: string;
   index: number;
   column?: string;
@@ -28,12 +25,12 @@ const priorityColorMap = {
   Low: 'success',
 } as const;
 
-const getTaskData = (id: string) => {
+function getTaskData(id: string) {
   const priorities = ['Urgent', 'Normal', 'Low'];
   const taskTypes = ['Homepage', 'Marketing', 'Tech work', 'Animation', 'Logo', 'Contact'];
 
   // 根据ID计算一个确定性哈希值，使相同ID总是产生相同结果
-  const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const hash = id.split('').reduce((accumulator, char) => accumulator + char.charCodeAt(0), 0);
 
   // 生成优先级和任务类型
   const priority = priorities[hash % 3];
@@ -59,9 +56,9 @@ const getTaskData = (id: string) => {
     commentCount,
     rawDueDate: dueDate, // 保留原始dayjs对象，以便后续需要
   };
-};
+}
 
-export function Item({ id, index, column, isActive }: ItemProps) {
+export function Item({ id, index, column, isActive }: ItemProperties) {
   // 使用基础的ref来使组件可拖拽
   const { ref, isDragging } = useSortable({
     id,

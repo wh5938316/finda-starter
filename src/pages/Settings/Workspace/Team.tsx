@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import EmailIcon from '@mui/icons-material/Email';
@@ -11,7 +10,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Checkbox from '@mui/material/Checkbox';
 import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
@@ -23,18 +21,15 @@ import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
+import { alpha } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -43,12 +38,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { alpha } from '@mui/material/styles';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
 import { MuiChipsInput } from 'mui-chips-input';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -120,10 +113,10 @@ const roles = [
 ];
 
 // 验证邮箱格式
-const isValidEmail = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/;
   return emailRegex.test(email);
-};
+}
 
 // 表单验证 schema
 const inviteFormSchema = z.object({
@@ -137,7 +130,7 @@ const inviteFormSchema = z.object({
 type InviteFormValues = z.infer<typeof inviteFormSchema>;
 
 // 成员行组件
-const MemberRow = ({
+function MemberRow({
   member,
   onEdit,
   onDelete,
@@ -145,7 +138,7 @@ const MemberRow = ({
   member: TeamMember;
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
-}) => {
+}) {
   const popupState = usePopupState({
     variant: 'popover',
     popupId: `member-menu-${member.id}`,
@@ -224,7 +217,7 @@ const MemberRow = ({
       </TableCell>
     </TableRow>
   );
-};
+}
 
 export default function WorkspaceTeamSettings() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -419,13 +412,13 @@ export default function WorkspaceTeamSettings() {
                         validate={handleValidateEmail}
                         fullWidth
                         variant="outlined"
-                        renderChip={(Component, key, props) => (
-                          <Component key={key} icon={<EmailIcon />} {...props} size="medium" />
+                        renderChip={(Component, key, properties) => (
+                          <Component key={key} icon={<EmailIcon />} {...properties} size="medium" />
                         )}
                       />
-                      {errors.emails && (
+                      {errors.emails ? (
                         <FormHelperText error>{errors.emails.message}</FormHelperText>
-                      )}
+                      ) : null}
                     </>
                   )}
                 />
@@ -446,7 +439,7 @@ export default function WorkspaceTeamSettings() {
                     </Select>
                   )}
                 />
-                {errors.role && <FormHelperText error>{errors.role.message}</FormHelperText>}
+                {errors.role ? <FormHelperText error>{errors.role.message}</FormHelperText> : null}
               </FormControl>
 
               <Controller

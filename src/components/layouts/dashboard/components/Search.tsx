@@ -2,7 +2,6 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import React from 'react';
 
 export default function Search() {
   return (

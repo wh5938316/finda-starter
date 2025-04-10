@@ -13,14 +13,14 @@ module.exports = {
         'perf',
         'test',
         'chore',
-        'revert'
-      ]
+        'revert',
+      ],
     ],
     'type-case': [2, 'always', 'lower-case'],
     'type-empty': [2, 'never'],
     'subject-empty': [2, 'never'],
     'subject-full-stop': [2, 'never', '.'],
     'subject-case': [0, 'never'],
-    'header-max-length': [2, 'always', 100]
-  }
-};
+    'header-max-length': [2, 'always', 100],
+  },
+}

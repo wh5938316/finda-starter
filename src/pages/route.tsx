@@ -1,9 +1,7 @@
-// eslint-disable-next-line no-restricted-imports
 import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import DesktopMacIcon from '@mui/icons-material/DesktopMac';
 import DeviceUnknownIcon from '@mui/icons-material/DeviceUnknown';
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import FlagIcon from '@mui/icons-material/Flag';
 import GroupIcon from '@mui/icons-material/Group';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
@@ -17,7 +15,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import SecurityIcon from '@mui/icons-material/Security';
 import SettingsIcon from '@mui/icons-material/Settings';
 import WorkIcon from '@mui/icons-material/Work';
-import { Navigate, Outlet, ScrollRestoration, createBrowserRouter } from 'react-router';
+import { createBrowserRouter,Navigate, Outlet, ScrollRestoration } from 'react-router';
 
 import AuthLayout from '@/components/layouts/auth';
 import DashboardLayout from '@/components/layouts/dashboard';
@@ -33,11 +31,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'login',
-        lazy: () => import('./Auth/Login'),
+        lazy: async () => import('./Auth/Login'),
       },
       {
         path: 'register',
-        lazy: () => import('./Auth/Register'),
+        lazy: async () => import('./Auth/Register'),
       },
       {
         // 默认重定向到登录页
@@ -60,7 +58,7 @@ export const router = createBrowserRouter([
           title: '首页',
           icon: <HomeIcon fontSize="small" />,
         },
-        lazy: () => import('./Home'),
+        lazy: async () => import('./Home'),
       },
       {
         path: 'analytics',
@@ -68,11 +66,9 @@ export const router = createBrowserRouter([
           title: '数据分析',
           icon: <AnalyticsRoundedIcon fontSize="small" />,
         },
-        lazy: async () => {
-          return {
-            Component: () => <div>数据分析页面（待实现）</div>,
-          };
-        },
+        lazy: async () => ({
+          Component: () => <div>数据分析页面（待实现）</div>,
+        }),
       },
       {
         path: 'notifications',
@@ -80,7 +76,7 @@ export const router = createBrowserRouter([
           title: '通知',
           icon: <NotificationsIcon fontSize="small" />,
         },
-        lazy: () => import('./Notifications'),
+        lazy: async () => import('./Notifications'),
       },
       {
         path: 'clients',
@@ -88,11 +84,9 @@ export const router = createBrowserRouter([
           title: '客户管理',
           icon: <PeopleRoundedIcon fontSize="small" />,
         },
-        lazy: async () => {
-          return {
-            Component: () => <div>客户管理页面（待实现）</div>,
-          };
-        },
+        lazy: async () => ({
+          Component: () => <div>客户管理页面（待实现）</div>,
+        }),
       },
       {
         path: 'guide',
@@ -100,7 +94,7 @@ export const router = createBrowserRouter([
           title: '引导演示',
           icon: <FlagIcon fontSize="small" />,
         },
-        lazy: () => import('./Guide'),
+        lazy: async () => import('./Guide'),
       },
       {
         path: 'messages',
@@ -108,7 +102,7 @@ export const router = createBrowserRouter([
           title: '消息',
           icon: <MessageIcon fontSize="small" />,
         },
-        lazy: () => import('./Messages'),
+        lazy: async () => import('./Messages'),
       },
       {
         path: 'tasks',
@@ -116,7 +110,7 @@ export const router = createBrowserRouter([
           title: '任务列表',
           icon: <AssignmentRoundedIcon fontSize="small" />,
         },
-        lazy: () => import('./Settings/DragAndDrop'),
+        lazy: async () => import('./Settings/DragAndDrop'),
       },
       {
         path: 'settings',
@@ -161,7 +155,7 @@ export const router = createBrowserRouter([
               title: '设备管理',
               icon: <DeviceUnknownIcon fontSize="small" />,
             },
-            lazy: () => import('./Settings/DeviceManagement'),
+            lazy: async () => import('./Settings/DeviceManagement'),
           },
           {
             path: 'notifications',
@@ -169,16 +163,14 @@ export const router = createBrowserRouter([
               title: '通知设置',
               icon: <NotificationsIcon fontSize="small" />,
             },
-            lazy: () => import('./Settings/Notifications'),
+            lazy: async () => import('./Settings/Notifications'),
           },
           {
             // 默认重定向到个人资料页
             index: true,
-            lazy: async () => {
-              return {
-                Component: () => <Navigate to="/settings/profile" replace />,
-              };
-            },
+            lazy: async () => ({
+              Component: () => <Navigate to="/settings/profile" replace />,
+            }),
           },
           {
             path: 'workspace/general',
@@ -197,7 +189,7 @@ export const router = createBrowserRouter([
               title: '账单与套餐',
               icon: <PaymentIcon fontSize="small" />,
             },
-            lazy: () => import('./Settings/Workspace/Billing'),
+            lazy: async () => import('./Settings/Workspace/Billing'),
           },
           {
             path: 'workspace/team',
@@ -218,11 +210,9 @@ export const router = createBrowserRouter([
           title: '关于我们',
           icon: <InfoRoundedIcon fontSize="small" />,
         },
-        lazy: async () => {
-          return {
-            Component: () => <div>关于我们页面（待实现）</div>,
-          };
-        },
+        lazy: async () => ({
+          Component: () => <div>关于我们页面（待实现）</div>,
+        }),
       },
       {
         path: 'feedback',
@@ -230,11 +220,9 @@ export const router = createBrowserRouter([
           title: '反馈建议',
           icon: <HelpRoundedIcon fontSize="small" />,
         },
-        lazy: async () => {
-          return {
-            Component: () => <div>反馈建议页面（待实现）</div>,
-          };
-        },
+        lazy: async () => ({
+          Component: () => <div>反馈建议页面（待实现）</div>,
+        }),
       },
       {
         path: 'project-creation',
@@ -242,7 +230,7 @@ export const router = createBrowserRouter([
           title: '创建项目',
           icon: <WorkIcon fontSize="small" />,
         },
-        lazy: () => import('./ProjectCreation'),
+        lazy: async () => import('./ProjectCreation'),
       },
     ],
   },

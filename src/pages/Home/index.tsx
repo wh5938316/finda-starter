@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
@@ -10,9 +9,10 @@ import CustomizedTreeView from './components/CustomizedTreeView';
 import HighlightedCard from './components/HighlightedCard';
 import PageViewsBarChart from './components/PageViewsBarChart';
 import SessionsChart from './components/SessionsChart';
-import StatCard, { StatCardProps } from './components/StatCard';
+import type { StatCardProps as StatCardProperties } from './components/StatCard';
+import StatCard from './components/StatCard';
 
-const data: StatCardProps[] = [
+const data: StatCardProperties[] = [
   {
     title: 'Users',
     value: '14k',
@@ -45,7 +45,7 @@ const data: StatCardProps[] = [
   },
 ];
 
-const HomePage = () => {
+function HomePage() {
   return (
     <Container maxWidth="xl" sx={{ pt: 2 }}>
       {/* cards */}
@@ -84,6 +84,6 @@ const HomePage = () => {
       </Grid>
     </Container>
   );
-};
+}
 
 export const Component = HomePage;

@@ -4,16 +4,16 @@ import { listClasses } from '@mui/material/List';
 import { listItemIconClasses } from '@mui/material/ListItemIcon';
 import { menuItemClasses } from '@mui/material/MenuItem';
 import { paperClasses } from '@mui/material/Paper';
+import type { Theme } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
 import { tablePaginationClasses } from '@mui/material/TablePagination';
-import { Theme, alpha } from '@mui/material/styles';
 import { gridClasses } from '@mui/x-data-grid';
-import type { DataGridProComponents } from '@mui/x-data-grid-pro/themeAugmentation';
 import type { DataGridComponents } from '@mui/x-data-grid/themeAugmentation';
+import type { DataGridProComponents } from '@mui/x-data-grid-pro/themeAugmentation';
 
 import { gray } from '../themePrimitives';
 
-/* eslint-disable import/prefer-default-export */
-export const dataGridCustomizations: DataGridProComponents<Theme> & DataGridComponents<Theme> = {
+const dataGridCustomizations: DataGridProComponents<Theme> & DataGridComponents<Theme> = {
   MuiDataGrid: {
     styleOverrides: {
       root: ({ theme }) => ({
@@ -133,3 +133,5 @@ export const dataGridCustomizations: DataGridProComponents<Theme> & DataGridComp
     },
   },
 };
+
+export default dataGridCustomizations;

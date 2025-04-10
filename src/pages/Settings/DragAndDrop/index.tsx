@@ -1,6 +1,5 @@
 import { move } from '@dnd-kit/helpers';
 import { DragDropProvider } from '@dnd-kit/react';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import TableRowsIcon from '@mui/icons-material/TableRows';
@@ -9,19 +8,17 @@ import TuneIcon from '@mui/icons-material/Tune';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import WidgetsIcon from '@mui/icons-material/Widgets';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import { alpha, styled, useTheme } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { alpha, styled, useTheme } from '@mui/material/styles';
-import React, { useState } from 'react';
-import { Link } from 'react-router';
+import type * as React from 'react';
+import { useState } from 'react';
 
 import { Column } from './Column';
 import { Item } from './Item';
@@ -62,7 +59,7 @@ const ToolbarButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
-const DragAndDropDemo = () => {
+function DragAndDropDemo() {
   const theme = useTheme();
   // 视图选择状态
   const [viewTab, setViewTab] = useState(1); // Board视图
@@ -198,6 +195,6 @@ const DragAndDropDemo = () => {
       </Box>
     </Container>
   );
-};
+}
 
 export const Component = DragAndDropDemo;

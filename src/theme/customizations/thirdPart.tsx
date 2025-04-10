@@ -1,11 +1,10 @@
+import type { Components, Theme } from '@mui/material/styles';
 import { svgIconClasses } from '@mui/material/SvgIcon';
-import { Components, Theme } from '@mui/material/styles';
 import { toastClasses } from 'material-ui-toaster';
 
 import { blue, green, orange, red } from '../themePrimitives';
 
-/* eslint-disable import/prefer-default-export */
-export const thirdPartCustomizations: Components<Theme> = {
+const thirdPartCustomizations: Components<Theme> = {
   MuiToast: {
     styleOverrides: {
       root: ({ theme }) => ({
@@ -73,7 +72,7 @@ export const thirdPartCustomizations: Components<Theme> = {
   // 自定义 Toaster 组件样式
   MuiToaster: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: () => ({
         // 增加间距
         '&.MuiToaster-positionBottomRight': {
           bottom: 32,
@@ -83,3 +82,5 @@ export const thirdPartCustomizations: Components<Theme> = {
     },
   },
 };
+
+export default thirdPartCustomizations;

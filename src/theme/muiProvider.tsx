@@ -2,7 +2,7 @@
 
 import DefaultPropsProvider from '@mui/material/DefaultPropsProvider';
 import type { SvgIconProps } from '@mui/material/SvgIcon';
-import React from 'react';
+import * as React from 'react';
 
 import CheckBoxOutlineBlankIcon from './icons/CheckBoxOutlineBlankIcon';
 import CheckIcon from './icons/CheckIcon';
@@ -11,12 +11,20 @@ import ExpandMoreIcon from './icons/ExpandMoreIcon';
 import RemoveIcon from './icons/RemoveIcon';
 import UnfoldMoreIcon from './icons/UnfoldMoreIcon';
 
-interface MuiProviderProps {
+// 解决嵌套组件定义问题，将组件提取为顶层组件
+const SelectIconComponent = ({
+  ref: reference,
+  ...properties
+}: SvgIconProps & { ref?: React.RefObject<SVGSVGElement | null> }) => (
+  <UnfoldMoreIcon fontSize="small" {...properties} ref={reference} />
+);
+
+interface MuiProviderProperties {
   children: React.ReactNode;
 }
 
-export default function MuiProvider(props: MuiProviderProps) {
-  const { children } = props;
+export default function MuiProvider(properties: MuiProviderProperties) {
+  const { children } = properties;
 
   return (
     <DefaultPropsProvider
@@ -62,9 +70,7 @@ export default function MuiProvider(props: MuiProviderProps) {
           indeterminateIcon: <RemoveIcon sx={{ height: 14, width: 14 }} />,
         },
         MuiSelect: {
-          IconComponent: React.forwardRef<SVGSVGElement, SvgIconProps>((props: any, ref) => (
-            <UnfoldMoreIcon fontSize="small" {...props} ref={ref} />
-          )),
+          IconComponent: SelectIconComponent,
         },
         MuiLink: {
           underline: 'none',

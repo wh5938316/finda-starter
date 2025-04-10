@@ -1,20 +1,24 @@
 import CheckIcon from '@mui/icons-material/Check';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import ScheduleIcon from '@mui/icons-material/Schedule';
-import React from 'react';
+import type * as React from 'react';
 
-import { MessageStatusIconProps } from './types';
+import type { MessageStatusIconProps as MessageStatusIconProperties } from './types';
 
-const MessageStatusIcon: React.FC<MessageStatusIconProps> = ({ status }) => {
+const MessageStatusIcon: React.FC<MessageStatusIconProperties> = ({ status }) => {
   switch (status) {
-    case 'sending':
+    case 'sending': {
       return <ScheduleIcon fontSize="small" sx={{ opacity: 0.7 }} />;
-    case 'sent':
+    }
+    case 'sent': {
       return <CheckIcon fontSize="small" sx={{ opacity: 0.7 }} />;
-    case 'read':
+    }
+    case 'read': {
       return <DoneAllIcon fontSize="small" color="primary" sx={{ opacity: 0.9 }} />;
-    default:
+    }
+    default: {
       return null;
+    }
   }
 };
 

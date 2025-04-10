@@ -1,18 +1,18 @@
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { alpha, styled } from '@mui/material/styles';
-import React from 'react';
+import Typography from '@mui/material/Typography';
+import type * as React from 'react';
 
 import MessageStatusIcon from './MessageStatusIcon';
-import { Message, MessageGroupProps } from './types';
+import type { Message, MessageGroupProps as MessageGroupProperties } from './types';
 
-interface MessageBubbleProps {
+interface MessageBubbleProperties {
   message: Message;
 }
 
 const StyledMessageBubble = styled(Box, {
-  shouldForwardProp: (prop) => prop !== 'isCurrentUser',
+  shouldForwardProp: (property) => property !== 'isCurrentUser',
 })<{
   isCurrentUser: boolean;
 }>(({ theme, isCurrentUser }) => ({
@@ -30,46 +30,44 @@ const StyledMessageBubble = styled(Box, {
 }));
 
 const MessageGroup = styled(Box, {
-  shouldForwardProp: (prop) => prop !== 'isCurrentUser',
-})<MessageGroupProps>(({ theme, isCurrentUser }) => ({
+  shouldForwardProp: (property) => property !== 'isCurrentUser',
+})<MessageGroupProperties>(({ theme, isCurrentUser }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: isCurrentUser ? 'flex-end' : 'flex-start',
   marginBottom: theme.spacing(2),
 }));
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
-  return (
-    <MessageGroup key={message.id} isCurrentUser={message.isCurrentUser}>
-      {!message.isCurrentUser && (
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
-          <Avatar
-            src={message.sender.avatar}
-            alt={message.sender.name}
-            sx={{ width: 36, height: 36, fontSize: '1rem', mr: 1 }}
-          >
-            {message.sender.name.charAt(0)}
-          </Avatar>
-          <Typography variant="caption" color="text.secondary">
-            {message.sender.name}
-          </Typography>
-        </Box>
-      )}
-      <Box sx={{ display: 'flex', alignItems: 'flex-end', maxWidth: '60%' }}>
-        <StyledMessageBubble isCurrentUser={message.isCurrentUser}>
-          <Typography variant="body2">{message.content}</Typography>
-        </StyledMessageBubble>
-        {message.isCurrentUser && (
-          <Box sx={{ ml: 0.5 }}>
-            <MessageStatusIcon status={message.status} />
-          </Box>
-        )}
+const MessageBubble: React.FC<MessageBubbleProperties> = ({ message }) => (
+  <MessageGroup key={message.id} isCurrentUser={message.isCurrentUser}>
+    {!message.isCurrentUser && (
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
+        <Avatar
+          src={message.sender.avatar}
+          alt={message.sender.name}
+          sx={{ width: 36, height: 36, fontSize: '1rem', mr: 1 }}
+        >
+          {message.sender.name.charAt(0)}
+        </Avatar>
+        <Typography variant="caption" color="text.secondary">
+          {message.sender.name}
+        </Typography>
       </Box>
-      <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
-        {message.time}
-      </Typography>
-    </MessageGroup>
-  );
-};
+    )}
+    <Box sx={{ display: 'flex', alignItems: 'flex-end', maxWidth: '60%' }}>
+      <StyledMessageBubble isCurrentUser={message.isCurrentUser}>
+        <Typography variant="body2">{message.content}</Typography>
+      </StyledMessageBubble>
+      {message.isCurrentUser ? (
+        <Box sx={{ ml: 0.5 }}>
+          <MessageStatusIcon status={message.status} />
+        </Box>
+      ) : null}
+    </Box>
+    <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
+      {message.time}
+    </Typography>
+  </MessageGroup>
+);
 
 export default MessageBubble;
