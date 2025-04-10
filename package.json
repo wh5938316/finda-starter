@@ -36,7 +36,6 @@
     "mitt": "^3.0.1",
     "motion": "^12.6.3",
     "mui-chips-input": "^4.0.1",
-    "notistack": "^2.0.8",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.55.0",
