@@ -49,32 +49,34 @@ const surfacesCustomizations: Components<Theme> = {
   },
   MuiCard: {
     styleOverrides: {
-      root: ({ theme }) => ({
-        gap: 16,
-        transition: 'all 100ms ease',
-        backgroundColor: gray[50],
-        borderRadius: theme.shape.borderRadius,
-        border: `1px solid ${theme.palette.divider}`,
-        boxShadow: 'none',
-        ...theme.applyStyles('dark', {
-          backgroundColor: gray[800],
-        }),
-        variants: [
-          {
-            props: {
-              variant: 'outlined',
+      root: ({ theme }) => {
+        return {
+          gap: 16,
+          transition: 'all 100ms ease',
+          backgroundColor: gray[50],
+          borderRadius: theme.shape.borderRadius,
+          border: `1px solid ${theme.palette.divider}`,
+          boxShadow: 'none',
+          ...theme.applyStyles('dark', {
+            backgroundColor: gray[800],
+          }),
+          variants: [
+            {
+              props: {
+                variant: 'outlined',
+              },
+              style: {
+                border: `1px solid ${theme.palette.divider}`,
+                boxShadow: 'none',
+                background: 'hsl(0, 0%, 100%)',
+                ...theme.applyStyles('dark', {
+                  background: alpha(gray[900], 0.4),
+                }),
+              },
             },
-            style: {
-              border: `1px solid ${theme.palette.divider}`,
-              boxShadow: 'none',
-              background: 'hsl(0, 0%, 100%)',
-              ...theme.applyStyles('dark', {
-                background: alpha(gray[900], 0.4),
-              }),
-            },
-          },
-        ],
-      }),
+          ],
+        };
+      },
     },
   },
   MuiCardContent: {
@@ -90,16 +92,20 @@ const surfacesCustomizations: Components<Theme> = {
         padding: '0px 16px 16px',
         margin: '0 -16px',
       },
-      title: ({ theme }) => ({
-        fontSize: theme.typography.h6.fontSize,
-        fontWeight: theme.typography.fontWeightBold,
-        marginBottom: 12,
-      }),
-      subheader: ({ theme }) => ({
-        fontSize: theme.typography.body1.fontSize,
-        color: theme.palette.text.secondary,
-        lineHeight: theme.typography.body1.lineHeight,
-      }),
+      title: ({ theme }) => {
+        return {
+          fontSize: theme.typography.h6.fontSize,
+          fontWeight: theme.typography.fontWeightBold,
+          marginBottom: 12,
+        };
+      },
+      subheader: ({ theme }) => {
+        return {
+          fontSize: theme.typography.body1.fontSize,
+          color: theme.palette.text.secondary,
+          lineHeight: theme.typography.body1.lineHeight,
+        };
+      },
     },
   },
   MuiCardActions: {
@@ -129,4 +135,4 @@ const surfacesCustomizations: Components<Theme> = {
   },
 };
 
-export default surfacesCustomizations;
+export { surfacesCustomizations };

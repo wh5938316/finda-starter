@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 
-interface LoadingIndicatorProperties {
+interface LoadingIndicatorProps {
   message?: string;
   fullScreen?: boolean;
   open?: boolean;
@@ -14,7 +14,7 @@ export default function LoadingIndicator({
   message = '加载中...',
   fullScreen = false,
   open = true,
-}: LoadingIndicatorProperties) {
+}: LoadingIndicatorProps) {
   // 全屏模式使用Backdrop
   if (fullScreen) {
     return (
@@ -30,7 +30,7 @@ export default function LoadingIndicator({
         }}
       >
         <CircularProgress color="inherit" size={60} thickness={4} />
-        {message ? (
+        {message && (
           <Typography
             variant="h6"
             color="white"
@@ -42,7 +42,7 @@ export default function LoadingIndicator({
           >
             {message}
           </Typography>
-        ) : null}
+        )}
       </Backdrop>
     );
   }
@@ -63,11 +63,11 @@ export default function LoadingIndicator({
         }}
       >
         <CircularProgress size={44} thickness={4} />
-        {message ? (
+        {message && (
           <Typography variant="body1" color="text.secondary" sx={{ mt: 2, fontWeight: 'medium' }}>
             {message}
           </Typography>
-        ) : null}
+        )}
       </Box>
     </Fade>
   );

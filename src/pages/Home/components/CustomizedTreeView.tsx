@@ -23,13 +23,13 @@ import * as React from 'react';
 
 type Color = 'blue' | 'green';
 
-interface ExtendedTreeItemProperties {
+type ExtendedTreeItemProps = {
   color?: Color;
   id: string;
   label: string;
-}
+};
 
-const ITEMS: Array<TreeViewBaseItem<ExtendedTreeItemProperties>> = [
+const ITEMS: TreeViewBaseItem<ExtendedTreeItemProps>[] = [
   {
     id: '1',
     label: 'Website',
@@ -83,24 +83,24 @@ function DotIcon({ color }: { color: string }) {
 
 const AnimatedCollapse = animated(Collapse);
 
-function TransitionComponent(properties: TransitionProps) {
+function TransitionComponent(props: TransitionProps) {
   const style = useSpring({
     to: {
-      opacity: properties.in ? 1 : 0,
-      transform: `translate3d(0,${properties.in ? 0 : 20}px,0)`,
+      opacity: props.in ? 1 : 0,
+      transform: `translate3d(0,${props.in ? 0 : 20}px,0)`,
     },
   });
 
-  return <AnimatedCollapse style={style} {...properties} />;
+  return <AnimatedCollapse style={style} {...props} />;
 }
 
-interface CustomLabelProperties {
+interface CustomLabelProps {
   children: React.ReactNode;
   color?: Color;
   expandable?: boolean;
 }
 
-function CustomLabel({ color, expandable, children, ...other }: CustomLabelProperties) {
+function CustomLabel({ color, expandable, children, ...other }: CustomLabelProps) {
   const theme = useTheme();
   const colors = {
     blue: (theme.vars || theme).palette.primary.main,
@@ -110,7 +110,7 @@ function CustomLabel({ color, expandable, children, ...other }: CustomLabelPrope
   const iconColor = color ? colors[color] : null;
   return (
     <TreeItem2Label {...other} sx={{ display: 'flex', alignItems: 'center' }}>
-      {iconColor ? <DotIcon color={iconColor} /> : null}
+      {iconColor && <DotIcon color={iconColor} />}
       <Typography className="labelText" variant="body2" sx={{ color: 'text.primary' }}>
         {children}
       </Typography>
@@ -118,12 +118,12 @@ function CustomLabel({ color, expandable, children, ...other }: CustomLabelPrope
   );
 }
 
-interface CustomTreeItemProperties
+interface CustomTreeItemProps
   extends Omit<UseTreeItem2Parameters, 'rootRef'>,
     Omit<React.HTMLAttributes<HTMLLIElement>, 'onFocus'> {}
 
-function CustomTreeItem({ ref: reference, ...properties }) {
-  const { id, itemId, label, disabled, children, ...other } = properties;
+const CustomTreeItem = function CustomTreeItem({ ref, ...props }) {
+  const { id, itemId, label, disabled, children, ...other } = props;
 
   const {
     getRootProps,
@@ -133,7 +133,7 @@ function CustomTreeItem({ ref: reference, ...properties }) {
     getGroupTransitionProps,
     status,
     publicAPI,
-  } = useTreeItem2({ id, itemId, children, label, disabled, rootRef: reference });
+  } = useTreeItem2({ id, itemId, children, label, disabled, rootRef: ref });
 
   const item = publicAPI.getItem(itemId);
   const color = item?.color;
@@ -150,21 +150,21 @@ function CustomTreeItem({ ref: reference, ...properties }) {
             }),
           })}
         >
-          {status.expandable ? (
+          {status.expandable && (
             <TreeItem2IconContainer {...getIconContainerProps()}>
               <TreeItem2Icon status={status} />
             </TreeItem2IconContainer>
-          ) : null}
+          )}
 
           <CustomLabel {...getLabelProps({ color })} />
         </TreeItem2Content>
-        {children ? (
+        {children && (
           <TransitionComponent {...getGroupTransitionProps({ className: 'groupTransition' })} />
-        ) : null}
+        )}
       </TreeItem2Root>
     </TreeItem2Provider>
   );
-}
+};
 
 export default function CustomizedTreeView() {
   return (

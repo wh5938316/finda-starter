@@ -33,7 +33,7 @@ import { alpha, styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import type * as React from 'react';
+import * as React from 'react';
 import { useState } from 'react';
 
 // 表单行组件
@@ -64,7 +64,7 @@ const SettingsIcon = styled(Box)(({ theme }) => ({
 }));
 
 // 主题选择器组件
-interface ThemeOptionProperties {
+interface ThemeOptionProps {
   selected: boolean;
   onClick: () => void;
   sx?: any;
@@ -72,8 +72,8 @@ interface ThemeOptionProperties {
 }
 
 const ThemeOption = styled(Box, {
-  shouldForwardProp: (property) => property !== 'selected',
-})<ThemeOptionProperties>(({ theme, selected }) => ({
+  shouldForwardProp: (prop) => prop !== 'selected',
+})<ThemeOptionProps>(({ theme, selected }) => ({
   width: 120,
   height: 80,
   borderRadius: theme.shape.borderRadius,

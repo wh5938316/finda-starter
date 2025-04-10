@@ -29,7 +29,7 @@ const ColumnContainer = styled(Paper)(({ theme }) => ({
 }));
 
 // 获取每个列对应的图标和颜色
-function getColumnIcon(id: string) {
+const getColumnIcon = (id: string) => {
   switch (id) {
     case 'A': {
       return {
@@ -72,15 +72,15 @@ function getColumnIcon(id: string) {
       };
     }
   }
-}
+};
 
-interface ColumnProperties {
+interface ColumnProps {
   children: React.ReactNode;
   id: string;
   activeId?: string | null;
 }
 
-export function Column({ children, id, activeId }: ColumnProperties) {
+export function Column({ children, id, activeId }: ColumnProps) {
   // 简化使用useDroppable钩子
   const { ref, isDropTarget } = useDroppable({
     id,
@@ -159,7 +159,7 @@ export function Column({ children, id, activeId }: ColumnProperties) {
         {children}
 
         {/* 显示列为空时的占位符 */}
-        {isEmpty ? (
+        {isEmpty && (
           <Card
             sx={{
               borderRadius: 2,
@@ -177,7 +177,7 @@ export function Column({ children, id, activeId }: ColumnProperties) {
               拖放任务到此处
             </Typography>
           </Card>
-        ) : null}
+        )}
       </Box>
     </ColumnContainer>
   );

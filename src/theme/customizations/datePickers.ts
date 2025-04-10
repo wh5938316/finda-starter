@@ -176,4 +176,4 @@ const datePickersCustomizations: PickerComponents<Theme> = {
   },
 };
 
-export default datePickersCustomizations;
+export { datePickersCustomizations };

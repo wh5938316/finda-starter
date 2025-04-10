@@ -15,7 +15,7 @@ import * as React from 'react';
 import type { StepItem as StepItemType } from './mockData';
 import { gettingStartedSteps, joinMovementSteps, prepareLaunchSteps } from './mockData';
 
-interface StepItemProperties {
+interface StepItemProps {
   icon: React.ReactNode;
   title: string;
   description: string;
@@ -24,14 +24,7 @@ interface StepItemProperties {
   onClick: () => void;
 }
 
-function StepItem({
-  icon,
-  title,
-  description,
-  buttonText,
-  completed,
-  onClick,
-}: StepItemProperties) {
+const StepItem = ({ icon, title, description, buttonText, completed, onClick }: StepItemProps) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', py: 2 }}>
       <Avatar
@@ -78,9 +71,9 @@ function StepItem({
       )}
     </Box>
   );
-}
+};
 
-function GuidePage() {
+const GuidePage = () => {
   const [expanded, setExpanded] = React.useState<string | false>('panel1');
   const [completedSteps, setCompletedSteps] = React.useState<Record<string, boolean>>({
     'create-community': true,
@@ -91,7 +84,7 @@ function GuidePage() {
   };
 
   const handleStepComplete = (stepId: string) => {
-    setCompletedSteps((previous) => ({ ...previous, [stepId]: true }));
+    setCompletedSteps((prev) => ({ ...prev, [stepId]: true }));
   };
 
   // 计算各部分剩余任务数
@@ -109,8 +102,8 @@ function GuidePage() {
   ).length;
 
   // 渲染步骤项
-  const renderStepItems = (steps: StepItemType[]) =>
-    steps.map((step) => (
+  const renderStepItems = (steps: StepItemType[]) => {
+    return steps.map((step) => (
       <StepItem
         key={step.id}
         icon={step.icon}
@@ -121,6 +114,7 @@ function GuidePage() {
         onClick={() => handleStepComplete(step.id)}
       />
     ));
+  };
 
   return (
     <Container maxWidth="md" sx={{ py: 8 }}>
@@ -281,6 +275,6 @@ function GuidePage() {
       </Box>
     </Container>
   );
-}
+};
 
 export const Component = GuidePage;

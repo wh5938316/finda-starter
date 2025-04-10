@@ -134,4 +134,4 @@ const dataGridCustomizations: DataGridProComponents<Theme> & DataGridComponents<
   },
 };
 
-export default dataGridCustomizations;
+export { dataGridCustomizations };

@@ -8,10 +8,10 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import type { ChangeEvent, KeyboardEvent } from 'react';
-import type * as React from 'react';
+import * as React from 'react';
 import { useState } from 'react';
 
-interface ChatInputProperties {
+interface ChatInputProps {
   onSendMessage: (message: string) => void;
 }
 
@@ -22,7 +22,7 @@ const MessageInput = styled(Box)(({ theme }) => ({
   alignItems: 'center',
 }));
 
-const ChatInput: React.FC<ChatInputProperties> = ({ onSendMessage }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
   const [newMessage, setNewMessage] = useState('');
 
   const handleMessageChange = (e: ChangeEvent<HTMLInputElement>) => {

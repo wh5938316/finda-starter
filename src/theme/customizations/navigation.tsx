@@ -25,6 +25,13 @@ const navigationCustomizations: Components<Theme> = {
       }),
     },
   },
+  // MuiBreadcrumbs: {
+  //   styleOverrides: {
+  //     li: {
+
+  //     },
+  //   },
+  // },
   MuiMenu: {
     styleOverrides: {
       list: {
@@ -185,7 +192,7 @@ const navigationCustomizations: Components<Theme> = {
   },
   MuiTabs: {
     styleOverrides: {
-      root: () => ({
+      root: ({ theme }) => ({
         minHeight: 'fit-content',
         padding: '0 16px',
       }),
@@ -314,4 +321,4 @@ const navigationCustomizations: Components<Theme> = {
   },
 };
 
-export default navigationCustomizations;
+export { navigationCustomizations };

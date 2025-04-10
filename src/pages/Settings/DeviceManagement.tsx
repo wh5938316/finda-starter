@@ -19,6 +19,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import * as React from 'react';
 import { Link } from 'react-router';
 
 // 样式组件
@@ -33,13 +34,13 @@ const SettingsIcon = styled(Box)(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
-interface DeviceCardProperties {
+interface DeviceCardProps {
   current?: boolean;
 }
 
 const DeviceCard = styled(Paper, {
-  shouldForwardProp: (property) => property !== 'current',
-})<DeviceCardProperties>(({ theme, current }) => ({
+  shouldForwardProp: (prop) => prop !== 'current',
+})<DeviceCardProps>(({ theme, current }) => ({
   padding: theme.spacing(2.5),
   marginBottom: theme.spacing(2),
   borderRadius: theme.shape.borderRadius,
@@ -94,7 +95,7 @@ const devices = [
   },
 ];
 
-function DeviceManagement() {
+const DeviceManagement = () => {
   return (
     <Box>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -151,7 +152,7 @@ function DeviceManagement() {
                     >
                       {device.browser}
                     </Box>
-                    {device.current ? <Chip label="活跃中" color="success" /> : null}
+                    {device.current && <Chip label="活跃中" color="success" />}
                   </Box>
                   <Typography variant="body2">
                     {device.location} • IP: {device.ip}
@@ -248,6 +249,6 @@ function DeviceManagement() {
       </Box>
     </Box>
   );
-}
+};
 
 export const Component = DeviceManagement;

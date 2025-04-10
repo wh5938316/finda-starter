@@ -62,4 +62,4 @@ const treeViewCustomizations: TreeViewComponents<Theme> = {
   },
 };
 
-export default treeViewCustomizations;
+export { treeViewCustomizations };

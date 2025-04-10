@@ -107,8 +107,8 @@ const ProjectTypeCard = styled(Paper)(({ theme }) => ({
 }));
 
 // 自定义步骤图标
-function ColorlibStepIcon(properties: any) {
-  const { active, completed, className, icon } = properties;
+const ColorlibStepIcon = (props: any) => {
+  const { active, completed, className, icon } = props;
 
   const icons: Record<string, React.ReactElement> = {
     1: <SearchIcon />,
@@ -123,7 +123,7 @@ function ColorlibStepIcon(properties: any) {
       {completed ? <CheckIcon /> : icons[String(icon)]}
     </ColorlibStepIconRoot>
   );
-}
+};
 
 // 项目类型数据
 const projectTypes = [
@@ -160,11 +160,11 @@ const projectTypes = [
 ];
 
 // 定义步骤内容类型
-type StepContentFunction = (handleSelectType: (type: string) => void) => React.ReactNode;
-type StepContent = React.ReactNode | StepContentFunction;
+type StepContentFunc = (handleSelectType: (type: string) => void) => React.ReactNode;
+type StepContent = React.ReactNode | StepContentFunc;
 
 // 针对首个组件
-function TypeCards({ handleSelectType }: { handleSelectType: (type: string) => void }) {
+const TypeCards = ({ handleSelectType }: { handleSelectType: (type: string) => void }) => {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '16px' }}>
       {projectTypes.map((type, index) => (
@@ -209,14 +209,14 @@ function TypeCards({ handleSelectType }: { handleSelectType: (type: string) => v
       ))}
     </div>
   );
-}
+};
 
 // 步骤内容定义
-const steps: Array<{
+const steps: {
   label: string;
   description: string;
   content: StepContent;
-}> = [
+}[] = [
   {
     label: '选择项目类型',
     description: '选择您要创建的项目类型',
@@ -707,7 +707,7 @@ const steps: Array<{
   },
 ];
 
-function ProjectCreationPage() {
+const ProjectCreationPage = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [projectType, setProjectType] = React.useState('');
 
@@ -720,11 +720,11 @@ function ProjectCreationPage() {
       return;
     }
     // 不是最后一步，继续下一步
-    setActiveStep((previousActiveStep) => previousActiveStep + 1);
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
-    setActiveStep((previousActiveStep) => previousActiveStep - 1);
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   const handleReset = () => {
@@ -740,10 +740,10 @@ function ProjectCreationPage() {
     }, 100);
   };
 
-  const renderStepContent = async (step: number) => {
+  const renderStepContent = (step: number) => {
     const { content } = steps[step];
     if (step === 0) {
-      return (content as StepContentFunction)(handleSelectProjectType);
+      return (content as StepContentFunc)(handleSelectProjectType);
     }
     return content as React.ReactNode;
   };
@@ -810,6 +810,6 @@ function ProjectCreationPage() {
       </Paper>
     </Container>
   );
-}
+};
 
 export const Component = ProjectCreationPage;

@@ -7,13 +7,14 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { useDrawingArea } from '@mui/x-charts/hooks';
 import { PieChart } from '@mui/x-charts/PieChart';
+import * as React from 'react';
 
 import { BrazilFlag, GlobeFlag, IndiaFlag, UsaFlag } from '../internals/components/CustomIcons';
 
 const data = [
-  { label: 'India', value: 50_000 },
-  { label: 'USA', value: 35_000 },
-  { label: 'Brazil', value: 10_000 },
+  { label: 'India', value: 50000 },
+  { label: 'USA', value: 35000 },
+  { label: 'Brazil', value: 10000 },
   { label: 'Other', value: 5000 },
 ];
 
@@ -44,13 +45,13 @@ const countries = [
   },
 ];
 
-interface StyledTextProperties {
+interface StyledTextProps {
   variant: 'primary' | 'secondary';
 }
 
 const StyledText = styled('text', {
-  shouldForwardProp: (property) => property !== 'variant',
-})<StyledTextProperties>(({ theme }) => ({
+  shouldForwardProp: (prop) => prop !== 'variant',
+})<StyledTextProps>(({ theme }) => ({
   textAnchor: 'middle',
   dominantBaseline: 'central',
   fill: (theme.vars || theme).palette.text.secondary,
@@ -86,25 +87,25 @@ const StyledText = styled('text', {
   ],
 }));
 
-interface PieCenterLabelProperties {
+interface PieCenterLabelProps {
   primaryText: string;
   secondaryText: string;
 }
 
-function PieCenterLabel({ primaryText, secondaryText }: PieCenterLabelProperties) {
+function PieCenterLabel({ primaryText, secondaryText }: PieCenterLabelProps) {
   const { width, height, left, top } = useDrawingArea();
   const primaryY = top + height / 2 - 10;
   const secondaryY = primaryY + 24;
 
   return (
-    <>
+    <React.Fragment>
       <StyledText variant="primary" x={left + width / 2} y={primaryY}>
         {primaryText}
       </StyledText>
       <StyledText variant="secondary" x={left + width / 2} y={secondaryY}>
         {secondaryText}
       </StyledText>
-    </>
+    </React.Fragment>
   );
 }
 

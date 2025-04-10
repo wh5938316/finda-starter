@@ -13,13 +13,13 @@ import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import * as React from 'react';
 
-interface ButtonFieldProperties
+interface ButtonFieldProps
   extends UseDateFieldProps<Dayjs, false>,
     BaseSingleInputFieldProps<Dayjs | null, Dayjs, FieldSection, false, DateValidationError> {
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function ButtonField(properties: ButtonFieldProperties) {
+function ButtonField(props: ButtonFieldProps) {
   const {
     setOpen,
     label,
@@ -27,7 +27,7 @@ function ButtonField(properties: ButtonFieldProperties) {
     disabled,
     InputProps: { ref } = {},
     inputProps: { 'aria-label': ariaLabel } = {},
-  } = properties;
+  } = props;
 
   return (
     <Button
@@ -37,7 +37,7 @@ function ButtonField(properties: ButtonFieldProperties) {
       ref={ref}
       aria-label={ariaLabel}
       size="small"
-      onClick={() => setOpen?.((previous) => !previous)}
+      onClick={() => setOpen?.((prev) => !prev)}
       startIcon={<CalendarTodayRoundedIcon fontSize="small" />}
       sx={{ minWidth: 'fit-content' }}
     >
@@ -54,7 +54,7 @@ export default function CustomDatePicker() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
         value={value}
-        label={value == undefined ? null : value.format('MMM DD, YYYY')}
+        label={value == null ? null : value.format('MMM DD, YYYY')}
         onChange={(newValue) => setValue(newValue)}
         slots={{ field: ButtonField }}
         slotProps={{

@@ -1,7 +1,7 @@
 import Stack from '@mui/material/Stack';
 import type { PropsWithChildren } from 'react';
 
-function AuthLayout({ children }: PropsWithChildren) {
+const AuthLayout = ({ children }: PropsWithChildren) => {
   return (
     <Stack
       direction="column"
@@ -32,6 +32,6 @@ function AuthLayout({ children }: PropsWithChildren) {
       {children}
     </Stack>
   );
-}
+};
 
 export default AuthLayout;

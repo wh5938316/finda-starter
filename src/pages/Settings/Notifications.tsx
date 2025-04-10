@@ -23,6 +23,7 @@ import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import type { ChangeEvent } from 'react';
+import * as React from 'react';
 import { useState } from 'react';
 
 // 样式组件
@@ -106,7 +107,7 @@ const importanceLabels = {
 type NotificationChannel = 'email' | 'app' | 'browser' | 'mobile';
 type ImportanceLevel = 'all' | 'important' | 'none';
 
-function NotificationSettings() {
+const NotificationSettings = () => {
   // 通知渠道状态
   const [emailEnabled, setEmailEnabled] = useState(true);
   const [appEnabled, setAppEnabled] = useState(true);
@@ -618,6 +619,6 @@ function NotificationSettings() {
       </Box>
     </Box>
   );
-}
+};
 
 export const Component = NotificationSettings;

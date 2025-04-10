@@ -578,10 +578,15 @@ const inputsCustomizations: Components<Theme> = {
         fontSize: theme.typography.body1.fontSize,
         marginBottom: 6,
         '&.Mui-focused': {
-          color: theme.palette.text.primary,
+          color: `${theme.palette.text.primary}`,
           transform: 'none',
         },
       }),
+    },
+  },
+  MuiTextField: {
+    styleOverrides: {
+      root: ({ theme }) => ({}),
     },
   },
   MuiAutocomplete: {
@@ -698,4 +703,4 @@ const inputsCustomizations: Components<Theme> = {
   },
 };
 
-export default inputsCustomizations;
+export { inputsCustomizations };

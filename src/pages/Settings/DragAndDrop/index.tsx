@@ -17,7 +17,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import type * as React from 'react';
+import * as React from 'react';
 import { useState } from 'react';
 
 import { Column } from './Column';
@@ -59,7 +59,7 @@ const ToolbarButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
-function DragAndDropDemo() {
+const DragAndDropDemo = () => {
   const theme = useTheme();
   // 视图选择状态
   const [viewTab, setViewTab] = useState(1); // Board视图
@@ -195,6 +195,6 @@ function DragAndDropDemo() {
       </Box>
     </Container>
   );
-}
+};
 
 export const Component = DragAndDropDemo;

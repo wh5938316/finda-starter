@@ -50,13 +50,13 @@ const SettingsIcon = styled(Box)(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
-interface DeviceCardProperties {
+interface DeviceCardProps {
   current?: boolean;
 }
 
 const DeviceCard = styled(Paper, {
-  shouldForwardProp: (property) => property !== 'current',
-})<DeviceCardProperties>(({ theme, current }) => ({
+  shouldForwardProp: (prop) => prop !== 'current',
+})<DeviceCardProps>(({ theme, current }) => ({
   padding: theme.spacing(2.5),
   marginBottom: theme.spacing(2),
   borderRadius: theme.shape.borderRadius,

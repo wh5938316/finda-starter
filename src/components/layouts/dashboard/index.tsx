@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import type * as React from 'react';
+import * as React from 'react';
 
 import AppNavbar from './components/AppNavbar';
 import Header from './components/Header';
@@ -13,7 +13,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <Box
         component="main"
-        sx={{
+        sx={(theme) => ({
           position: 'relative',
           flexGrow: 1,
           // backgroundColor: theme.vars
@@ -21,7 +21,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           //   : alpha(theme.palette.background.default, 1),
           overflow: 'auto',
           paddingTop: '64px',
-        }}
+        })}
       >
         <Header />
         {children}

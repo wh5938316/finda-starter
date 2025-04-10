@@ -81,4 +81,4 @@ const chartsCustomizations: ChartsComponents<Theme> = {
   },
 };
 
-export default chartsCustomizations;
+export { chartsCustomizations };

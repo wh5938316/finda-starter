@@ -25,13 +25,13 @@ const MessageContainer = styled(Box)(({ theme }) => ({
   boxShadow: theme.shadows[1],
 }));
 
-function MessagesPage() {
+const MessagesPage = () => {
   const [selectedConversation, setSelectedConversation] = React.useState(1);
   const [messageList, setMessageList] = React.useState(messages);
 
   const handleSendMessage = (newMessage: string) => {
     if (newMessage.trim() !== '') {
-      const newMessageObject: Message = {
+      const newMessageObj: Message = {
         id: messageList.length + 1,
         sender: { id: 999, name: '我', avatar: '/avatars/me.jpg' },
         content: newMessage,
@@ -40,13 +40,13 @@ function MessagesPage() {
         isCurrentUser: true,
       };
 
-      setMessageList([...messageList, newMessageObject]);
+      setMessageList([...messageList, newMessageObj]);
 
       // 模拟消息发送状态更新
       setTimeout(() => {
-        setMessageList((previous) =>
-          previous.map((message) =>
-            message.id === newMessageObject.id ? { ...message, status: 'sent' as const } : message,
+        setMessageList((prev) =>
+          prev.map((msg) =>
+            msg.id === newMessageObj.id ? { ...msg, status: 'sent' as const } : msg,
           ),
         );
       }, 1000);
@@ -75,6 +75,6 @@ function MessagesPage() {
       </MessageContainer>
     </AppContainer>
   );
-}
+};
 
 export const Component = MessagesPage;

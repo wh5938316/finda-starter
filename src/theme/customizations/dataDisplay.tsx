@@ -252,9 +252,9 @@ const dataDisplayCustomizations: Components<Theme> = {
   },
   MuiTable: {
     styleOverrides: {
-      root: () => ({
+      root: {
         '--Table-Cell-height': '40px',
-      }),
+      },
     },
   },
   MuiTableCell: {
@@ -280,4 +280,4 @@ const dataDisplayCustomizations: Components<Theme> = {
   },
 };
 
-export default dataDisplayCustomizations;
+export { dataDisplayCustomizations };

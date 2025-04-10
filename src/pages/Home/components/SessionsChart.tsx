@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { LineChart } from '@mui/x-charts/LineChart';
+import * as React from 'react';
 
 function AreaGradient({ color, id }: { color: string; id: string }) {
   return (
@@ -24,10 +25,10 @@ function getDaysInMonth(month: number, year: number) {
   });
   const daysInMonth = date.getDate();
   const days = [];
-  let index = 1;
+  let i = 1;
   while (days.length < daysInMonth) {
-    days.push(`${monthName} ${index}`);
-    index += 1;
+    days.push(`${monthName} ${i}`);
+    i += 1;
   }
   return days;
 }
@@ -72,7 +73,7 @@ export default function SessionsChart() {
             {
               scaleType: 'point',
               data,
-              tickInterval: (index, index_) => (index_ + 1) % 5 === 0,
+              tickInterval: (index, i) => (i + 1) % 5 === 0,
             },
           ]}
           series={[

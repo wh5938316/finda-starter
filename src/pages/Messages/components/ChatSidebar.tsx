@@ -19,10 +19,11 @@ import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
+import * as React from 'react';
 
-import type { Conversation, StyledListItemProps as StyledListItemProperties } from './types';
+import type { Conversation, StyledListItemProps } from './types';
 
-interface ChatSidebarProperties {
+interface ChatSidebarProps {
   conversations: Conversation[];
   selectedConversation: number;
   setSelectedConversation: (id: number) => void;
@@ -43,7 +44,7 @@ const MessageList = styled(List)(({ theme }) => ({
   gap: 0,
 }));
 
-const MessageListItem = styled(ListItem)<StyledListItemProperties>(({ theme, isSelected }) => ({
+const MessageListItem = styled(ListItem)<StyledListItemProps>(({ theme, isSelected }) => ({
   padding: theme.spacing(2),
   cursor: 'pointer',
   backgroundColor: isSelected ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
@@ -61,11 +62,11 @@ const SearchField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-function ChatSidebar({
+const ChatSidebar = ({
   conversations,
   selectedConversation,
   setSelectedConversation,
-}: ChatSidebarProperties) {
+}: ChatSidebarProps) => {
   const filterPopupState = usePopupState({ variant: 'popover', popupId: 'filter-popup' });
 
   return (
@@ -212,6 +213,6 @@ function ChatSidebar({
       </MessageList>
     </SidebarContainer>
   );
-}
+};
 
 export default ChatSidebar;

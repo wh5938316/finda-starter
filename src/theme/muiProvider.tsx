@@ -11,20 +11,20 @@ import ExpandMoreIcon from './icons/ExpandMoreIcon';
 import RemoveIcon from './icons/RemoveIcon';
 import UnfoldMoreIcon from './icons/UnfoldMoreIcon';
 
-// 解决嵌套组件定义问题，将组件提取为顶层组件
+// 将嵌套组件提取到顶层
 const SelectIconComponent = ({
-  ref: reference,
-  ...properties
+  ref,
+  ...props
 }: SvgIconProps & { ref?: React.RefObject<SVGSVGElement | null> }) => (
-  <UnfoldMoreIcon fontSize="small" {...properties} ref={reference} />
+  <UnfoldMoreIcon fontSize="small" {...props} ref={ref} />
 );
 
-interface MuiProviderProperties {
+interface MuiProviderProps {
   children: React.ReactNode;
 }
 
-export default function MuiProvider(properties: MuiProviderProperties) {
-  const { children } = properties;
+export default function MuiProvider(props: MuiProviderProps) {
+  const { children } = props;
 
   return (
     <DefaultPropsProvider

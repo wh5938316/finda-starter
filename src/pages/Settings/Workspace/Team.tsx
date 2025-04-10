@@ -41,6 +41,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
 import { MuiChipsInput } from 'mui-chips-input';
+import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -113,10 +114,10 @@ const roles = [
 ];
 
 // 验证邮箱格式
-function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@][^\s.@]*\.[^\s@]+$/;
+const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
-}
+};
 
 // 表单验证 schema
 const inviteFormSchema = z.object({
@@ -130,7 +131,7 @@ const inviteFormSchema = z.object({
 type InviteFormValues = z.infer<typeof inviteFormSchema>;
 
 // 成员行组件
-function MemberRow({
+const MemberRow = ({
   member,
   onEdit,
   onDelete,
@@ -138,7 +139,7 @@ function MemberRow({
   member: TeamMember;
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
-}) {
+}) => {
   const popupState = usePopupState({
     variant: 'popover',
     popupId: `member-menu-${member.id}`,
@@ -217,7 +218,7 @@ function MemberRow({
       </TableCell>
     </TableRow>
   );
-}
+};
 
 export default function WorkspaceTeamSettings() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -412,13 +413,13 @@ export default function WorkspaceTeamSettings() {
                         validate={handleValidateEmail}
                         fullWidth
                         variant="outlined"
-                        renderChip={(Component, key, properties) => (
-                          <Component key={key} icon={<EmailIcon />} {...properties} size="medium" />
+                        renderChip={(Component, key, props) => (
+                          <Component key={key} icon={<EmailIcon />} {...props} size="medium" />
                         )}
                       />
-                      {errors.emails ? (
+                      {errors.emails && (
                         <FormHelperText error>{errors.emails.message}</FormHelperText>
-                      ) : null}
+                      )}
                     </>
                   )}
                 />
@@ -439,7 +440,7 @@ export default function WorkspaceTeamSettings() {
                     </Select>
                   )}
                 />
-                {errors.role ? <FormHelperText error>{errors.role.message}</FormHelperText> : null}
+                {errors.role && <FormHelperText error>{errors.role.message}</FormHelperText>}
               </FormControl>
 
               <Controller

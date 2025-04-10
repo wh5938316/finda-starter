@@ -3,7 +3,7 @@ import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
 import Breadcrumbs, { breadcrumbsClasses } from '@mui/material/Breadcrumbs';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import type * as React from 'react';
+import * as React from 'react';
 import { Link, useMatches } from 'react-router';
 
 // 定义handle属性的类型
@@ -49,11 +49,11 @@ export default function NavbarBreadcrumbs() {
               alignItems: 'center',
             }}
           >
-            {handle.icon ? (
+            {handle.icon && (
               <span style={{ marginRight: 4, display: 'flex', alignItems: 'center' }}>
                 {handle.icon}
               </span>
-            ) : null}
+            )}
             {handle.title || match.pathname.split('/').pop() || '未知'}
           </Typography>
         );
@@ -78,11 +78,11 @@ export default function NavbarBreadcrumbs() {
               alignItems: 'center',
             }}
           >
-            {handle.icon ? (
+            {handle.icon && (
               <span style={{ marginRight: 4, display: 'flex', alignItems: 'center' }}>
                 {handle.icon}
               </span>
-            ) : null}
+            )}
             {handle.title || match.pathname.split('/').pop() || '未知'}
           </Typography>
         </Link>

@@ -28,6 +28,7 @@ import {
   Typography,
 } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
+import * as React from 'react';
 import { useState } from 'react';
 
 // 样式组件
@@ -141,7 +142,7 @@ const plans = [
   },
 ];
 
-function WorkspaceBilling() {
+const WorkspaceBilling = () => {
   const [autoRenew, setAutoRenew] = useState(true);
 
   return (
@@ -270,7 +271,7 @@ function WorkspaceBilling() {
                       <Typography variant="subtitle2">
                         {method.type === 'visa' ? 'Visa' : 'Mastercard'} **** {method.last4}
                       </Typography>
-                      {method.default ? (
+                      {method.default && (
                         <Chip
                           label="默认"
                           size="small"
@@ -278,7 +279,7 @@ function WorkspaceBilling() {
                           variant="outlined"
                           sx={{ ml: 1, height: 20 }}
                         />
-                      ) : null}
+                      )}
                     </Box>
                     <Typography variant="body2" color="text.secondary">
                       到期日: {method.expiry}
@@ -397,14 +398,14 @@ function WorkspaceBilling() {
                           }}
                         >
                           <Typography variant="h6">{plan.name}</Typography>
-                          {plan.popular ? (
+                          {plan.popular && (
                             <Chip
                               label="最受欢迎"
                               size="small"
                               color="primary"
                               sx={{ height: 20 }}
                             />
-                          ) : null}
+                          )}
                         </Box>
                       }
                       subheader={
@@ -449,6 +450,6 @@ function WorkspaceBilling() {
       </SectionContainer>
     </Box>
   );
-}
+};
 
 export const Component = WorkspaceBilling;

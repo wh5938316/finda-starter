@@ -7,14 +7,15 @@ import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { areaElementClasses } from '@mui/x-charts/LineChart';
 import { SparkLineChart } from '@mui/x-charts/SparkLineChart';
+import * as React from 'react';
 
-export interface StatCardProperties {
+export type StatCardProps = {
   title: string;
   value: string;
   interval: string;
   trend: 'up' | 'down' | 'neutral';
   data: number[];
-}
+};
 
 function getDaysInMonth(month: number, year: number) {
   const date = new Date(year, month, 0);
@@ -23,10 +24,10 @@ function getDaysInMonth(month: number, year: number) {
   });
   const daysInMonth = date.getDate();
   const days = [];
-  let index = 1;
+  let i = 1;
   while (days.length < daysInMonth) {
-    days.push(`${monthName} ${index}`);
-    index += 1;
+    days.push(`${monthName} ${i}`);
+    i += 1;
   }
   return days;
 }
@@ -42,7 +43,7 @@ function AreaGradient({ color, id }: { color: string; id: string }) {
   );
 }
 
-export default function StatCard({ title, value, interval, trend, data }: StatCardProperties) {
+export default function StatCard({ title, value, interval, trend, data }: StatCardProps) {
   const theme = useTheme();
   const daysInWeek = getDaysInMonth(4, 2024);
 

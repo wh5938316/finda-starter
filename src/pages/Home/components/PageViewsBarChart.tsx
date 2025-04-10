@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { BarChart } from '@mui/x-charts/BarChart';
+import * as React from 'react';
 
 export default function PageViewsBarChart() {
   const theme = useTheme();

@@ -9,10 +9,10 @@ import CustomizedTreeView from './components/CustomizedTreeView';
 import HighlightedCard from './components/HighlightedCard';
 import PageViewsBarChart from './components/PageViewsBarChart';
 import SessionsChart from './components/SessionsChart';
-import type { StatCardProps as StatCardProperties } from './components/StatCard';
+import type { StatCardProps } from './components/StatCard';
 import StatCard from './components/StatCard';
 
-const data: StatCardProperties[] = [
+const data: StatCardProps[] = [
   {
     title: 'Users',
     value: '14k',
@@ -45,7 +45,7 @@ const data: StatCardProperties[] = [
   },
 ];
 
-function HomePage() {
+const HomePage = () => {
   return (
     <Container maxWidth="xl" sx={{ pt: 2 }}>
       {/* cards */}
@@ -84,6 +84,6 @@ function HomePage() {
       </Grid>
     </Container>
   );
-}
+};
 
 export const Component = HomePage;

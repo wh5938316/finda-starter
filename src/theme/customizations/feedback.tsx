@@ -7,7 +7,7 @@ import { gray, green, orange } from '../themePrimitives';
 const feedbackCustomizations: Components<Theme> = {
   MuiAlert: {
     styleOverrides: {
-      root: () => ({
+      root: ({ theme }) => ({
         borderRadius: 8,
         fontWeight: 400,
         variants: [
@@ -90,7 +90,7 @@ const feedbackCustomizations: Components<Theme> = {
           {
             props: { variant: 'card' },
             style: {
-              '--mui-palette-Tooltip-bg': theme.palette.background.paper,
+              ['--mui-palette-Tooltip-bg']: theme.palette.background.paper,
               fontSize: 'unset',
               fontWeight: 'unset',
               padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
@@ -110,4 +110,4 @@ const feedbackCustomizations: Components<Theme> = {
   },
 };
 
-export default feedbackCustomizations;
+export { feedbackCustomizations };
