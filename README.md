@@ -1,136 +1,125 @@
-# Finda - 领域驱动设计应用架构
+# Finda - A Robust Frontend Foundation
 
-Finda 是一个基于领域驱动设计 (DDD) 原则和六边形架构构建的现代化 NestJS 应用程序。该项目采用了严格的领域隔离和分层结构，确保业务逻辑与技术实现细节的清晰分离。
+<div align="center">
+  <img src="https://via.placeholder.com/150" alt="Finda Logo" width="150" />
+  <p>A frontend foundation with solid core capabilities, powerful performance, and clean architecture</p>
+</div>
 
-## 项目架构
+## Overview
 
-项目采用了以下架构模式：
+Finda is a modern React frontend foundation designed for building high-performance, maintainable
+enterprise applications. Built on the latest frontend technology stack, it provides a rich set of UI
+components and functional modules, enabling developers to quickly build applications with a
+professional look and user experience.
 
-- **领域驱动设计 (DDD)** - 通过聚合根、实体、值对象等概念组织业务逻辑
-- **命令查询责任分离 (CQRS)** - 区分修改操作和查询操作
-- **六边形架构** - 将领域核心与外部依赖隔离
-- **模块化设计** - 每个领域都是独立的模块
-- **Monorepo 结构** - 使用 Turborepo 管理多包项目
+### Key Features
 
-## 主要组件
+- **Modern Technology Stack**: Vite as the build tool, React 19+, MUI 7+, and React Router 7
+- **Rich Component Library**: Integration of MUI's extensive component library, including data
+  grids, charts, date pickers, and more
+- **Theme Customization**: Comprehensive theming system supporting dark/light modes and custom
+  themes
+- **Routing System**: Lazy-loading routing system based on React Router 7, optimizing first-screen
+  loading performance
+- **Developer Experience**: Strict code standards, Git commit conventions, and automated lint
+  toolchain
 
-### Core Package
+## Getting Started
 
-Core Package 是对 @nestjs/cqrs 的增强实现，提供了领域驱动设计的基础构建块：
+### Requirements
 
-- **聚合根基类** - 增加了与 Repository 交互的接口
-- **实体基类** - 提供实体基本功能
-- **值对象支持** - 定义不可变的值对象
-- **领域异常** - 专用的领域错误类型及异常过滤器
-- **CQRS 增强** - 改进的命令、查询和事件处理机制
+- Node.js 18+
+- pnpm 8+
 
-该模块为整个应用程序提供了统一的领域建模方式，确保所有领域遵循相同的设计原则。
+### Installation
 
-### 领域模块 (domains/\*/domain)
+```bash
+# Clone the repository
+git clone https://github.com/your-organization/finda-starter.git
+cd finda-starter
 
-领域模块是业务核心，每个领域包含特定业务领域的所有规则和逻辑：
+# Install dependencies
+pnpm install
 
-- **聚合根** - 定义业务实体和业务规则
-- **实体** - 领域对象及其生命周期
-- **值对象** - 不可变的领域概念
-- **领域事件** - 领域内状态变更的通知机制
-- **领域服务** - 处理跨越多个聚合的操作
-- **仓储接口** - 定义与持久化层的交互契约
-
-关键特点：
-
-- 不依赖外部技术实现
-- 纯粹的业务逻辑
-- 通过仓储端口与外部世界通信
-
-### 基础设施模块 (domains/\*/infrastructure)
-
-基础设施模块实现了领域模块定义的技术细节，主要包括：
-
-- **仓储实现** - 实现领域定义的仓储接口
-- **数据映射** - ORM实体与领域模型之间的转换
-- **外部服务集成** - 邮件、支付、消息等外部服务
-- **技术细节实现** - 安全、缓存、事件发布等
-
-这一层负责将领域模型与实际技术选型连接起来，同时保护领域核心不受技术变更的影响。
-
-### 数据库模块 (database)
-
-数据库模块负责管理整个应用的数据库架构：
-
-- **Schema 管理** - 从各领域的 infrastructure 模块收集 schema 定义
-- **Migration 工具** - 数据库迁移和版本控制
-- **数据访问工具** - 提供统一的数据库访问方法
-- **数据库配置** - 集中管理数据库连接和设置
-
-该模块确保了所有领域模型在数据库层面的一致性和协调性。
-
-## 领域模块列表
-
-目前项目包含以下领域模块：
-
-- **Auth** - 用户认证和授权
-- **[其他领域]** - [描述]
-
-## 技术栈
-
-项目采用以下技术：
-
-- **框架**: NestJS
-- **语言**: TypeScript
-- **ORM**: Drizzle
-- **数据库**: PostgreSQL
-- **缓存**: Redis
-- **包管理**: Turborepo
-- **消息队列**: [根据实际情况填写]
-- **前端框架**: [根据实际情况填写]
-
-## 项目结构
-
-```
-finda-starter/
-├── apps/                    # 应用程序
-│   ├── server/              # API 服务器
-│   └── web/                 # Web 前端
-├── domains/                 # 领域模块
-│   ├── auth/                # 认证领域
-│   │   ├── domain/          # 领域核心
-│   │   └── infrastructure/  # 基础设施实现
-│   └── [other-domain]/      # 其他领域
-├── packages/                # 共享包
-│   ├── core/                # 核心DDD构建块
-│   ├── database/            # 数据库管理
-│   └── [other-package]/     # 其他共享包
-├── turbo.json               # Turborepo 配置
-└── README.md                # 项目文档
+# Create environment variables file
+cp .env.example .env
 ```
 
-## 开发流程
+### Development
 
-### 添加新领域
+```bash
+# Start the development server
+pnpm dev
+```
 
-1. 创建领域核心模块，定义业务规则和聚合
-2. 定义领域仓储接口
-3. 实现基础设施层的仓储实现
-4. 在数据库模块中注册领域 schema
-5. 创建领域特定的 API 控制器
+### Building
 
-### 最佳实践
+```bash
+# Build for production
+pnpm build
 
-- 保持领域核心的纯粹性，避免引入技术依赖
-- 使用值对象表示不可变的概念
-- 通过领域事件通知领域状态变更
-- 使用命令和查询分离修改和读取操作
-- 确保仓储实现正确转换领域模型和数据库模型
+# Preview the production build
+pnpm preview
+```
 
-## 部署
+## Project Structure
 
-[部署相关内容]
+```
+src/
+├── components/      # Common components
+├── pages/           # Page components and routes
+├── theme/           # Theme configuration
+├── App.tsx          # Application entry
+└── main.tsx         # Rendering entry
+```
 
-## 贡献指南
+## Technology Stack
 
-[贡献指南]
+- **Build Tool**: Vite 6
+- **UI Framework**: React 19
+- **UI Component Library**: MUI 7
+- **Routing**: React Router 7
+- **Form Handling**: React Hook Form + Zod
+- **Type System**: TypeScript
+- **Code Standards**: ESLint + Prettier
+- **Git Standards**: Commitlint + Husky
 
-## 许可
+## Features
 
-[许可信息]
+- **Authentication System**: Login/registration flows
+- **Layout System**: Responsive layouts with mobile support
+- **Theme System**: Support for light/dark theme switching
+- **Notification System**: Integrated material-ui-toaster
+- **Settings Panel**: User personal settings
+- **Data Visualization**: Integrated MUI Charts library
+- **Drag and Drop**: Drag-and-drop sorting based on dnd-kit
+- **Route Permissions**: Role-based access control
+
+## Docker Support
+
+The project provides Docker configuration for containerized deployment:
+
+```bash
+# Start with Docker Compose
+docker-compose up
+```
+
+## Development Standards
+
+The project adopts strict code and Git commit standards:
+
+- **Code Standards**: See `LINT_USAGE.md`
+- **Commit Standards**: See `COMMIT_CONVENTION.md`
+
+## Contributing Guidelines
+
+Contributions to the project are welcome through PRs or Issues. Before submitting code, please
+ensure:
+
+1. Code passes all lint checks
+2. Commit messages conform to project standards
+3. Features have appropriate test coverage
+
+## License
+
+[MIT License](LICENSE)
