@@ -192,7 +192,7 @@ const navigationCustomizations: Components<Theme> = {
   },
   MuiTabs: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: () => ({
         minHeight: 'fit-content',
         padding: '0 16px',
       }),

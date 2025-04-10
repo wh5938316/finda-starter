@@ -72,7 +72,7 @@ const thirdPartCustomizations: Components<Theme> = {
   // 自定义 Toaster 组件样式
   MuiToaster: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: () => ({
         // 增加间距
         '&.MuiToaster-positionBottomRight': {
           bottom: 32,

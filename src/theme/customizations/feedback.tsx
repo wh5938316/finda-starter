@@ -7,7 +7,7 @@ import { gray, green, orange } from '../themePrimitives';
 const feedbackCustomizations: Components<Theme> = {
   MuiAlert: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: () => ({
         borderRadius: 8,
         fontWeight: 400,
         variants: [

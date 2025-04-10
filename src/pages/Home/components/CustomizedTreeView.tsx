@@ -120,9 +120,11 @@ function CustomLabel({ color, expandable, children, ...other }: CustomLabelProps
 
 interface CustomTreeItemProps
   extends Omit<UseTreeItem2Parameters, 'rootRef'>,
-    Omit<React.HTMLAttributes<HTMLLIElement>, 'onFocus'> {}
+    Omit<React.HTMLAttributes<HTMLLIElement>, 'onFocus'> {
+  ref?: React.Ref<HTMLLIElement>;
+}
 
-const CustomTreeItem = function CustomTreeItem({ ref, ...props }) {
+const CustomTreeItem = function CustomTreeItem({ ref: reference, ...props }: CustomTreeItemProps) {
   const { id, itemId, label, disabled, children, ...other } = props;
 
   const {
@@ -133,7 +135,7 @@ const CustomTreeItem = function CustomTreeItem({ ref, ...props }) {
     getGroupTransitionProps,
     status,
     publicAPI,
-  } = useTreeItem2({ id, itemId, children, label, disabled, rootRef: ref });
+  } = useTreeItem2({ id, itemId, children, label, disabled, rootRef: reference });
 
   const item = publicAPI.getItem(itemId);
   const color = item?.color;

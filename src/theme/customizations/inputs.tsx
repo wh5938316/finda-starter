@@ -584,11 +584,6 @@ const inputsCustomizations: Components<Theme> = {
       }),
     },
   },
-  MuiTextField: {
-    styleOverrides: {
-      root: ({ theme }) => ({}),
-    },
-  },
   MuiAutocomplete: {
     styleOverrides: {
       endAdornment: ({ theme }) => ({
