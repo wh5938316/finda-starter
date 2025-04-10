@@ -1,9 +1,5 @@
 /// <reference types="material-ui-toaster/types" />
-
-import { OverridableStringUnion } from '@mui/types';
-import { ToasterProps } from '../components/Toaster/Toaster';
-import { ToastProps } from '../components/Toaster/Toast';
-import { ToastClasses } from '../components/Toaster/toastClasses';
+import type { OverridableStringUnion } from '@mui/types';
 
 declare module '@mui/material/styles/createPalette' {
   interface Theme {
@@ -26,7 +22,7 @@ declare module '@mui/material/styles/createPalette' {
     900: string;
   }
 
-  interface PaletteColor extends ColorRange { }
+  interface PaletteColor extends ColorRange {}
 }
 
 declare module '@mui/material/Button' {
