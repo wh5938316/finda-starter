@@ -1,73 +1,73 @@
-# Git 提交规范
+# Git Commit Convention
 
-本项目使用 [Conventional Commits](https://www.conventionalcommits.org/zh-hans/v1.0.0/) 规范来确保 Git 提交信息的统一性和可读性。
+This project uses the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification to ensure uniformity and readability of Git commit messages.
 
-## 提交信息格式
-
-```
-<类型>[可选的作用域]: <描述>
-
-[可选的正文]
-
-[可选的脚注]
-```
-
-### 类型
-
-必须是以下类型之一：
-
-- `feat`：新增功能
-- `fix`：修复 bug
-- `docs`：只更改了文档（如 README, CHANGELOG 等）
-- `style`：代码格式调整，不影响代码功能（如空格、格式缩进、逗号等）
-- `refactor`：代码重构，既不修复 bug 也不添加新功能
-- `perf`：性能优化相关的改动
-- `test`：添加或修改测试代码
-- `chore`：构建过程或辅助工具的变动（如依赖更新、构建配置调整等）
-- `revert`：回滚到上一个版本
-
-### 作用域（可选）
-
-作用域可以是影响范围的任何东西。例如：组件名称、文件名、模块名等。
-
-### 示例
+## Commit Message Format
 
 ```
-feat(auth): 添加用户登录功能
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
 ```
 
+### Types
+
+Must be one of the following:
+
+- `feat`: A new feature
+- `fix`: A bug fix
+- `docs`: Documentation only changes (e.g., README, CHANGELOG, etc.)
+- `style`: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc.)
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `perf`: A code change that improves performance
+- `test`: Adding missing tests or correcting existing tests
+- `chore`: Changes to the build process or auxiliary tools and libraries
+- `revert`: Revert to a previous version
+
+### Scope (Optional)
+
+The scope can be anything specifying the place of the commit change. For example, component name, file name, module name, etc.
+
+### Examples
+
 ```
-fix(ui): 修复按钮在移动设备上显示不正确的问题
+feat(auth): add user login functionality
 ```
 
 ```
-docs: 更新README文件安装说明
+fix(ui): fix button display issue on mobile devices
 ```
 
 ```
-style: 格式化代码，添加分号
+docs: update installation instructions in README
 ```
 
 ```
-refactor(api): 重构用户数据获取逻辑
+style: format code, add semicolons
 ```
 
 ```
-perf: 优化图片加载性能
+refactor(api): restructure user data retrieval logic
 ```
 
 ```
-test: 为用户登录添加单元测试
+perf: improve image loading performance
 ```
 
 ```
-chore: 更新依赖版本
+test: add unit tests for user login
 ```
 
 ```
-revert: 回滚到版本 123abc
+chore: update dependency versions
+```
+
+```
+revert: revert to version 123abc
 ```
 
 ## Commitlint
 
-本项目使用 `commitlint` 和 `husky` 在提交前自动检查提交信息是否符合规范。如果不符合规范，提交将被拒绝。 
+This project uses `commitlint` and `husky` to automatically check if commit messages comply with the convention. If they don't, the commit will be rejected.
