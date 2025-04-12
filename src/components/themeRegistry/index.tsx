@@ -1,9 +1,14 @@
+import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme,ThemeProvider } from '@mui/material/styles';
 import { ConfirmProvider } from 'material-ui-confirm';
 import * as React from 'react';
 
 import { getTheme,MuiProvider } from '@/theme';
+
+import createEmotionCache from './createEmotionCache';
+
+const cache = createEmotionCache();
 
 const theme = createTheme({
   cssVariables: {
@@ -14,20 +19,22 @@ const theme = createTheme({
 
 export default function ThemeRegistry({ children }: React.PropsWithChildren<{}>) {
   return (
-    <ThemeProvider theme={theme}>
-      <MuiProvider>
-        <CssBaseline />
-        <ConfirmProvider
-          defaultOptions={{
-            confirmationText: 'Confirm',
-            confirmationButtonProps: {
-              variant: 'contained',
-            },
-          }}
-        >
-          {children}
-        </ConfirmProvider>
-      </MuiProvider>
-    </ThemeProvider>
+    <CacheProvider value={cache}>
+      <ThemeProvider theme={theme}>
+        <MuiProvider>
+          <CssBaseline />
+          <ConfirmProvider
+            defaultOptions={{
+              confirmationText: 'Confirm',
+              confirmationButtonProps: {
+                variant: 'contained',
+              },
+            }}
+          >
+            {children}
+          </ConfirmProvider>
+        </MuiProvider>
+      </ThemeProvider>
+    </CacheProvider>
   );
 }

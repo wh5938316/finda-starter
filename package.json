@@ -16,6 +16,7 @@
     "@dnd-kit/abstract": "^0.0.10",
     "@dnd-kit/helpers": "^0.0.10",
     "@dnd-kit/react": "0.0.10",
+    "@emotion/cache": "^11.14.0",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
     "@hookform/resolvers": "^5.0.1",
