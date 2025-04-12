@@ -2,8 +2,10 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import MuiDrawer, { drawerClasses } from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
+import { memo } from 'react';
 
 import CardAlert from './CardAlert';
 import MenuContent from './MenuContent';
@@ -23,7 +25,7 @@ const Drawer = styled(MuiDrawer)({
   },
 });
 
-export default function SideMenu() {
+function SideMenu() {
   return (
     <Drawer
       variant="permanent"
@@ -81,3 +83,5 @@ export default function SideMenu() {
     </Drawer>
   );
 }
+
+export default memo(SideMenu);

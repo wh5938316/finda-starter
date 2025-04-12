@@ -17,6 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import * as React from 'react';
+import { memo, useMemo } from 'react';
 import { Link, useLocation } from 'react-router';
 
 // 定义导航项接口
@@ -101,64 +102,81 @@ const secondaryNavItems: NavItem[] = [
   },
 ];
 
-export default function MenuContent() {
-  const location = useLocation();
-
-  // 判断当前导航项是否处于激活状态
-  const isActive = (path: string) => {
-    // 根路径特殊处理
-    if (path === '/' && location.pathname === '/') {
-      return true;
-    }
-    // 其他路径前缀匹配
-    return path !== '/' && location.pathname.startsWith(path);
-  };
-
-  // 渲染导航项
-  const renderNavItem = (item: NavItem) => {
-    const active = isActive(item.path);
-
-    return (
-      <ListItem key={item.path} disablePadding sx={{ display: 'block' }}>
-        <Tooltip title={item.tooltip || item.text} placement="right" arrow>
-          <ListItemButton
-            component={Link}
-            to={item.path}
-            selected={active}
-            sx={{
-              '&.Mui-selected': {
+const NavItem = memo(({ item, isActive }: { item: NavItem; isActive: boolean }) => {
+  return (
+    <ListItem key={item.path} disablePadding sx={{ display: 'block' }}>
+      <Tooltip title={item.tooltip || item.text} placement="right" arrow>
+        <ListItemButton
+          component={Link}
+          to={item.path}
+          selected={isActive}
+          sx={{
+            '&.Mui-selected': {
+              bgcolor: 'primary.light',
+              '&:hover': {
                 bgcolor: 'primary.light',
-                '&:hover': {
-                  bgcolor: 'primary.light',
-                },
               },
+            },
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              color: isActive ? 'primary.main' : 'inherit',
+              minWidth: 0,
+              mr: 2,
             }}
           >
-            <ListItemIcon
-              sx={{
-                color: active ? 'primary.main' : 'inherit',
-                minWidth: 0,
-                mr: 2,
-              }}
-            >
-              {item.icon}
-            </ListItemIcon>
-            <ListItemText
-              primary={item.text}
-              primaryTypographyProps={{
-                fontWeight: active ? 'medium' : 'regular',
-              }}
-            />
-          </ListItemButton>
-        </Tooltip>
-      </ListItem>
-    );
-  };
+            {item.icon}
+          </ListItemIcon>
+          <ListItemText
+            primary={item.text}
+            primaryTypographyProps={{
+              fontWeight: isActive ? 'medium' : 'regular',
+            }}
+          />
+        </ListItemButton>
+      </Tooltip>
+    </ListItem>
+  );
+});
+
+NavItem.displayName = 'NavItem';
+
+function MenuContent() {
+  const location = useLocation();
+
+  // 使用 useMemo 优化 isActive 函数，当 location.pathname 变化时才重新计算
+  const isActive = useMemo(() => {
+    return (path: string) => {
+      // 根路径特殊处理
+      if (path === '/' && location.pathname === '/') {
+        return true;
+      }
+      // 其他路径前缀匹配
+      return path !== '/' && location.pathname.startsWith(path);
+    };
+  }, [location.pathname]);
+
+  // 使用 useMemo 记忆主导航列表
+  const mainNavComponents = useMemo(() => {
+    return mainNavItems.map((item) => (
+      <NavItem key={item.path} item={item} isActive={isActive(item.path)} />
+    ));
+  }, [isActive]);
+
+  // 使用 useMemo 记忆次要导航列表
+  const secondaryNavComponents = useMemo(() => {
+    return secondaryNavItems.map((item) => (
+      <NavItem key={item.path} item={item} isActive={isActive(item.path)} />
+    ));
+  }, [isActive]);
 
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
-      <List dense>{mainNavItems.map(renderNavItem)}</List>
-      <List dense>{secondaryNavItems.map(renderNavItem)}</List>
+      <List dense>{mainNavComponents}</List>
+      <List dense>{secondaryNavComponents}</List>
     </Stack>
   );
 }
+
+export default memo(MenuContent);

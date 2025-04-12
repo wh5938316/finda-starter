@@ -1,11 +1,12 @@
 import Box from '@mui/material/Box';
 import * as React from 'react';
+import { memo } from 'react';
 
 import AppNavbar from './components/AppNavbar';
 import Header from './components/Header';
 import SideMenu from './components/SideMenu';
 
-export default function Dashboard({ children }: { children: React.ReactNode }) {
+function Dashboard({ children }: { children: React.ReactNode }) {
   return (
     <Box sx={{ display: 'flex' }}>
       <SideMenu />
@@ -29,3 +30,5 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     </Box>
   );
 }
+
+export default memo(Dashboard);

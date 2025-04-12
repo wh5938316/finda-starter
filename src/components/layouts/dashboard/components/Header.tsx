@@ -2,6 +2,7 @@ import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import * as React from 'react';
+import { memo } from 'react';
 
 import CustomDatePicker from './CustomDatePicker';
 import MenuButton from './MenuButton';
@@ -9,7 +10,7 @@ import NavbarBreadcrumbs from './NavbarBreadcrumbs';
 // import ColorModeIconDropdown from '../../shared-theme/ColorModeIconDropdown';
 import Search from './Search';
 
-export default function Header() {
+function Header() {
   return (
     <Box
       sx={(theme) => ({
@@ -62,3 +63,5 @@ export default function Header() {
     </Box>
   );
 }
+
+export default memo(Header);

@@ -8,6 +8,7 @@ import { tabsClasses } from '@mui/material/Tabs';
 import MuiToolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import { memo, useCallback, useState } from 'react';
 
 import MenuButton from './MenuButton';
 import SideMenuMobile from './SideMenuMobile';
@@ -30,12 +31,15 @@ const Toolbar = styled(MuiToolbar)({
   },
 });
 
-export default function AppNavbar() {
-  const [open, setOpen] = React.useState(false);
+function AppNavbar() {
+  const [open, setOpen] = useState(false);
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
-  };
+  const toggleDrawer = useCallback(
+    (newOpen: boolean) => () => {
+      setOpen(newOpen);
+    },
+    [],
+  );
 
   return (
     <AppBar
@@ -77,7 +81,7 @@ export default function AppNavbar() {
   );
 }
 
-export function CustomIcon() {
+const CustomIcon = memo(function CustomIcon() {
   return (
     <Box
       sx={{
@@ -99,4 +103,7 @@ export function CustomIcon() {
       <DashboardRoundedIcon color="inherit" sx={{ fontSize: '1rem' }} />
     </Box>
   );
-}
+});
+
+export { CustomIcon };
+export default memo(AppNavbar);
