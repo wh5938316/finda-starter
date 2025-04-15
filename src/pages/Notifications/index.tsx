@@ -7,7 +7,7 @@ import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { ToasterPosition } from 'material-ui-toaster';
-import Toaster, { toaster } from 'material-ui-toaster';
+import { Toaster, toaster } from 'material-ui-toaster';
 import * as React from 'react';
 
 // 模拟异步操作
