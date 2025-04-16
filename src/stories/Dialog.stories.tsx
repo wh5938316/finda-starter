@@ -17,6 +17,7 @@ import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import type { Meta } from '@storybook/react';
+import { useConfirm } from 'material-ui-confirm';
 import * as React from 'react';
 
 const meta = {
@@ -344,5 +345,110 @@ export const ConfirmationDialog = () => {
         </DialogActions>
       </Dialog>
     </>
+  );
+};
+
+// Material-UI-Confirm 对话框
+export const MaterialUIConfirm = () => {
+  const confirm = useConfirm();
+  const [result, setResult] = React.useState<string | null>(null);
+
+  // 基本确认对话框
+  const handleBasicConfirm = async () => {
+    try {
+      await confirm({
+        title: '确认操作',
+        description: '你确定要执行这个操作吗？此操作不可撤销。',
+      });
+      setResult('用户确认了操作');
+    } catch {
+      setResult('用户取消了操作');
+    }
+  };
+
+  // 自定义确认对话框
+  const handleCustomConfirm = async () => {
+    try {
+      await confirm({
+        title: '删除文件',
+        description: '你确定要删除这个文件吗？此操作不可撤销，文件将被永久删除。',
+        confirmationText: '删除',
+        cancellationText: '保留',
+        confirmationButtonProps: {
+          variant: 'contained',
+          color: 'error',
+        },
+        cancellationButtonProps: {
+          variant: 'outlined',
+          color: 'primary',
+        },
+        dialogProps: {
+          maxWidth: 'xs',
+        },
+      });
+      setResult('用户选择了删除文件');
+    } catch {
+      setResult('用户选择了保留文件');
+    }
+  };
+
+  // 含有表单的确认对话框
+  const handleFormConfirm = async () => {
+    let reason = '';
+
+    try {
+      await confirm({
+        title: '提交反馈',
+        content: (
+          <TextField
+            autoFocus
+            margin="dense"
+            id="reason"
+            label="反馈内容"
+            fullWidth
+            multiline
+            rows={4}
+            variant="outlined"
+            onChange={(e) => {
+              reason = e.target.value;
+            }}
+          />
+        ),
+        confirmationText: '提交',
+        cancellationText: '取消',
+      });
+      setResult(`用户提交了反馈: ${reason || '(无内容)'}`);
+    } catch {
+      setResult('用户取消了反馈');
+    }
+  };
+
+  return (
+    <Stack spacing={3}>
+      <Typography variant="h6">Material-UI-Confirm 对话框</Typography>
+
+      <Typography variant="body2">
+        Material-UI-Confirm 是一个便捷的库，用于创建确认对话框，无需手动管理对话框状态。
+        它通过ConfirmProvider和useConfirm hook实现，在ThemeRegistry中已经配置了ConfirmProvider。
+      </Typography>
+
+      <Stack direction="row" spacing={2}>
+        <Button variant="outlined" color="primary" onClick={handleBasicConfirm}>
+          基本确认
+        </Button>
+        <Button variant="outlined" color="error" onClick={handleCustomConfirm}>
+          自定义确认
+        </Button>
+        <Button variant="outlined" color="info" onClick={handleFormConfirm}>
+          表单确认
+        </Button>
+      </Stack>
+
+      {result && (
+        <Typography variant="body1" sx={{ mt: 2, p: 2, bgcolor: 'action.hover', borderRadius: 1 }}>
+          结果: {result}
+        </Typography>
+      )}
+    </Stack>
   );
 };
