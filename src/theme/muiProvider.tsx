@@ -100,6 +100,44 @@ export default function MuiProvider(props: MuiProviderProps) {
             },
           },
         },
+        MuiPickersPopper: {
+          slotProps: {
+            desktopPaper: {
+              variant: 'popper',
+            },
+          },
+        },
+        // MuiPopper: {
+        //   slotProps: {
+        //     desktopPaper: {
+        //       variant: "popper",
+        //     },
+        //   }
+        // },
+        MuiDatePicker: {
+          slotProps: {
+            mobilePaper: {
+              variant: 'popper',
+            },
+            desktopPaper: {
+              variant: 'popper',
+            },
+          },
+        },
+        MuiDialog: {
+          slotProps: {
+            paper: {
+              variant: 'popper',
+            },
+          },
+        },
+        // MuiDesktopDatePicker: {
+        //   slotProps: {
+        //     desktopPaper: {
+        //       variant: "popper",
+        //     },
+        //   }
+        // },
       }}
     >
       {children}

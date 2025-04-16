@@ -1,10 +1,9 @@
 import { menuItemClasses } from '@mui/material/MenuItem';
 import type { Theme } from '@mui/material/styles';
-import { alpha } from '@mui/material/styles';
 import { pickersDayClasses, pickersMonthClasses, pickersYearClasses } from '@mui/x-date-pickers';
 import type { PickerComponents } from '@mui/x-date-pickers/themeAugmentation';
 
-import { brand, gray } from '../themePrimitives';
+import { gray } from '../themePrimitives';
 
 const datePickersCustomizations: PickerComponents<Theme> = {
   MuiPickersPopper: {
@@ -64,8 +63,8 @@ const datePickersCustomizations: PickerComponents<Theme> = {
           fontWeight: theme.typography.fontWeightMedium,
         },
         '&:focus': {
-          outline: `3px solid ${alpha(brand[500], 0.5)}`,
-          outlineOffset: '2px',
+          outline: `3px solid ${theme.palette.primary.light}`,
+          outlineOffset: '0px',
           backgroundColor: 'transparent',
           [`&.${pickersMonthClasses.selected}`]: { backgroundColor: gray[700] },
         },
@@ -80,8 +79,8 @@ const datePickersCustomizations: PickerComponents<Theme> = {
             backgroundColor: gray[300],
           },
           '&:focus': {
-            outline: `3px solid ${alpha(brand[500], 0.5)}`,
-            outlineOffset: '2px',
+            outline: `3px solid ${theme.palette.primary.light}`,
+            outlineOffset: '0px',
             backgroundColor: 'transparent',
             [`&.${pickersMonthClasses.selected}`]: {
               backgroundColor: gray[300],
@@ -107,8 +106,8 @@ const datePickersCustomizations: PickerComponents<Theme> = {
           fontWeight: theme.typography.fontWeightMedium,
         },
         '&:focus': {
-          outline: `3px solid ${alpha(brand[500], 0.5)}`,
-          outlineOffset: '2px',
+          outline: `3px solid ${theme.palette.primary.light}`,
+          outlineOffset: '0px',
           backgroundColor: 'transparent',
           [`&.${pickersYearClasses.selected}`]: { backgroundColor: gray[700] },
         },
@@ -123,8 +122,8 @@ const datePickersCustomizations: PickerComponents<Theme> = {
             backgroundColor: gray[300],
           },
           '&:focus': {
-            outline: `3px solid ${alpha(brand[500], 0.5)}`,
-            outlineOffset: '2px',
+            outline: `3px solid ${theme.palette.primary.light}`,
+            outlineOffset: '0px',
             backgroundColor: 'transparent',
             [`&.${pickersYearClasses.selected}`]: {
               backgroundColor: gray[300],
@@ -149,8 +148,8 @@ const datePickersCustomizations: PickerComponents<Theme> = {
           fontWeight: theme.typography.fontWeightMedium,
         },
         '&:focus': {
-          outline: `3px solid ${alpha(brand[500], 0.5)}`,
-          outlineOffset: '2px',
+          outline: `3px solid ${theme.palette.primary.light}`,
+          outlineOffset: '0px',
           backgroundColor: 'transparent',
           [`&.${pickersDayClasses.selected}`]: { backgroundColor: gray[700] },
         },
@@ -165,8 +164,8 @@ const datePickersCustomizations: PickerComponents<Theme> = {
             backgroundColor: gray[300],
           },
           '&:focus': {
-            outline: `3px solid ${alpha(brand[500], 0.5)}`,
-            outlineOffset: '2px',
+            outline: `3px solid ${theme.palette.primary.light}`,
+            outlineOffset: '0px',
             backgroundColor: 'transparent',
             [`&.${pickersDayClasses.selected}`]: { backgroundColor: gray[300] },
           },

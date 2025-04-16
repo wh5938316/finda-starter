@@ -61,6 +61,9 @@ export default function CustomDatePicker() {
           field: { setOpen } as any,
           nextIconButton: { size: 'small' },
           previousIconButton: { size: 'small' },
+          // desktopPaper: {
+          //   variant: "popper",
+          // }
         }}
         open={open}
         onClose={() => setOpen(false)}

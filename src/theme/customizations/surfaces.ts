@@ -125,8 +125,11 @@ const surfacesCustomizations: Components<Theme> = {
             },
             style: {
               boxShadow:
-                'rgba(28, 40, 64, 0.04) 0px 0px 0px 1px, rgba(28, 40, 64, 0.12) 0px 4px 8px -4px, rgba(28, 40, 64, 0.16) 0px 4px 12px -2px',
+                'rgba(24, 39, 75, 0.04) 0px 0px 0px 1px, rgba(24, 39, 75, 0.12) 0px 4px 8px -4px, rgba(24, 39, 75, 0.16) 0px 4px 12px -2px',
+              // boxShadow:
+              //   'rgba(28, 40, 64, 0.04) 0px 0px 0px 1px, rgba(28, 40, 64, 0.12) 0px 4px 8px -4px, rgba(28, 40, 64, 0.16) 0px 4px 12px -2px',
               backgroundColor: theme.palette.background.default,
+              border: 0,
             },
           },
         ],

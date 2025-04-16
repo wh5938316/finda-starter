@@ -6,7 +6,7 @@ import { selectClasses } from '@mui/material/Select';
 import type { Components, Theme } from '@mui/material/styles';
 import { alpha } from '@mui/material/styles';
 
-import { brand, gray } from '../themePrimitives';
+import { gray } from '../themePrimitives';
 
 const navigationCustomizations: Components<Theme> = {
   MuiMenuItem: {
@@ -80,7 +80,7 @@ const navigationCustomizations: Components<Theme> = {
         },
         [`&.${selectClasses.focused}`]: {
           outlineOffset: 0,
-          borderColor: gray[400],
+          borderColor: theme.palette.primary.main,
         },
         '&:before, &:after': {
           display: 'none',
@@ -157,8 +157,8 @@ const navigationCustomizations: Components<Theme> = {
                 width: 0,
               },
               '&:focus-visible': {
-                outline: `3px solid ${alpha(brand[500], 0.5)}`,
-                outlineOffset: '4px',
+                outline: `3px solid ${theme.palette.primary.light}`,
+                outlineOffset: '0px',
                 borderRadius: '2px',
               },
             },

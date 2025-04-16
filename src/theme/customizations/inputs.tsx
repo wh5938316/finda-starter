@@ -22,9 +22,9 @@ const inputsCustomizations: Components<Theme> = {
       root: ({ theme }) => ({
         boxSizing: 'border-box',
         transition: 'all 100ms ease-in',
-        '&:focus-visible': {
-          outline: `3px solid ${alpha(theme.palette.primary.main, 0.5)}`,
-          outlineOffset: '2px',
+        '&.Mui-focusVisible': {
+          outline: `3px solid ${theme.palette.primary.light}`,
+          outlineOffset: '0px',
         },
       }),
     },
@@ -426,8 +426,8 @@ const inputsCustomizations: Components<Theme> = {
           borderColor: brand[300],
         },
         '&.Mui-focusVisible': {
-          outline: `3px solid ${alpha(brand[500], 0.5)}`,
-          outlineOffset: '2px',
+          outline: `3px solid ${theme.palette.primary.light}`,
+          outlineOffset: '0px',
           borderColor: brand[400],
         },
         '&:not(.Mui-disabled)': {
@@ -464,8 +464,8 @@ const inputsCustomizations: Components<Theme> = {
           },
           '&.Mui-focusVisible': {
             borderColor: brand[400],
-            outline: `3px solid ${alpha(brand[500], 0.5)}`,
-            outlineOffset: '2px',
+            outline: `3px solid ${theme.palette.primary.light}`,
+            outlineOffset: '0px',
           },
         }),
       }),
@@ -510,7 +510,7 @@ const inputsCustomizations: Components<Theme> = {
           borderColor: gray[400],
         },
         [`&.${outlinedInputClasses.focused}`]: {
-          outline: `3px solid ${alpha(brand[500], 0.5)}`,
+          outline: `3px solid ${theme.palette.primary.light}`,
           borderColor: brand[400],
         },
         ...theme.applyStyles('dark', {
