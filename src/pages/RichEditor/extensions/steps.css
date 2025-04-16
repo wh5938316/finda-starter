@@ -1,0 +1,110 @@
+.ProseMirror .steps-component {
+  position: relative;
+  margin: 1rem 0;
+}
+
+.ProseMirror .steps-line {
+  position: absolute;
+  left: 16px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: rgba(0, 0, 0, 0.12);
+  z-index: 0;
+}
+
+.ProseMirror .step-item {
+  position: relative;
+  margin-bottom: 1rem;
+  padding-left: 0;
+}
+
+.ProseMirror .step-number {
+  position: absolute;
+  left: -0.5rem;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  font-weight: bold;
+}
+
+.ProseMirror .add-step-button {
+  position: absolute;
+  left: 0;
+  bottom: -2rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.ProseMirror .add-step-button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.ProseMirror .stepper-wrapper {
+  position: relative;
+  margin: 1rem 0;
+}
+
+.ProseMirror .step-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+  padding-left: 0;
+}
+
+.ProseMirror .stepper-content {
+  width: 100%;
+}
+
+.ProseMirror .step-content {
+  min-height: 1.5rem;
+  padding: 0.5rem 0;
+  width: 100%;
+}
+
+/* 确保每个步骤的内容区域独立 */
+.ProseMirror .step-content > * {
+  margin: 0;
+}
+
+/* 鼠标悬停时添加轻微的高亮效果 - 仅在编辑模式下 */
+.ProseMirror.editable .step-wrapper:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* 选中步骤时的样式 - 仅在编辑模式下 */
+.ProseMirror.editable .step-wrapper.selected {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* 确保编辑器内容区域有足够的空间 */
+.ProseMirror .step-content p:first-child {
+  margin-top: 0;
+}
+
+.ProseMirror .step-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* 非编辑模式下的样式调整 */
+.ProseMirror:not(.editable) .stepper-wrapper {
+  margin-left: 0;
+}
+
+.ProseMirror:not(.editable) .step-wrapper:last-child {
+  margin-bottom: 0;
+}

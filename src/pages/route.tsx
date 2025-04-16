@@ -2,6 +2,7 @@ import AnalyticsRoundedIcon from '@mui/icons-material/AnalyticsRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import DesktopMacIcon from '@mui/icons-material/DesktopMac';
 import DeviceUnknownIcon from '@mui/icons-material/DeviceUnknown';
+import EditDocumentIcon from '@mui/icons-material/EditDocument';
 import FlagIcon from '@mui/icons-material/Flag';
 import GroupIcon from '@mui/icons-material/Group';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
@@ -115,6 +116,14 @@ export const router = createBrowserRouter([
           icon: <AssignmentRoundedIcon fontSize="small" />,
         },
         lazy: () => import('./Settings/DragAndDrop'),
+      },
+      {
+        path: 'rich-editor',
+        handle: {
+          title: '富文本编辑器',
+          icon: <EditDocumentIcon fontSize="small" />,
+        },
+        lazy: () => import('./RichEditor'),
       },
       {
         path: 'settings',
