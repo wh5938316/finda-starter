@@ -1,5 +1,6 @@
 /// <reference types="vitest" />
 import react from '@vitejs/plugin-react-swc';
+import { resolve } from 'node:path';
 import type { PluginOption } from 'vite';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
@@ -18,7 +19,11 @@ export default defineConfig(({ mode }) => {
   }
   return {
     plugins,
-    resolve: {},
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, './src'),
+      },
+    },
     assetsInclude: ['/sb-preview/runtime.js'],
   };
 });

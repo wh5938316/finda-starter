@@ -1,7 +1,6 @@
+import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-
-import { storybookTest } from '@storybook/experimental-addon-test/vitest-plugin';
 import { defineWorkspace } from 'vitest/config';
 
 const dirname =
