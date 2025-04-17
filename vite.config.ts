@@ -6,14 +6,19 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import vtjump from 'vtjump';
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => ({
-  plugins: [
-    vtjump() as PluginOption,
+export default defineConfig(({ mode }) => {
+  const plugins: PluginOption[] = [
     tsconfigPaths({
       parseNative: false,
     }),
     react(),
-  ],
-  resolve: {},
-  assetsInclude: ['/sb-preview/runtime.js'],
-}));
+  ];
+  if (mode === 'development') {
+    plugins.unshift(vtjump() as PluginOption);
+  }
+  return {
+    plugins,
+    resolve: {},
+    assetsInclude: ['/sb-preview/runtime.js'],
+  };
+});
