@@ -14,6 +14,7 @@ const navigationCustomizations: Components<Theme> = {
       root: ({ theme }) => ({
         borderRadius: theme.shape.borderRadius,
         padding: '6px 8px',
+        minHeight: '36px',
         [`&.${menuItemClasses.focusVisible}`]: {
           backgroundColor: 'transparent',
         },

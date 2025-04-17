@@ -90,7 +90,6 @@ export const CustomToasts = () => {
     toaster.info('自定义通知内容', {
       description: '这个通知使用了自定义的持续时间和位置。',
       duration: 5000,
-      position: 'bottom-right',
     });
   };
 
@@ -169,15 +168,11 @@ export const ToastConfigurator = () => {
         message,
         description,
         duration,
-        position,
-        expand,
       });
     } else {
       toaster[type as 'success' | 'error' | 'warning' | 'info'](message, {
         description,
         duration,
-        position,
-        expand,
       });
     }
   };
@@ -195,7 +190,7 @@ export const ToastConfigurator = () => {
         <Divider sx={{ my: 2 }} />
 
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               fullWidth
               label="通知内容"
@@ -204,7 +199,7 @@ export const ToastConfigurator = () => {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               fullWidth
               label="通知描述"
@@ -215,7 +210,7 @@ export const ToastConfigurator = () => {
             />
           </Grid>
 
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <FormControl fullWidth>
               <InputLabel>通知类型</InputLabel>
               <Select value={type} onChange={(e) => setType(e.target.value)} label="通知类型">
@@ -228,7 +223,7 @@ export const ToastConfigurator = () => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <FormControl fullWidth>
               <Typography id="duration-slider" gutterBottom>
                 持续时间: {duration}ms
@@ -245,7 +240,7 @@ export const ToastConfigurator = () => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <FormControl fullWidth>
               <InputLabel>位置</InputLabel>
               <Select
@@ -263,7 +258,7 @@ export const ToastConfigurator = () => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <FormControl component="fieldset">
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Button
@@ -281,7 +276,7 @@ export const ToastConfigurator = () => {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Button variant="contained" color="primary" fullWidth onClick={showConfiguredToast}>
               显示通知
             </Button>

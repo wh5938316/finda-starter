@@ -57,8 +57,7 @@ export const BasicMenu = () => {
           slotProps={{
             paper: {
               sx: {
-                minWidth: 180,
-                boxShadow: 3,
+                minWidth: 120,
               },
             },
           }}
@@ -94,18 +93,9 @@ export const MenuWithPopupState = () => {
           slotProps={{
             paper: {
               sx: {
-                width: 200,
-                bgcolor: '#fafafa',
+                minWidth: 150,
               },
             },
-          }}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
           }}
         >
           <MenuItem onClick={popupState.close}>
@@ -182,13 +172,7 @@ export const ContextMenu = () => {
           slotProps={{
             paper: {
               sx: {
-                width: 200,
-                borderRadius: 2,
-                mt: 0.5,
-                '& .MuiMenuItem-root': {
-                  px: 2,
-                  py: 1,
-                },
+                width: 150,
               },
             },
           }}
@@ -247,8 +231,7 @@ export const NestedMenu = () => {
           slotProps={{
             paper: {
               sx: {
-                width: 200,
-                boxShadow: 3,
+                width: 150,
               },
             },
           }}
@@ -272,9 +255,7 @@ export const NestedMenu = () => {
           slotProps={{
             paper: {
               sx: {
-                width: 200,
-                ml: 1,
-                boxShadow: 3,
+                width: 120,
               },
             },
           }}
@@ -363,7 +344,7 @@ export const MenuPatterns = () => {
             {...bindMenu(moreActionsPopupState)}
             anchorOrigin={{
               vertical: 'bottom',
-              horizontal: 'left',
+              horizontal: 'right',
             }}
             transformOrigin={{
               vertical: 'top',
@@ -372,9 +353,7 @@ export const MenuPatterns = () => {
             slotProps={{
               paper: {
                 sx: {
-                  minWidth: 180,
-                  borderRadius: 2,
-                  boxShadow: 4,
+                  minWidth: 150,
                 },
               },
             }}
@@ -398,48 +377,6 @@ export const MenuPatterns = () => {
               </ListItemIcon>
               <ListItemText>删除</ListItemText>
             </MenuItem>
-          </Menu>
-        </CardContent>
-      </Card>
-
-      <Card sx={{ width: '100%', maxWidth: 400 }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            选择菜单
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            用户可以从菜单中选择一个选项，类似于下拉框但更灵活。
-          </Typography>
-
-          <Button variant="outlined" {...bindTrigger(selectPopupState)}>
-            {options[selectedIndex]}
-          </Button>
-          <Menu
-            {...bindMenu(selectPopupState)}
-            slotProps={{
-              paper: {
-                sx: {
-                  width: 120,
-                  mt: 1,
-                  '& .MuiMenuItem-root.Mui-selected': {
-                    bgcolor: 'primary.lighter',
-                    '&:hover': {
-                      bgcolor: 'primary.lighter',
-                    },
-                  },
-                },
-              },
-            }}
-          >
-            {options.map((option, index) => (
-              <MenuItem
-                key={option}
-                selected={index === selectedIndex}
-                onClick={() => handleMenuItemClick(index)}
-              >
-                {option}
-              </MenuItem>
-            ))}
           </Menu>
         </CardContent>
       </Card>
