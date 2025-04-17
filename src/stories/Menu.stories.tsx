@@ -35,18 +35,9 @@ const meta = {
 
 export default meta;
 
-// 基础菜单
+// 基础菜单 - 使用material-ui-popup-state
 export const BasicMenu = () => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const popupState = usePopupState({ variant: 'popover', popupId: 'basicMenu' });
 
   return (
     <Card sx={{ width: '100%', maxWidth: 400 }}>
@@ -55,31 +46,26 @@ export const BasicMenu = () => {
           基础菜单
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          最基本的菜单组件，通过点击按钮打开，需要手动管理状态。
+          使用material-ui-popup-state简化菜单状态管理
         </Typography>
 
-        <Button
-          variant="contained"
-          id="basic-button"
-          aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-        >
+        <Button variant="contained" {...bindTrigger(popupState)}>
           打开菜单
         </Button>
         <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
+          {...bindMenu(popupState)}
+          slotProps={{
+            paper: {
+              sx: {
+                minWidth: 180,
+                boxShadow: 3,
+              },
+            },
           }}
         >
-          <MenuItem onClick={handleClose}>个人资料</MenuItem>
-          <MenuItem onClick={handleClose}>我的账户</MenuItem>
-          <MenuItem onClick={handleClose}>退出登录</MenuItem>
+          <MenuItem onClick={popupState.close}>个人资料</MenuItem>
+          <MenuItem onClick={popupState.close}>我的账户</MenuItem>
+          <MenuItem onClick={popupState.close}>退出登录</MenuItem>
         </Menu>
       </CardContent>
     </Card>
@@ -97,13 +83,31 @@ export const MenuWithPopupState = () => {
           使用 material-ui-popup-state
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          使用 material-ui-popup-state 可以简化菜单状态管理，避免手动处理 anchorEl。
+          自定义菜单位置 (anchorOrigin) 和变换原点 (transformOrigin)
         </Typography>
 
         <Button variant="contained" color="primary" {...bindTrigger(popupState)}>
           打开菜单
         </Button>
-        <Menu {...bindMenu(popupState)}>
+        <Menu
+          {...bindMenu(popupState)}
+          slotProps={{
+            paper: {
+              sx: {
+                width: 200,
+                bgcolor: '#fafafa',
+              },
+            },
+          }}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+        >
           <MenuItem onClick={popupState.close}>
             <ListItemIcon>
               <AccountCircleIcon fontSize="small" />
@@ -152,7 +156,7 @@ export const ContextMenu = () => {
           上下文菜单（右键菜单）
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          右键点击下方区域触发上下文菜单，常用于文件管理、编辑器等场景。
+          右键点击下方区域触发上下文菜单，使用自定义样式
         </Typography>
 
         <div
@@ -175,6 +179,19 @@ export const ContextMenu = () => {
           {...bindMenu(popupState)}
           anchorReference="anchorPosition"
           anchorPosition={anchorPosition ?? undefined}
+          slotProps={{
+            paper: {
+              sx: {
+                width: 200,
+                borderRadius: 2,
+                mt: 0.5,
+                '& .MuiMenuItem-root': {
+                  px: 2,
+                  py: 1,
+                },
+              },
+            },
+          }}
         >
           <MenuItem onClick={popupState.close}>
             <ListItemIcon>
@@ -225,7 +242,17 @@ export const NestedMenu = () => {
         <Button variant="contained" {...bindTrigger(popupState)}>
           打开菜单
         </Button>
-        <Menu {...bindMenu(popupState)}>
+        <Menu
+          {...bindMenu(popupState)}
+          slotProps={{
+            paper: {
+              sx: {
+                width: 200,
+                boxShadow: 3,
+              },
+            },
+          }}
+        >
           <MenuItem onClick={popupState.close}>首页</MenuItem>
           <MenuItem
             {...bindHover(nestedPopupState)}
@@ -242,6 +269,15 @@ export const NestedMenu = () => {
           {...bindMenu(nestedPopupState)}
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+          slotProps={{
+            paper: {
+              sx: {
+                width: 200,
+                ml: 1,
+                boxShadow: 3,
+              },
+            },
+          }}
         >
           <MenuItem
             onClick={() => {
@@ -323,7 +359,26 @@ export const MenuPatterns = () => {
             </IconButton>
           </div>
 
-          <Menu {...bindMenu(moreActionsPopupState)}>
+          <Menu
+            {...bindMenu(moreActionsPopupState)}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            slotProps={{
+              paper: {
+                sx: {
+                  minWidth: 180,
+                  borderRadius: 2,
+                  boxShadow: 4,
+                },
+              },
+            }}
+          >
             <MenuItem onClick={moreActionsPopupState.close}>
               <ListItemIcon>
                 <EditIcon fontSize="small" />
@@ -359,7 +414,23 @@ export const MenuPatterns = () => {
           <Button variant="outlined" {...bindTrigger(selectPopupState)}>
             {options[selectedIndex]}
           </Button>
-          <Menu {...bindMenu(selectPopupState)}>
+          <Menu
+            {...bindMenu(selectPopupState)}
+            slotProps={{
+              paper: {
+                sx: {
+                  width: 120,
+                  mt: 1,
+                  '& .MuiMenuItem-root.Mui-selected': {
+                    bgcolor: 'primary.lighter',
+                    '&:hover': {
+                      bgcolor: 'primary.lighter',
+                    },
+                  },
+                },
+              },
+            }}
+          >
             {options.map((option, index) => (
               <MenuItem
                 key={option}
@@ -373,5 +444,181 @@ export const MenuPatterns = () => {
         </CardContent>
       </Card>
     </Stack>
+  );
+};
+
+// 高级配置选项展示
+export const AdvancedMenuConfigurations = () => {
+  // 左上角菜单
+  const topLeftPopupState = usePopupState({ variant: 'popover', popupId: 'topLeftMenu' });
+
+  // 右上角菜单
+  const topRightPopupState = usePopupState({ variant: 'popover', popupId: 'topRightMenu' });
+
+  // 左下角菜单
+  const bottomLeftPopupState = usePopupState({ variant: 'popover', popupId: 'bottomLeftMenu' });
+
+  // 右下角菜单
+  const bottomRightPopupState = usePopupState({ variant: 'popover', popupId: 'bottomRightMenu' });
+
+  return (
+    <Card sx={{ width: '100%', maxWidth: 500 }}>
+      <CardContent>
+        <Typography variant="h6" gutterBottom>
+          菜单高级配置
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+          展示不同的anchorOrigin和transformOrigin组合，以及自定义slotProps
+        </Typography>
+
+        <Stack direction="column" spacing={4}>
+          <Stack direction="row" spacing={2} justifyContent="space-between">
+            <Button variant="outlined" {...bindTrigger(topLeftPopupState)}>
+              左上角菜单
+            </Button>
+            <Button variant="outlined" {...bindTrigger(topRightPopupState)}>
+              右上角菜单
+            </Button>
+          </Stack>
+
+          <Stack direction="row" spacing={2} justifyContent="space-between">
+            <Button variant="outlined" {...bindTrigger(bottomLeftPopupState)}>
+              左下角菜单
+            </Button>
+            <Button variant="outlined" {...bindTrigger(bottomRightPopupState)}>
+              右下角菜单
+            </Button>
+          </Stack>
+        </Stack>
+
+        {/* 左上角菜单 */}
+        <Menu
+          {...bindMenu(topLeftPopupState)}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          slotProps={{
+            paper: {
+              sx: {
+                width: 180,
+                bgcolor: 'primary.lighter',
+                color: 'primary.dark',
+                boxShadow: 2,
+                '& .MuiMenuItem-root': {
+                  '&:hover': {
+                    bgcolor: 'primary.light',
+                  },
+                },
+              },
+            },
+          }}
+        >
+          <MenuItem onClick={topLeftPopupState.close}>菜单项 1</MenuItem>
+          <MenuItem onClick={topLeftPopupState.close}>菜单项 2</MenuItem>
+          <MenuItem onClick={topLeftPopupState.close}>菜单项 3</MenuItem>
+        </Menu>
+
+        {/* 右上角菜单 */}
+        <Menu
+          {...bindMenu(topRightPopupState)}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          slotProps={{
+            paper: {
+              sx: {
+                width: 180,
+                bgcolor: 'secondary.lighter',
+                color: 'secondary.dark',
+                boxShadow: 2,
+                '& .MuiMenuItem-root': {
+                  '&:hover': {
+                    bgcolor: 'secondary.light',
+                  },
+                },
+              },
+            },
+          }}
+        >
+          <MenuItem onClick={topRightPopupState.close}>菜单项 1</MenuItem>
+          <MenuItem onClick={topRightPopupState.close}>菜单项 2</MenuItem>
+          <MenuItem onClick={topRightPopupState.close}>菜单项 3</MenuItem>
+        </Menu>
+
+        {/* 左下角菜单 */}
+        <Menu
+          {...bindMenu(bottomLeftPopupState)}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          slotProps={{
+            paper: {
+              sx: {
+                width: 180,
+                bgcolor: 'success.lighter',
+                color: 'success.dark',
+                boxShadow: 2,
+                '& .MuiMenuItem-root': {
+                  '&:hover': {
+                    bgcolor: 'success.light',
+                  },
+                },
+              },
+            },
+          }}
+        >
+          <MenuItem onClick={bottomLeftPopupState.close}>菜单项 1</MenuItem>
+          <MenuItem onClick={bottomLeftPopupState.close}>菜单项 2</MenuItem>
+          <MenuItem onClick={bottomLeftPopupState.close}>菜单项 3</MenuItem>
+        </Menu>
+
+        {/* 右下角菜单 */}
+        <Menu
+          {...bindMenu(bottomRightPopupState)}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          slotProps={{
+            paper: {
+              sx: {
+                width: 180,
+                bgcolor: 'warning.lighter',
+                color: 'warning.dark',
+                boxShadow: 2,
+                '& .MuiMenuItem-root': {
+                  '&:hover': {
+                    bgcolor: 'warning.light',
+                  },
+                },
+              },
+            },
+          }}
+        >
+          <MenuItem onClick={bottomRightPopupState.close}>菜单项 1</MenuItem>
+          <MenuItem onClick={bottomRightPopupState.close}>菜单项 2</MenuItem>
+          <MenuItem onClick={bottomRightPopupState.close}>菜单项 3</MenuItem>
+        </Menu>
+      </CardContent>
+    </Card>
   );
 };
