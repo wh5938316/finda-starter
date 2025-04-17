@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'eslint-config-hyoban'
+import { defineConfig } from 'eslint-config-hyoban';
 
 export default defineConfig(
   {
@@ -11,6 +11,7 @@ export default defineConfig(
   },
   {
     rules: {
+      'simple-import-sort/imports': 'off',
       'unicorn/expiring-todo-comments': 'off',
       'package-json/valid-package-def': 'off',
       '@eslint-react/no-missing-key': 'warn',
@@ -56,4 +57,4 @@ export default defineConfig(
       'package-json/valid-package-definition': 0,
     },
   },
-)
+);
