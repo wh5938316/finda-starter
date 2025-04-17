@@ -3,10 +3,10 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { useDrawingArea } from '@mui/x-charts/hooks';
+import { styled } from '@mui/material/styles';
 import { PieChart } from '@mui/x-charts/PieChart';
+import { useDrawingArea } from '@mui/x-charts/hooks';
 import * as React from 'react';
 
 import { BrazilFlag, GlobeFlag, IndiaFlag, UsaFlag } from '../internals/components/CustomIcons';

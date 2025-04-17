@@ -1,5 +1,5 @@
-import type { Components, Theme } from '@mui/material/styles';
 import { svgIconClasses } from '@mui/material/SvgIcon';
+import type { Components, Theme } from '@mui/material/styles';
 import { toastClasses } from 'material-ui-toaster';
 
 import { blue, green, orange, red } from '../themePrimitives';

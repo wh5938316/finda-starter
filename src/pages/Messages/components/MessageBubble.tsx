@@ -1,7 +1,7 @@
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import { alpha, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { alpha, styled } from '@mui/material/styles';
 import * as React from 'react';
 
 import MessageStatusIcon from './MessageStatusIcon';

@@ -4,12 +4,12 @@ import { listClasses } from '@mui/material/List';
 import { listItemIconClasses } from '@mui/material/ListItemIcon';
 import { menuItemClasses } from '@mui/material/MenuItem';
 import { paperClasses } from '@mui/material/Paper';
+import { tablePaginationClasses } from '@mui/material/TablePagination';
 import type { Theme } from '@mui/material/styles';
 import { alpha } from '@mui/material/styles';
-import { tablePaginationClasses } from '@mui/material/TablePagination';
 import { gridClasses } from '@mui/x-data-grid';
-import type { DataGridComponents } from '@mui/x-data-grid/themeAugmentation';
 import type { DataGridProComponents } from '@mui/x-data-grid-pro/themeAugmentation';
+import type { DataGridComponents } from '@mui/x-data-grid/themeAugmentation';
 
 import { gray } from '../themePrimitives';
 

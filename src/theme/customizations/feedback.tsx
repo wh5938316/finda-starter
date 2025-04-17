@@ -1,6 +1,6 @@
+import { tooltipClasses } from '@mui/material/Tooltip';
 import type { Components, Theme } from '@mui/material/styles';
 import { alpha } from '@mui/material/styles';
-import { tooltipClasses } from '@mui/material/Tooltip';
 
 import { gray, green, orange } from '../themePrimitives';
 

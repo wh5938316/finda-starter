@@ -4,8 +4,8 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { alpha, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
+import { alpha, styled } from '@mui/material/styles';
 import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
 import * as React from 'react';
 

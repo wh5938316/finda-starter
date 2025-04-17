@@ -2,9 +2,9 @@ import { listItemIconClasses, tableRowClasses } from '@mui/material';
 import { buttonBaseClasses } from '@mui/material/ButtonBase';
 import { chipClasses } from '@mui/material/Chip';
 import { iconButtonClasses } from '@mui/material/IconButton';
+import { svgIconClasses } from '@mui/material/SvgIcon';
 import type { Components, Theme } from '@mui/material/styles';
 import { alpha } from '@mui/material/styles';
-import { svgIconClasses } from '@mui/material/SvgIcon';
 
 import { gray, green, red } from '../themePrimitives';
 

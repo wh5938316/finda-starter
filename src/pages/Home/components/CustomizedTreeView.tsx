@@ -2,10 +2,9 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Collapse from '@mui/material/Collapse';
+import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import type { TransitionProps } from '@mui/material/transitions';
-import Typography from '@mui/material/Typography';
-import type { TreeViewBaseItem } from '@mui/x-tree-view/models';
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView';
 import {
   TreeItem2Content,
@@ -15,6 +14,7 @@ import {
 } from '@mui/x-tree-view/TreeItem2';
 import { TreeItem2Icon } from '@mui/x-tree-view/TreeItem2Icon';
 import { TreeItem2Provider } from '@mui/x-tree-view/TreeItem2Provider';
+import type { TreeViewBaseItem } from '@mui/x-tree-view/models';
 import type { UseTreeItem2Parameters } from '@mui/x-tree-view/useTreeItem2';
 import { unstable_useTreeItem2 as useTreeItem2 } from '@mui/x-tree-view/useTreeItem2';
 import { animated, useSpring } from '@react-spring/web';

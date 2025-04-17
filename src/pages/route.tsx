@@ -15,7 +15,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import SecurityIcon from '@mui/icons-material/Security';
 import SettingsIcon from '@mui/icons-material/Settings';
 import WorkIcon from '@mui/icons-material/Work';
-import { createBrowserRouter,Navigate, Outlet, ScrollRestoration } from 'react-router';
+import { Navigate, Outlet, ScrollRestoration, createBrowserRouter } from 'react-router';
 
 import AuthLayout from '@/components/layouts/auth';
 import DashboardLayout from '@/components/layouts/dashboard';
