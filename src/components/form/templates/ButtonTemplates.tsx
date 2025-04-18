@@ -1,15 +1,19 @@
 import { Add, ArrowDownward, ArrowUpward, Delete } from '@mui/icons-material';
+import type { ButtonProps} from '@mui/material';
 import { Button, IconButton } from '@mui/material';
 import type { IconButtonProps } from '@rjsf/utils';
 
-interface CustomButtonProps extends IconButtonProps {
+interface CustomButtonProps extends Omit<IconButtonProps, 'color'> {
   uiSchema?: Record<string, unknown>;
 }
 
 const ButtonTemplates = {
   SubmitButton: ({ uiSchema = {}, ...props }: CustomButtonProps) => {
     const submitOptions = uiSchema?.['ui:submitButtonOptions'] || {};
-    const { submitText, props: submitProps = {} } = submitOptions;
+    const { submitText, props: submitProps = {} } = submitOptions as {
+      submitText?: string;
+      props?: ButtonProps;
+    };
     return (
       <Button type="submit" variant="contained" color="primary" {...submitProps}>
         {submitText || props.children || '提交'}
