@@ -8,12 +8,11 @@ import { tablePaginationClasses } from '@mui/material/TablePagination';
 import type { Theme } from '@mui/material/styles';
 import { alpha } from '@mui/material/styles';
 import { gridClasses } from '@mui/x-data-grid';
-import type { DataGridProComponents } from '@mui/x-data-grid-pro/themeAugmentation';
 import type { DataGridComponents } from '@mui/x-data-grid/themeAugmentation';
 
 import { gray } from '../themePrimitives';
 
-const dataGridCustomizations: DataGridProComponents<Theme> & DataGridComponents<Theme> = {
+const dataGridCustomizations: DataGridComponents<Theme> = {
   MuiDataGrid: {
     styleOverrides: {
       root: ({ theme }) => ({

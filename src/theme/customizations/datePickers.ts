@@ -1,12 +1,14 @@
 import { menuItemClasses } from '@mui/material/MenuItem';
 import type { Theme } from '@mui/material/styles';
-import { pickersDayClasses, pickersMonthClasses, pickersYearClasses } from '@mui/x-date-pickers';
+import { pickersDayClasses } from '@mui/x-date-pickers';
+import { monthCalendarClasses } from '@mui/x-date-pickers/MonthCalendar';
+import { yearCalendarClasses } from '@mui/x-date-pickers/YearCalendar';
 import type { PickerComponents } from '@mui/x-date-pickers/themeAugmentation';
 
 import { gray } from '../themePrimitives';
 
 const datePickersCustomizations: PickerComponents<Theme> = {
-  MuiPickersPopper: {
+  MuiPickerPopper: {
     styleOverrides: {
       paper: ({ theme }) => ({
         marginTop: 4,
@@ -48,9 +50,9 @@ const datePickersCustomizations: PickerComponents<Theme> = {
       },
     },
   },
-  MuiPickersMonth: {
+  MuiMonthCalendar: {
     styleOverrides: {
-      monthButton: ({ theme }) => ({
+      button: ({ theme }) => ({
         fontSize: theme.typography.body1.fontSize,
         color: theme.palette.grey[600],
         padding: theme.spacing(0.5),
@@ -58,7 +60,7 @@ const datePickersCustomizations: PickerComponents<Theme> = {
         '&:hover': {
           backgroundColor: theme.palette.action.hover,
         },
-        [`&.${pickersMonthClasses.selected}`]: {
+        [`&.${monthCalendarClasses.selected}`]: {
           backgroundColor: gray[700],
           fontWeight: theme.typography.fontWeightMedium,
         },
@@ -66,14 +68,14 @@ const datePickersCustomizations: PickerComponents<Theme> = {
           outline: `3px solid ${theme.palette.primary.light}`,
           outlineOffset: '0px',
           backgroundColor: 'transparent',
-          [`&.${pickersMonthClasses.selected}`]: { backgroundColor: gray[700] },
+          [`&.${monthCalendarClasses.selected}`]: { backgroundColor: gray[700] },
         },
         ...theme.applyStyles('dark', {
           color: theme.palette.grey[300],
           '&:hover': {
             backgroundColor: theme.palette.action.hover,
           },
-          [`&.${pickersMonthClasses.selected}`]: {
+          [`&.${monthCalendarClasses.selected}`]: {
             color: theme.palette.common.black,
             fontWeight: theme.typography.fontWeightMedium,
             backgroundColor: gray[300],
@@ -82,7 +84,7 @@ const datePickersCustomizations: PickerComponents<Theme> = {
             outline: `3px solid ${theme.palette.primary.light}`,
             outlineOffset: '0px',
             backgroundColor: 'transparent',
-            [`&.${pickersMonthClasses.selected}`]: {
+            [`&.${monthCalendarClasses.selected}`]: {
               backgroundColor: gray[300],
             },
           },
@@ -90,9 +92,9 @@ const datePickersCustomizations: PickerComponents<Theme> = {
       }),
     },
   },
-  MuiPickersYear: {
+  MuiYearCalendar: {
     styleOverrides: {
-      yearButton: ({ theme }) => ({
+      button: ({ theme }) => ({
         fontSize: theme.typography.body1.fontSize,
         color: theme.palette.grey[600],
         padding: theme.spacing(0.5),
@@ -101,7 +103,7 @@ const datePickersCustomizations: PickerComponents<Theme> = {
         '&:hover': {
           backgroundColor: theme.palette.action.hover,
         },
-        [`&.${pickersYearClasses.selected}`]: {
+        [`&.${yearCalendarClasses.selected}`]: {
           backgroundColor: gray[700],
           fontWeight: theme.typography.fontWeightMedium,
         },
@@ -109,14 +111,14 @@ const datePickersCustomizations: PickerComponents<Theme> = {
           outline: `3px solid ${theme.palette.primary.light}`,
           outlineOffset: '0px',
           backgroundColor: 'transparent',
-          [`&.${pickersYearClasses.selected}`]: { backgroundColor: gray[700] },
+          [`&.${yearCalendarClasses.selected}`]: { backgroundColor: gray[700] },
         },
         ...theme.applyStyles('dark', {
           color: theme.palette.grey[300],
           '&:hover': {
             backgroundColor: theme.palette.action.hover,
           },
-          [`&.${pickersYearClasses.selected}`]: {
+          [`&.${yearCalendarClasses.selected}`]: {
             color: theme.palette.common.black,
             fontWeight: theme.typography.fontWeightMedium,
             backgroundColor: gray[300],
@@ -125,7 +127,7 @@ const datePickersCustomizations: PickerComponents<Theme> = {
             outline: `3px solid ${theme.palette.primary.light}`,
             outlineOffset: '0px',
             backgroundColor: 'transparent',
-            [`&.${pickersYearClasses.selected}`]: {
+            [`&.${yearCalendarClasses.selected}`]: {
               backgroundColor: gray[300],
             },
           },
