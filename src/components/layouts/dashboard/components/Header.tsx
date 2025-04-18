@@ -22,14 +22,15 @@ function Header() {
         zIndex: 'appBar',
         height: 64,
         pointerEvents: 'none',
-        borderBottom: `1px solid ${theme.palette.divider}`,
+        borderBottom: `1px solid`,
+        borderColor: theme.vars.palette.divider,
       })}
     >
       <Box
         sx={{
           width: '100%',
           height: '100%',
-          bgcolor: 'common.white',
+          backgroundColor: 'background.paper',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

@@ -95,7 +95,7 @@ export const blue = {
 
 export const getDesignTokens = (mode: PaletteMode) => ({
   palette: {
-    // mode,
+    mode,
     primary: {
       light: brand[200],
       main: brand[400],
@@ -155,15 +155,25 @@ export const getDesignTokens = (mode: PaletteMode) => ({
     grey: {
       ...gray,
     },
-    divider: mode === 'dark' ? alpha(gray[700], 0.6) : alpha(gray[300], 0.6),
+    divider: mode === 'dark' ? 'hsl(0, 0%, 18%)' : alpha(gray[300], 0.6),
+    // divider: mode === 'dark' ? alpha(gray[700], 0.6) : alpha(gray[300], 0.6),
+
+    //#141414 background
+    //#181818 paper
+    //#1f1f1f surface
+    //#1c1c1c control
     background: {
-      default: 'hsl(0, 0%, 99%)',
-      paper: 'hsl(220, 35%, 97%)',
-      softBlack: 'hsl(0, 0%, 12%)',
-      warmWhite: 'hsl(40, 26%, 93%)',
+      default: 'hsl(0, 0.00%, 98.00%)',
+      background: 'hsl(0, 0.00%, 98.00%)',
+      paper: 'hsl(0, 0.00%, 96.40%)',
+      surface: 'hsl(0, 0.00%, 93.60%)',
+      control: 'hsl(0, 0.00%, 94.80%)',
       ...(mode === 'dark' && {
-        default: gray[900],
-        paper: 'hsl(220, 30%, 7%)',
+        default: 'hsl(0, 0.00%, 8.00%)',
+        background: 'hsl(0, 0.00%, 9.00%)',
+        paper: 'hsl(0, 0.00%, 9.00%)',
+        surface: 'hsl(0, 0.00%, 12.00%)',
+        control: 'hsl(0, 0.00%, 15.00%)',
       }),
     },
     text: {
@@ -171,15 +181,16 @@ export const getDesignTokens = (mode: PaletteMode) => ({
       secondary: gray[600],
       warning: orange[400],
       ...(mode === 'dark' && {
-        primary: 'hsl(0, 0%, 100%)',
-        secondary: gray[400],
+        primary: 'hsl(0, 0%, 95%)',
+        secondary: 'hsl(0, 0%, 60%)',
       }),
     },
     action: {
       hover: alpha(gray[200], 0.4),
       selected: `${alpha(gray[200], 0.6)}`,
       ...(mode === 'dark' && {
-        hover: alpha(gray[600], 0.4),
+        // hover: alpha(gray[600], 0.4),
+        hover: 'hsl(0, 0%, 32%)',
         selected: alpha(gray[600], 0.6),
       }),
     },

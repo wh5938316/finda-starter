@@ -1,5 +1,4 @@
 import type { Components, Theme } from '@mui/material/styles';
-import { alpha } from '@mui/material/styles';
 
 import { gray } from '../themePrimitives';
 
@@ -66,11 +65,13 @@ const surfacesCustomizations: Components<Theme> = {
                 variant: 'outlined',
               },
               style: {
-                border: `1px solid ${theme.palette.divider}`,
+                border: `1px solid`,
+                borderColor: theme.vars.palette.background.paper,
                 boxShadow: 'none',
                 background: 'hsl(0, 0%, 100%)',
                 ...theme.applyStyles('dark', {
-                  background: alpha(gray[900], 0.4),
+                  background: theme.vars.palette.background.paper,
+                  // borderColor: theme.vars.palette.background,
                 }),
               },
             },
@@ -126,10 +127,16 @@ const surfacesCustomizations: Components<Theme> = {
             style: {
               boxShadow:
                 'rgba(24, 39, 75, 0.04) 0px 0px 0px 1px, rgba(24, 39, 75, 0.12) 0px 4px 8px -4px, rgba(24, 39, 75, 0.16) 0px 4px 12px -2px',
-              // boxShadow:
-              //   'rgba(28, 40, 64, 0.04) 0px 0px 0px 1px, rgba(28, 40, 64, 0.12) 0px 4px 8px -4px, rgba(28, 40, 64, 0.16) 0px 4px 12px -2px',
-              backgroundColor: theme.palette.background.default,
+              backgroundColor: theme.vars.palette.background.background,
               border: 0,
+            },
+          },
+          {
+            props: {
+              variant: 'outlined',
+            },
+            style: {
+              backgroundColor: theme.vars.palette.background.surface,
             },
           },
         ],

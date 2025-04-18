@@ -1,4 +1,4 @@
-import type { CssVarsThemeOptions, PaletteMode } from '@mui/material/styles';
+import type { CssVarsThemeOptions } from '@mui/material/styles';
 import type {} from '@mui/material/themeCssVarsAugmentation';
 
 // import type {} from '@mui/x-charts/themeAugmentation';
@@ -19,17 +19,18 @@ import {
 // import type {} from '@mui/x-tree-view/themeAugmentation';
 import { getDesignTokens } from './themePrimitives';
 
-export default function getTheme(mode: PaletteMode): CssVarsThemeOptions {
+export default function getTheme(): CssVarsThemeOptions {
+  console.log(getDesignTokens('dark'));
   return {
     // colorSchemes: {
     //   light: true,
     //   dark: true,
     // },
-    // colorSchemes: {
-    //   light: getDesignTokens('light'),
-    //   dark: getDesignTokens('dark'),
-    // },
-    ...getDesignTokens(mode),
+    colorSchemes: {
+      light: getDesignTokens('light'),
+      dark: getDesignTokens('dark'),
+    },
+    // ...getDesignTokens(mode),
     components: {
       ...chartsCustomizations,
       ...dataGridCustomizations,

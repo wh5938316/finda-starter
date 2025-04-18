@@ -71,6 +71,13 @@ export default function MuiProvider(props: MuiProviderProps) {
         },
         MuiSelect: {
           IconComponent: SelectIconComponent,
+          MenuProps: {
+            slotProps: {
+              paper: {
+                variant: 'popper',
+              },
+            },
+          },
         },
         MuiLink: {
           underline: 'none',
@@ -107,13 +114,6 @@ export default function MuiProvider(props: MuiProviderProps) {
             },
           },
         },
-        // MuiPopper: {
-        //   slotProps: {
-        //     desktopPaper: {
-        //       variant: "popper",
-        //     },
-        //   }
-        // },
         MuiDatePicker: {
           slotProps: {
             mobilePaper: {
@@ -131,13 +131,6 @@ export default function MuiProvider(props: MuiProviderProps) {
             },
           },
         },
-        // MuiDesktopDatePicker: {
-        //   slotProps: {
-        //     desktopPaper: {
-        //       variant: "popper",
-        //     },
-        //   }
-        // },
       }}
     >
       {children}

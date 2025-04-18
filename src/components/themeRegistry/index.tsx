@@ -13,7 +13,7 @@ const theme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'class',
   },
-  ...getTheme('light'),
+  ...getTheme(),
 });
 
 export default function ThemeRegistry({ children }: React.PropsWithChildren<{}>) {

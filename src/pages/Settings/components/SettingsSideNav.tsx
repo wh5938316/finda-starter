@@ -8,12 +8,13 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import * as React from 'react';
 import { Link, useLocation } from 'react-router';
+
+import SidebarMenuButton from '@/components/layouts/components/SidebarMenuButton';
 
 interface SettingsNavItem {
   title: string;
@@ -106,31 +107,10 @@ export default function SettingsSideNav() {
 
             return (
               <ListItem key={item.path} disablePadding>
-                <ListItemButton
-                  component={Link}
-                  to={item.path}
-                  selected={isActive}
-                  sx={{
-                    '&.Mui-selected': {
-                      backgroundColor: 'primary.light',
-                      '&:hover': {
-                        backgroundColor: 'primary.light',
-                      },
-                    },
-                  }}
-                >
-                  <ListItemIcon sx={{ color: isActive ? 'primary.main' : 'inherit' }}>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.title}
-                    slotProps={{
-                      primary: {
-                        fontWeight: isActive ? 'bold' : 'regular',
-                      },
-                    }}
-                  />
-                </ListItemButton>
+                <SidebarMenuButton component={Link} to={item.path} selected={isActive}>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.title} />
+                </SidebarMenuButton>
               </ListItem>
             );
           })}

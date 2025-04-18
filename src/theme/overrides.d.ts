@@ -1,14 +1,16 @@
 /// <reference types="material-ui-toaster/types" />
 import type { OverridableStringUnion } from '@mui/types';
 
-declare module '@mui/material/styles/createPalette' {
-  interface Theme {
-    background: {
-      softBlack: string;
-      warmWhite: string;
-    };
+declare module '@mui/material/styles' {
+  interface TypeBackground {
+    background: string;
+    paper: string;
+    surface: string;
+    control: string;
   }
+}
 
+declare module '@mui/material/styles/createPalette' {
   interface ColorRange {
     50: string;
     100: string;

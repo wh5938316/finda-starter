@@ -1,4 +1,4 @@
-import { listItemIconClasses, tableRowClasses } from '@mui/material';
+import { tableRowClasses } from '@mui/material';
 import { buttonBaseClasses } from '@mui/material/ButtonBase';
 import { chipClasses } from '@mui/material/Chip';
 import { iconButtonClasses } from '@mui/material/IconButton';
@@ -23,41 +23,42 @@ const dataDisplayCustomizations: Components<Theme> = {
     styleOverrides: {
       root: ({ theme }) => ({
         padding: 0,
-        [`& .${listItemIconClasses.root}`]: {
-          color: theme.palette.text.primary,
-        },
         [`& .${svgIconClasses.root}`]: {
-          fontSize: '1.125rem',
+          fontSize: '1rem',
           fill: 'currentColor',
           color: 'inherit',
         },
-        [`& .${buttonBaseClasses.root}`]: {
-          display: 'flex',
-          gap: 8,
-          padding: '2px 8px',
-          borderRadius: theme.shape.borderRadius,
-          // opacity: 0.7,
-          '&.Mui-nested': {
-            paddingLeft: '36px',
-            opacity: 0.8,
-            fontWeight: 400,
-          },
-          '&.Mui-selected': {
-            opacity: 1,
-            backgroundColor: alpha(theme.palette.action.selected, 0.8),
-            [`& .${svgIconClasses.root}`]: {
-              color: theme.palette.text.primary,
-            },
-            '&:focus-visible': {
-              backgroundColor: theme.palette.action.selected,
-            },
-            '&:hover': {
-              backgroundColor: theme.palette.action.selected,
-            },
-          },
+        [`& .${buttonBaseClasses.root}`]: {},
+      }),
+    },
+  },
+  MuiListItemButton: {
+    styleOverrides: {
+      root: ({ theme }) => ({
+        display: 'flex',
+        gap: 8,
+        padding: '2px 8px',
+        borderRadius: theme.shape.borderRadius,
+        '&.Mui-nested': {
+          paddingLeft: '36px',
+          opacity: 0.8,
+          fontWeight: 400,
+        },
+        '&.Mui-selected': {
+          opacity: 1,
+          backgroundColor: alpha(theme.palette.action.selected, 0.8),
+          // [`& .${svgIconClasses.root}`]: {
+          //   color: theme.palette.text.primary,
+          // },
           '&:focus-visible': {
-            backgroundColor: 'transparent',
+            backgroundColor: theme.palette.action.selected,
           },
+          '&:hover': {
+            backgroundColor: theme.palette.action.selected,
+          },
+        },
+        '&:focus-visible': {
+          backgroundColor: 'transparent',
         },
       }),
     },
@@ -66,7 +67,7 @@ const dataDisplayCustomizations: Components<Theme> = {
     styleOverrides: {
       primary: ({ theme }) => ({
         // fontSize: theme.typography.body2.fontSize,
-        fontWeight: 500,
+        fontWeight: theme.typography.fontWeightMedium,
         // lineHeight: theme.typography.body2.lineHeight,
       }),
       secondary: ({ theme }) => ({
@@ -89,6 +90,7 @@ const dataDisplayCustomizations: Components<Theme> = {
   MuiListItemIcon: {
     styleOverrides: {
       root: {
+        color: 'inherit',
         minWidth: 0,
       },
     },
@@ -236,6 +238,8 @@ const dataDisplayCustomizations: Components<Theme> = {
   MuiAvatar: {
     styleOverrides: {
       root: ({ theme }) => ({
+        color: theme.vars.palette.text.primary,
+        backgroundColor: theme.vars.palette.background.control,
         variants: [
           {
             props: {
@@ -244,6 +248,10 @@ const dataDisplayCustomizations: Components<Theme> = {
             style: {
               borderRadius: `calc(0.75 * ${theme.vars.shape.borderRadius})`,
               border: `1px solid ${theme.palette.divider}`,
+              ...theme.applyStyles('dark', {
+                // border: `1px solid ${theme.vars.palette.background.paper}`,
+                backgroundColor: theme.vars.palette.background.control,
+              }),
             },
           },
         ],

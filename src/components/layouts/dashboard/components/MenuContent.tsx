@@ -11,7 +11,6 @@ import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import WorkIcon from '@mui/icons-material/Work';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
@@ -19,6 +18,8 @@ import Tooltip from '@mui/material/Tooltip';
 import * as React from 'react';
 import { memo, useMemo } from 'react';
 import { Link, useLocation } from 'react-router';
+
+import SidebarMenuButton from '../../components/SidebarMenuButton';
 
 // 定义导航项接口
 interface NavItem {
@@ -106,35 +107,16 @@ const NavItem = memo(({ item, isActive }: { item: NavItem; isActive: boolean }) 
   return (
     <ListItem key={item.path} disablePadding sx={{ display: 'block' }}>
       <Tooltip title={item.tooltip || item.text} placement="right" arrow>
-        <ListItemButton
-          component={Link}
-          to={item.path}
-          selected={isActive}
-          sx={{
-            '&.Mui-selected': {
-              bgcolor: 'primary.light',
-              '&:hover': {
-                bgcolor: 'primary.light',
-              },
-            },
-          }}
-        >
+        <SidebarMenuButton component={Link} to={item.path} selected={isActive}>
           <ListItemIcon
             sx={{
-              color: isActive ? 'primary.main' : 'inherit',
-              minWidth: 0,
               mr: 2,
             }}
           >
             {item.icon}
           </ListItemIcon>
-          <ListItemText
-            primary={item.text}
-            primaryTypographyProps={{
-              fontWeight: isActive ? 'medium' : 'regular',
-            }}
-          />
-        </ListItemButton>
+          <ListItemText primary={item.text} />
+        </SidebarMenuButton>
       </Tooltip>
     </ListItem>
   );

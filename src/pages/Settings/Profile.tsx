@@ -32,7 +32,7 @@ import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { alpha, styled } from '@mui/material/styles';
+import { alpha, styled, useColorScheme } from '@mui/material/styles';
 import * as React from 'react';
 import { useState } from 'react';
 
@@ -94,7 +94,7 @@ const ThemeOption = styled(Box, {
 }));
 
 export default function ProfileSettings() {
-  const [theme, setTheme] = useState('light');
+  const { mode, setMode } = useColorScheme();
   const [fontScale, setFontScale] = useState(1);
   const [compactMode, setCompactMode] = useState(false);
   const [highContrast, setHighContrast] = useState(false);
@@ -103,8 +103,8 @@ export default function ProfileSettings() {
   const [preferredLang, setPreferredLang] = useState('zh_CN');
   const [accountType, setAccountType] = useState('personal');
 
-  const handleThemeChange = (newTheme: string) => {
-    setTheme(newTheme);
+  const handleThemeChange = (newTheme: 'system' | 'light' | 'dark') => {
+    setMode(newTheme);
   };
 
   const handleFontScaleChange = (_event: Event, newValue: number | number[]) => {
@@ -189,7 +189,6 @@ export default function ProfileSettings() {
               sx={{
                 p: 2,
                 mt: 1,
-                bgcolor: alpha('#000', 0.02),
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 1,
@@ -558,14 +557,14 @@ export default function ProfileSettings() {
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
                   <ThemeOption
-                    selected={theme === 'light'}
+                    selected={mode === 'light'}
                     onClick={() => handleThemeChange('light')}
                   >
                     <WbSunnyIcon />
                     <Typography variant="caption">浅色</Typography>
                   </ThemeOption>
                   <ThemeOption
-                    selected={theme === 'dark'}
+                    selected={mode === 'dark'}
                     onClick={() => handleThemeChange('dark')}
                     sx={{
                       bgcolor: alpha('#000', 0.8),
@@ -576,7 +575,7 @@ export default function ProfileSettings() {
                     <Typography variant="caption">深色</Typography>
                   </ThemeOption>
                   <ThemeOption
-                    selected={theme === 'system'}
+                    selected={mode === 'system'}
                     onClick={() => handleThemeChange('system')}
                   >
                     <Box sx={{ display: 'flex' }}>

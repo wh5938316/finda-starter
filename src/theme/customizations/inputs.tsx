@@ -83,11 +83,11 @@ const inputsCustomizations: Components<Theme> = {
                 backgroundColor: brand[900],
               },
               ...theme.applyStyles('dark', {
-                color: 'black',
-                backgroundColor: gray[50],
+                color: theme.vars.palette.text.primary,
+                backgroundColor: theme.vars.palette.primary.dark,
                 // backgroundImage: `linear-gradient(to bottom, ${gray[100]}, ${gray[50]})`,
-                boxShadow: 'inset 0 -1px 0  hsl(220, 30%, 80%)',
-                border: `1px solid ${gray[50]}`,
+                boxShadow: 'inset 0 -1px 0 hsl(220, 30%, 80%)',
+                // border: `1px solid ${gray[50]}`,
                 '&:hover': {
                   backgroundImage: 'none',
                   backgroundColor: gray[300],
@@ -137,8 +137,27 @@ const inputsCustomizations: Components<Theme> = {
                 backgroundColor: gray[200],
               },
               ...theme.applyStyles('dark', {
-                backgroundColor: gray[800],
-                borderColor: gray[700],
+                color: theme.vars.palette.text.primary,
+                backgroundColor: theme.vars.palette.background.control,
+                // backgroundImage: `linear-gradient(to bottom, #262626, #1d1d1d)`,
+                position: 'relative',
+                borderRadius: 8,
+                border: 'none',
+                '&::before': {
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  borderRadius: 8,
+                  padding: '1px',
+                  background: `linear-gradient(to bottom, #525252, #323232)`,
+                  WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                  WebkitMaskComposite: 'xor',
+                  maskComposite: 'exclude',
+                  pointerEvents: 'none',
+                },
 
                 '&:hover': {
                   backgroundColor: gray[900],
@@ -476,10 +495,10 @@ const inputsCustomizations: Components<Theme> = {
       root: {
         border: 'none',
       },
-      input: {
+      input: ({ theme }) => ({
         '&::placeholder': {
           opacity: 0.7,
-          color: gray[500],
+          color: theme.vars.palette.text.secondary,
         },
         variants: [
           {
@@ -491,7 +510,7 @@ const inputsCustomizations: Components<Theme> = {
             },
           },
         ],
-      },
+      }),
     },
   },
   MuiOutlinedInput: {
@@ -501,21 +520,24 @@ const inputsCustomizations: Components<Theme> = {
       },
       root: ({ theme }) => ({
         padding: '8px 12px',
-        color: theme.palette.text.primary,
+        color: theme.vars.palette.text.primary,
         borderRadius: theme.shape.borderRadius,
-        border: `1px solid ${theme.palette.divider}`,
-        backgroundColor: theme.palette.background.default,
+        border: `1px solid`,
+        borderColor: theme.vars.palette.divider,
+        backgroundColor: theme.vars.palette.background.control,
         transition: 'border 120ms ease-in',
         '&:hover': {
-          borderColor: gray[400],
+          borderColor: theme.vars.palette.action.hover,
         },
         [`&.${outlinedInputClasses.focused}`]: {
-          outline: `3px solid ${theme.palette.primary.light}`,
-          borderColor: brand[400],
+          outline: `2px solid`,
+          outlineColor: theme.vars.palette.primary.light,
+          outlineOffset: '2px',
+          borderColor: '#616161',
         },
         ...theme.applyStyles('dark', {
           '&:hover': {
-            borderColor: gray[500],
+            // borderColor: gray[500],
           },
         }),
         variants: [
@@ -559,7 +581,8 @@ const inputsCustomizations: Components<Theme> = {
           height: '100%',
           color: theme.palette.grey[500],
           ...theme.applyStyles('dark', {
-            color: theme.palette.grey[400],
+            backgroundColor: theme.vars.palette.background.control,
+            color: theme.vars.palette.text.primary,
           }),
         },
       }),
