@@ -4,9 +4,10 @@ import type { OverridableStringUnion } from '@mui/types';
 declare module '@mui/material/styles' {
   interface TypeBackground {
     background: string;
-    paper: string;
     surface: string;
+    paper: string;
     control: string;
+    controlChannel: string;
   }
 }
 

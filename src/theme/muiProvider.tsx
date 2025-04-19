@@ -107,7 +107,14 @@ export default function MuiProvider(props: MuiProviderProps) {
             },
           },
         },
-        MuiPickersPopper: {
+        MuiMenu: {
+          slotProps: {
+            paper: {
+              variant: 'popper',
+            },
+          },
+        },
+        MuiDateTimePicker: {
           slotProps: {
             desktopPaper: {
               variant: 'popper',

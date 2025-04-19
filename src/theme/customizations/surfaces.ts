@@ -57,7 +57,7 @@ const surfacesCustomizations: Components<Theme> = {
           border: `1px solid ${theme.palette.divider}`,
           boxShadow: 'none',
           ...theme.applyStyles('dark', {
-            backgroundColor: gray[800],
+            background: theme.vars.palette.background.paper,
           }),
           variants: [
             {
@@ -69,10 +69,6 @@ const surfacesCustomizations: Components<Theme> = {
                 borderColor: theme.vars.palette.background.paper,
                 boxShadow: 'none',
                 background: 'hsl(0, 0%, 100%)',
-                ...theme.applyStyles('dark', {
-                  background: theme.vars.palette.background.paper,
-                  // borderColor: theme.vars.palette.background,
-                }),
               },
             },
           ],
@@ -127,7 +123,7 @@ const surfacesCustomizations: Components<Theme> = {
             style: {
               boxShadow:
                 'rgba(24, 39, 75, 0.04) 0px 0px 0px 1px, rgba(24, 39, 75, 0.12) 0px 4px 8px -4px, rgba(24, 39, 75, 0.16) 0px 4px 12px -2px',
-              backgroundColor: theme.vars.palette.background.background,
+              backgroundColor: theme.vars.palette.background.surface,
               border: 0,
             },
           },
@@ -137,6 +133,11 @@ const surfacesCustomizations: Components<Theme> = {
             },
             style: {
               backgroundColor: theme.vars.palette.background.surface,
+              border: '1px solid',
+              borderColor: theme.vars.palette.divider,
+              ...theme.applyStyles('dark', {
+                borderColor: theme.vars.palette.divider,
+              }),
             },
           },
         ],

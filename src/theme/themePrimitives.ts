@@ -97,15 +97,15 @@ export const getDesignTokens = (mode: PaletteMode) => ({
   palette: {
     mode,
     primary: {
-      light: brand[200],
-      main: brand[400],
-      dark: brand[700],
+      light: brand[300],
+      main: brand[700],
+      dark: brand[800],
       contrastText: brand[50],
       ...(mode === 'dark' && {
         contrastText: brand[50],
-        light: brand[300],
-        main: brand[400],
-        dark: brand[700],
+        light: brand[500],
+        main: brand[700],
+        dark: brand[900],
       }),
       ...brand,
     },
@@ -163,17 +163,19 @@ export const getDesignTokens = (mode: PaletteMode) => ({
     //#1f1f1f surface
     //#1c1c1c control
     background: {
-      default: 'hsl(0, 0.00%, 98.00%)',
-      background: 'hsl(0, 0.00%, 98.00%)',
-      paper: 'hsl(0, 0.00%, 96.40%)',
-      surface: 'hsl(0, 0.00%, 93.60%)',
-      control: 'hsl(0, 0.00%, 94.80%)',
+      default: 'hsl(0, 0.00%, 100.00%)',
+      background: 'hsl(0, 0.00%, 100.00%)',
+      surface: 'hsl(0, 0.00%, 96.00%)',
+      paper: 'hsl(0, 0.00%, 92.00%)',
+      control: 'hsl(0, 0.00%, 88.00%)',
+      controlChannel: '224, 224, 224',
       ...(mode === 'dark' && {
-        default: 'hsl(0, 0.00%, 8.00%)',
-        background: 'hsl(0, 0.00%, 9.00%)',
-        paper: 'hsl(0, 0.00%, 9.00%)',
-        surface: 'hsl(0, 0.00%, 12.00%)',
-        control: 'hsl(0, 0.00%, 15.00%)',
+        default: 'hsl(0, 0.00%, 5.00%)',
+        background: 'hsl(0, 0.00%, 5.00%)',
+        surface: 'hsl(0, 0.00%, 9.00%)',
+        paper: 'hsl(0, 0.00%, 11.00%)',
+        control: 'hsl(0, 0.00%, 12.00%)',
+        controlChannel: '31, 31, 31',
       }),
     },
     text: {
@@ -190,8 +192,9 @@ export const getDesignTokens = (mode: PaletteMode) => ({
       selected: `${alpha(gray[200], 0.6)}`,
       ...(mode === 'dark' && {
         // hover: alpha(gray[600], 0.4),
-        hover: 'hsl(0, 0%, 32%)',
+        hover: 'hsl(0, 0%, 14%)',
         selected: alpha(gray[600], 0.6),
+        active: 'hsl(0, 0%, 24%)',
       }),
     },
     Tooltip: {

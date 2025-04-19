@@ -68,15 +68,13 @@ const inputsCustomizations: Components<Theme> = {
             },
             style: {
               color: 'white',
-              backgroundColor: brand[800],
-              // backgroundImage: `linear-gradient(to bottom, ${brand[700]}, ${brand[800]})`,
-              // boxShadow: `inset 0 1px 0 ${brand[600]}, inset 0 -1px 0 1px hsl(220, 0%, 0%)`,
+              backgroundColor: theme.vars.palette.primary.main,
               [`&:not(.${buttonClasses.disabled})`]: {
                 border: `1px solid ${brand[700]}`,
               },
               '&:hover': {
                 backgroundImage: 'none',
-                backgroundColor: brand[700],
+                backgroundColor: theme.vars.palette.primary.dark,
                 boxShadow: 'none',
               },
               '&:active': {
@@ -84,17 +82,20 @@ const inputsCustomizations: Components<Theme> = {
               },
               ...theme.applyStyles('dark', {
                 color: theme.vars.palette.text.primary,
-                backgroundColor: theme.vars.palette.primary.dark,
-                // backgroundImage: `linear-gradient(to bottom, ${gray[100]}, ${gray[50]})`,
+                backgroundColor: theme.vars.palette.primary.main,
                 boxShadow: 'inset 0 -1px 0 hsl(220, 30%, 80%)',
-                // border: `1px solid ${gray[50]}`,
+                transition: theme.transitions.create(['box-shadow', 'background-color'], {
+                  duration: 250,
+                  easing: 'ease-in',
+                }),
                 '&:hover': {
-                  backgroundImage: 'none',
-                  backgroundColor: gray[300],
+                  backgroundColor: theme.vars.palette.primary.main,
                   boxShadow: 'none',
                 },
                 '&:active': {
-                  backgroundColor: gray[400],
+                  backgroundColor: theme.vars.palette.primary.dark,
+                  // backgroundColor: theme.vars.palette.primary.main,
+                  boxShadow: 'none',
                 },
               }),
             },
@@ -129,6 +130,10 @@ const inputsCustomizations: Components<Theme> = {
               border: '1px solid',
               borderColor: gray[200],
               backgroundColor: alpha(gray[50], 0.3),
+              // boxSizing: 'border-box',
+              transition: theme.transitions.create(['backgroundColor'], {
+                duration: 350,
+              }),
               '&:hover': {
                 backgroundColor: gray[100],
                 borderColor: gray[300],
@@ -139,10 +144,9 @@ const inputsCustomizations: Components<Theme> = {
               ...theme.applyStyles('dark', {
                 color: theme.vars.palette.text.primary,
                 backgroundColor: theme.vars.palette.background.control,
-                // backgroundImage: `linear-gradient(to bottom, #262626, #1d1d1d)`,
-                position: 'relative',
-                borderRadius: 8,
-                border: 'none',
+                // border: 'none',
+                border: '1px solid',
+                borderColor: 'transparent',
                 '&::before': {
                   content: '""',
                   position: 'absolute',
@@ -150,6 +154,7 @@ const inputsCustomizations: Components<Theme> = {
                   left: 0,
                   right: 0,
                   bottom: 0,
+                  margin: -1,
                   borderRadius: 8,
                   padding: '1px',
                   background: `linear-gradient(to bottom, #525252, #323232)`,
@@ -158,13 +163,19 @@ const inputsCustomizations: Components<Theme> = {
                   maskComposite: 'exclude',
                   pointerEvents: 'none',
                 },
-
                 '&:hover': {
-                  backgroundColor: gray[900],
-                  borderColor: gray[600],
+                  backgroundColor: theme.vars.palette.background.control,
+                  border: '1px solid',
+                  borderColor: theme.vars.palette.action.hover,
+                  // backgroundColor: gray[900],
+                  // borderColor: gray[600],
+                  '&::before': {
+                    // content: 'none',
+                    opacity: 0,
+                  },
                 },
                 '&:active': {
-                  backgroundColor: gray[900],
+                  backgroundColor: theme.vars.palette.background.paper,
                 },
               }),
             },
@@ -327,7 +338,7 @@ const inputsCustomizations: Components<Theme> = {
               },
               ...theme.applyStyles('dark', {
                 color: gray[100],
-                backgroundColor: alpha(gray[800], 0.5),
+                backgroundColor: theme.vars.palette.background.control,
                 '&:hover': {
                   backgroundColor: alpha(gray[800], 0.7),
                 },
@@ -342,15 +353,15 @@ const inputsCustomizations: Components<Theme> = {
               variant: 'outlined',
             },
             style: {
+              color: theme.vars.palette.text.primary,
               boxShadow: 'none',
               borderRadius: theme.shape.borderRadius,
               textTransform: 'none',
               fontWeight: theme.typography.fontWeightMedium,
               letterSpacing: 0,
-              color: theme.palette.text.primary,
               border: '1px solid ',
               borderColor: gray[200],
-              backgroundColor: alpha(gray[50], 0.3),
+              backgroundColor: theme.vars.palette.background.control,
               '&:hover': {
                 backgroundColor: gray[100],
                 borderColor: gray[300],
@@ -359,14 +370,14 @@ const inputsCustomizations: Components<Theme> = {
                 backgroundColor: gray[200],
               },
               ...theme.applyStyles('dark', {
-                backgroundColor: gray[800],
-                borderColor: gray[700],
+                backgroundColor: theme.vars.palette.background.control,
+                borderColor: theme.vars.palette.divider,
                 '&:hover': {
-                  backgroundColor: gray[900],
-                  borderColor: gray[600],
+                  backgroundColor: theme.vars.palette.action.hover,
+                  borderColor: theme.vars.palette.divider,
                 },
                 '&:active': {
-                  backgroundColor: gray[900],
+                  backgroundColor: theme.vars.palette.action.active,
                 },
               }),
             },
@@ -523,11 +534,15 @@ const inputsCustomizations: Components<Theme> = {
         color: theme.vars.palette.text.primary,
         borderRadius: theme.shape.borderRadius,
         border: `1px solid`,
+        // borderColor: 'hsl(0, 0%, 22%)',
         borderColor: theme.vars.palette.divider,
         backgroundColor: theme.vars.palette.background.control,
         transition: 'border 120ms ease-in',
         '&:hover': {
-          borderColor: theme.vars.palette.action.hover,
+          // borderColor: theme.vars.palette.action.,
+          // borderCOlor: lighten(theme.palette.dividerChannel),
+          // borderColor: theme.palette.dividerChannel,
+          backgroundColor: theme.vars.palette.action.hover,
         },
         [`&.${outlinedInputClasses.focused}`]: {
           outline: `2px solid`,
@@ -694,11 +709,13 @@ const inputsCustomizations: Components<Theme> = {
           easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
         }),
       }),
-      track: {
-        borderRadius: 20 / 2,
-        opacity: 1,
-        backgroundColor: 'rgba(0, 0, 0, .25)',
-        boxSizing: 'border-box',
+      track: ({ theme }) => {
+        return {
+          borderRadius: 20 / 2,
+          opacity: 1,
+          backgroundColor: `color-mix(in srgb, ${theme.vars.palette.background.control} 80%, white)`,
+          boxSizing: 'border-box',
+        };
       },
     },
   },

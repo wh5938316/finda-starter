@@ -22,10 +22,7 @@ const ColumnContainer = styled(Paper)(({ theme }) => ({
   minWidth: 320,
   maxWidth: 400,
   minHeight: 400,
-  backgroundColor: alpha(theme.palette.background.paper, 0.6),
-  borderRadius: theme.shape.borderRadius,
   transition: 'box-shadow 0.2s ease-in-out',
-  border: `1px solid ${theme.palette.divider}`,
 }));
 
 // 获取每个列对应的图标和颜色
@@ -104,7 +101,6 @@ export function Column({ children, id, activeId }: ColumnProps) {
 
   return (
     <ColumnContainer
-      elevation={0}
       style={style}
       sx={{
         position: 'relative',

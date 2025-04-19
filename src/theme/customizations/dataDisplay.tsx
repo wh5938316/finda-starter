@@ -271,7 +271,11 @@ const dataDisplayCustomizations: Components<Theme> = {
         padding: `${theme.spacing(1)} ${theme.spacing(2)}`,
       }),
       head: ({ theme }) => ({
-        borderBottom: `1px solid ${theme.palette.divider}`,
+        borderBottom: '1px solid',
+        borderColor: theme.vars.palette.divider,
+        ...theme.applyStyles('dark', {
+          borderColor: theme.vars.palette.divider,
+        }),
       }),
     },
   },
@@ -280,7 +284,7 @@ const dataDisplayCustomizations: Components<Theme> = {
       root: ({ theme }) => ({
         [`&:not(.${tableRowClasses.head})`]: {
           '&:hover': {
-            backgroundColor: theme.palette.action.hover,
+            backgroundColor: theme.vars.palette.action.hover,
           },
         },
       }),

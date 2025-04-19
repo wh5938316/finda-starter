@@ -13,7 +13,8 @@ const datePickersCustomizations: PickerComponents<Theme> = {
       paper: ({ theme }) => ({
         marginTop: 4,
         borderRadius: theme.shape.borderRadius,
-        border: `1px solid ${theme.palette.divider}`,
+        border: '1px solid',
+        borderColor: theme.vars.palette.divider,
         backgroundImage: 'none',
         background: 'hsl(0, 0%, 100%)',
         boxShadow:
@@ -23,7 +24,8 @@ const datePickersCustomizations: PickerComponents<Theme> = {
           margin: '0 6px',
         },
         ...theme.applyStyles('dark', {
-          background: gray[900],
+          // background: gray[900],
+          background: theme.vars.palette.background.surface,
           boxShadow:
             'hsla(220, 30%, 5%, 0.7) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.8) 0px 8px 16px -5px',
         }),
@@ -156,14 +158,14 @@ const datePickersCustomizations: PickerComponents<Theme> = {
           [`&.${pickersDayClasses.selected}`]: { backgroundColor: gray[700] },
         },
         ...theme.applyStyles('dark', {
-          color: theme.palette.grey[300],
+          color: theme.vars.palette.text.secondary,
           '&:hover': {
-            backgroundColor: theme.palette.action.hover,
+            backgroundColor: theme.vars.palette.action.hover,
           },
           [`&.${pickersDayClasses.selected}`]: {
-            color: theme.palette.common.black,
+            color: theme.vars.palette.common.black,
             fontWeight: theme.typography.fontWeightMedium,
-            backgroundColor: gray[300],
+            backgroundColor: theme.vars.palette.background.control,
           },
           '&:focus': {
             outline: `3px solid ${theme.palette.primary.light}`,

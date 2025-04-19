@@ -20,17 +20,11 @@ import {
 import { getDesignTokens } from './themePrimitives';
 
 export default function getTheme(): CssVarsThemeOptions {
-  console.log(getDesignTokens('dark'));
   return {
-    // colorSchemes: {
-    //   light: true,
-    //   dark: true,
-    // },
     colorSchemes: {
       light: getDesignTokens('light'),
       dark: getDesignTokens('dark'),
     },
-    // ...getDesignTokens(mode),
     components: {
       ...chartsCustomizations,
       ...dataGridCustomizations,

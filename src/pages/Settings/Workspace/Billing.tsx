@@ -6,27 +6,26 @@ import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import StarIcon from '@mui/icons-material/Star';
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Chip,
-  Divider,
-  FormControlLabel,
-  Grid,
-  IconButton,
-  Stack,
-  Switch,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Switch from '@mui/material/Switch';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
 import { alpha, styled } from '@mui/material/styles';
 import * as React from 'react';
 import { useState } from 'react';
@@ -53,12 +52,9 @@ const SettingsIcon = styled(Box)(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
-const SettingsContainer = styled(Box)(({ theme }) => ({
-  backgroundColor: alpha('#f5f5f5', 0.5),
-  borderRadius: theme.shape.borderRadius * 2,
+const SettingsContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
-  marginBottom: theme.spacing(3),
-}));
+})) as typeof Paper;
 
 const PlanCard = styled(Card)(({ theme }) => ({
   border: `1px solid ${theme.palette.divider}`,

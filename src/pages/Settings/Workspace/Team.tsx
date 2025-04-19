@@ -318,7 +318,6 @@ export default function WorkspaceTeamSettings() {
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <TextField
-          size="small"
           placeholder="搜索成员..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}

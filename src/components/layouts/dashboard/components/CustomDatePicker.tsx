@@ -1,47 +1,36 @@
 import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded';
 import Button from '@mui/material/Button';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import type { UseDateFieldProps } from '@mui/x-date-pickers/DateField';
+import type { DatePickerFieldProps } from '@mui/x-date-pickers/DatePicker';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import type {
-  BaseSingleInputFieldProps,
-  DateValidationError,
-  FieldSection,
-} from '@mui/x-date-pickers/models';
+import { usePickerContext } from '@mui/x-date-pickers/hooks';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import * as React from 'react';
 
-interface ButtonFieldProps
-  extends UseDateFieldProps<Dayjs, false>,
-    BaseSingleInputFieldProps<Dayjs | null, Dayjs, FieldSection, false, DateValidationError> {
+interface ButtonFieldProps extends DatePickerFieldProps {
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function ButtonField(props: ButtonFieldProps) {
-  const {
-    setOpen,
-    label,
-    id,
-    disabled,
-    InputProps: { ref } = {},
-    inputProps: { 'aria-label': ariaLabel } = {},
-  } = props;
+  const { setOpen, id } = props;
+
+  const pickerContext = usePickerContext();
 
   return (
     <Button
       variant="outlined"
       id={id}
-      disabled={disabled}
-      ref={ref}
-      aria-label={ariaLabel}
+      disabled={pickerContext.disabled}
+      ref={pickerContext.triggerRef}
+      // aria-label={props.}
       size="small"
       onClick={() => setOpen?.((prev) => !prev)}
       startIcon={<CalendarTodayRoundedIcon fontSize="small" />}
       sx={{ minWidth: 'fit-content' }}
     >
-      {label ? `${label}` : 'Pick a date'}
+      {pickerContext.label ? `${pickerContext.label}` : 'Pick a date'}
     </Button>
   );
 }

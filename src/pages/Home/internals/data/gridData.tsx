@@ -40,7 +40,7 @@ function renderSparklineCell(params: GridCellParams<SparkLineData, any>) {
         plotType="bar"
         showHighlight
         showTooltip
-        colors={[brand[900]]}
+        color={brand[900]}
         xAxis={{
           scaleType: 'band',
           data,

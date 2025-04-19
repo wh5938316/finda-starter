@@ -48,18 +48,19 @@ const navigationCustomizations: Components<Theme> = {
       paper: ({ theme }) => ({
         marginTop: '4px',
         borderRadius: theme.shape.borderRadius,
-        border: `1px solid ${theme.palette.divider}`,
+        border: `1px solid`,
+        borderColor: theme.vars.palette.divider,
         backgroundImage: 'none',
-        background: 'hsl(0, 0%, 100%)',
-        boxShadow:
-          'hsla(220, 30%, 5%, 0.07) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.07) 0px 8px 16px -5px',
+        // background: 'hsl(0, 0%, 100%)',
+        // backgroundColor: theme.vars.palette.background.paper,
+        // boxShadow:
+        //   'hsla(220, 30%, 5%, 0.07) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.07) 0px 8px 16px -5px',
         [`& .${buttonBaseClasses.root}`]: {
           '&.Mui-selected': {
             backgroundColor: alpha(theme.palette.action.selected, 0.3),
           },
         },
         ...theme.applyStyles('dark', {
-          background: gray[900],
           boxShadow:
             'hsla(220, 30%, 5%, 0.7) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.8) 0px 8px 16px -5px',
         }),
@@ -89,17 +90,17 @@ const navigationCustomizations: Components<Theme> = {
 
         ...theme.applyStyles('dark', {
           borderRadius: theme.shape.borderRadius,
-          borderColor: gray[700],
-          backgroundColor: theme.palette.background.paper,
+          borderColor: theme.vars.palette.divider,
+          backgroundColor: theme.vars.palette.background.paper,
           // boxShadow: `inset 0 1px 0 1px ${alpha(gray[700], 0.15)}, inset 0 -1px 0 1px hsla(220, 0%, 0%, 0.7)`,
           '&:hover': {
-            borderColor: alpha(gray[700], 0.7),
-            backgroundColor: theme.palette.background.paper,
-            boxShadow: 'none',
+            borderColor: theme.vars.palette.action.hover,
+            backgroundColor: theme.vars.palette.background.paper,
+            // boxShadow: 'none',
           },
           [`&.${selectClasses.focused}`]: {
-            outlineOffset: 0,
-            borderColor: gray[900],
+            outlineOffset: 2,
+            borderColor: theme.vars.palette.action.active,
           },
           '&:before, &:after': {
             display: 'none',

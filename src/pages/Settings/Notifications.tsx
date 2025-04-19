@@ -17,7 +17,9 @@ import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import Slider from '@mui/material/Slider';
+import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -57,8 +59,6 @@ const NotificationItem = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: theme.spacing(2, 0),
-  borderBottom: `1px solid ${alpha(theme.palette.divider, 0.6)}`,
   '&:last-child': {
     borderBottom: 'none',
   },
@@ -69,12 +69,9 @@ const NotificationItemContent = styled(Box)(({ theme }) => ({
   alignItems: 'center',
 }));
 
-const SettingsContainer = styled(Box)(({ theme }) => ({
-  backgroundColor: alpha('#f5f5f5', 0.5),
-  borderRadius: theme.shape.borderRadius * 2,
+const SettingsContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
-  marginBottom: theme.spacing(3),
-}));
+})) as typeof Paper;
 
 // 通知频率标记
 const freqMarks = [
@@ -205,89 +202,91 @@ const NotificationSettings = () => {
 
         <Box sx={{ pl: { xs: 0, sm: 6 } }}>
           <SettingsContainer>
-            <NotificationItem>
-              <NotificationItemContent>
-                <SettingsIcon sx={{ width: 40, height: 40 }}>
-                  <MailIcon />
-                </SettingsIcon>
-                <Box sx={{ ml: 2 }}>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    电子邮件通知
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    接收任务更新、团队邀请等电子邮件通知
-                  </Typography>
-                </Box>
-              </NotificationItemContent>
-              <Switch
-                checked={emailEnabled}
-                onChange={(e) => setEmailEnabled(e.target.checked)}
-                color="primary"
-              />
-            </NotificationItem>
+            <Stack direction="column" spacing={2} divider={<Divider />}>
+              <NotificationItem>
+                <NotificationItemContent>
+                  <SettingsIcon sx={{ width: 40, height: 40 }}>
+                    <MailIcon />
+                  </SettingsIcon>
+                  <Box sx={{ ml: 2 }}>
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      电子邮件通知
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      接收任务更新、团队邀请等电子邮件通知
+                    </Typography>
+                  </Box>
+                </NotificationItemContent>
+                <Switch
+                  checked={emailEnabled}
+                  onChange={(e) => setEmailEnabled(e.target.checked)}
+                  color="primary"
+                />
+              </NotificationItem>
 
-            <NotificationItem>
-              <NotificationItemContent>
-                <SettingsIcon sx={{ width: 40, height: 40 }}>
-                  <MessageIcon />
-                </SettingsIcon>
-                <Box sx={{ ml: 2 }}>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    应用内通知
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    在应用内接收实时通知和更新
-                  </Typography>
-                </Box>
-              </NotificationItemContent>
-              <Switch
-                checked={appEnabled}
-                onChange={(e) => setAppEnabled(e.target.checked)}
-                color="primary"
-              />
-            </NotificationItem>
+              <NotificationItem>
+                <NotificationItemContent>
+                  <SettingsIcon sx={{ width: 40, height: 40 }}>
+                    <MessageIcon />
+                  </SettingsIcon>
+                  <Box sx={{ ml: 2 }}>
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      应用内通知
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      在应用内接收实时通知和更新
+                    </Typography>
+                  </Box>
+                </NotificationItemContent>
+                <Switch
+                  checked={appEnabled}
+                  onChange={(e) => setAppEnabled(e.target.checked)}
+                  color="primary"
+                />
+              </NotificationItem>
 
-            <NotificationItem>
-              <NotificationItemContent>
-                <SettingsIcon sx={{ width: 40, height: 40 }}>
-                  <BrowserUpdatedIcon />
-                </SettingsIcon>
-                <Box sx={{ ml: 2 }}>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    浏览器通知
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    在您的浏览器中显示桌面推送通知，即使您未打开应用
-                  </Typography>
-                </Box>
-              </NotificationItemContent>
-              <Switch
-                checked={browserEnabled}
-                onChange={(e) => setBrowserEnabled(e.target.checked)}
-                color="primary"
-              />
-            </NotificationItem>
+              <NotificationItem>
+                <NotificationItemContent>
+                  <SettingsIcon sx={{ width: 40, height: 40 }}>
+                    <BrowserUpdatedIcon />
+                  </SettingsIcon>
+                  <Box sx={{ ml: 2 }}>
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      浏览器通知
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      在您的浏览器中显示桌面推送通知，即使您未打开应用
+                    </Typography>
+                  </Box>
+                </NotificationItemContent>
+                <Switch
+                  checked={browserEnabled}
+                  onChange={(e) => setBrowserEnabled(e.target.checked)}
+                  color="primary"
+                />
+              </NotificationItem>
 
-            <NotificationItem sx={{ pb: 0 }}>
-              <NotificationItemContent>
-                <SettingsIcon sx={{ width: 40, height: 40 }}>
-                  <PhoneAndroidIcon />
-                </SettingsIcon>
-                <Box sx={{ ml: 2 }}>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    移动设备通知
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    在您的移动设备上接收推送通知
-                  </Typography>
-                </Box>
-              </NotificationItemContent>
-              <Switch
-                checked={mobileEnabled}
-                onChange={(e) => setMobileEnabled(e.target.checked)}
-                color="primary"
-              />
-            </NotificationItem>
+              <NotificationItem sx={{ pb: 0 }}>
+                <NotificationItemContent>
+                  <SettingsIcon sx={{ width: 40, height: 40 }}>
+                    <PhoneAndroidIcon />
+                  </SettingsIcon>
+                  <Box sx={{ ml: 2 }}>
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      移动设备通知
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      在您的移动设备上接收推送通知
+                    </Typography>
+                  </Box>
+                </NotificationItemContent>
+                <Switch
+                  checked={mobileEnabled}
+                  onChange={(e) => setMobileEnabled(e.target.checked)}
+                  color="primary"
+                />
+              </NotificationItem>
+            </Stack>
           </SettingsContainer>
         </Box>
       </SectionContainer>
@@ -310,137 +309,139 @@ const NotificationSettings = () => {
 
         <Box sx={{ pl: { xs: 0, sm: 6 } }}>
           <SettingsContainer>
-            <NotificationItem>
-              <NotificationItemContent>
-                <SettingsIcon sx={{ width: 40, height: 40 }}>
-                  <AssignmentIcon />
-                </SettingsIcon>
-                <Box sx={{ ml: 2 }}>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    任务提醒
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    任务分配、截止日期提醒和状态更新
-                  </Typography>
-                </Box>
-              </NotificationItemContent>
-              <Checkbox
-                checked={notifyTypes.tasks}
-                onChange={handleNotifyTypeChange}
-                name="tasks"
-                color="primary"
-              />
-            </NotificationItem>
+            <Stack direction="column" spacing={2} divider={<Divider />}>
+              <NotificationItem>
+                <NotificationItemContent>
+                  <SettingsIcon sx={{ width: 40, height: 40 }}>
+                    <AssignmentIcon />
+                  </SettingsIcon>
+                  <Box sx={{ ml: 2 }}>
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      任务提醒
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      任务分配、截止日期提醒和状态更新
+                    </Typography>
+                  </Box>
+                </NotificationItemContent>
+                <Checkbox
+                  checked={notifyTypes.tasks}
+                  onChange={handleNotifyTypeChange}
+                  name="tasks"
+                  color="primary"
+                />
+              </NotificationItem>
 
-            <NotificationItem>
-              <NotificationItemContent>
-                <SettingsIcon sx={{ width: 40, height: 40 }}>
-                  <GroupsIcon />
-                </SettingsIcon>
-                <Box sx={{ ml: 2 }}>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    团队更新
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    新成员加入、团队公告和成员变动
-                  </Typography>
-                </Box>
-              </NotificationItemContent>
-              <Checkbox
-                checked={notifyTypes.team}
-                onChange={handleNotifyTypeChange}
-                name="team"
-                color="primary"
-              />
-            </NotificationItem>
+              <NotificationItem>
+                <NotificationItemContent>
+                  <SettingsIcon sx={{ width: 40, height: 40 }}>
+                    <GroupsIcon />
+                  </SettingsIcon>
+                  <Box sx={{ ml: 2 }}>
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      团队更新
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      新成员加入、团队公告和成员变动
+                    </Typography>
+                  </Box>
+                </NotificationItemContent>
+                <Checkbox
+                  checked={notifyTypes.team}
+                  onChange={handleNotifyTypeChange}
+                  name="team"
+                  color="primary"
+                />
+              </NotificationItem>
 
-            <NotificationItem>
-              <NotificationItemContent>
-                <SettingsIcon sx={{ width: 40, height: 40 }}>
-                  <CommentIcon />
-                </SettingsIcon>
-                <Box sx={{ ml: 2 }}>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    评论与回复
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    您参与的讨论的新评论和回复
-                  </Typography>
-                </Box>
-              </NotificationItemContent>
-              <Checkbox
-                checked={notifyTypes.comments}
-                onChange={handleNotifyTypeChange}
-                name="comments"
-                color="primary"
-              />
-            </NotificationItem>
+              <NotificationItem>
+                <NotificationItemContent>
+                  <SettingsIcon sx={{ width: 40, height: 40 }}>
+                    <CommentIcon />
+                  </SettingsIcon>
+                  <Box sx={{ ml: 2 }}>
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      评论与回复
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      您参与的讨论的新评论和回复
+                    </Typography>
+                  </Box>
+                </NotificationItemContent>
+                <Checkbox
+                  checked={notifyTypes.comments}
+                  onChange={handleNotifyTypeChange}
+                  name="comments"
+                  color="primary"
+                />
+              </NotificationItem>
 
-            <NotificationItem>
-              <NotificationItemContent>
-                <SettingsIcon sx={{ width: 40, height: 40 }}>
-                  <SecurityIcon />
-                </SettingsIcon>
-                <Box sx={{ ml: 2 }}>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    安全警报
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    重要的安全相关通知和未知登录提醒
-                  </Typography>
-                </Box>
-              </NotificationItemContent>
-              <Checkbox
-                checked={notifyTypes.security}
-                onChange={handleNotifyTypeChange}
-                name="security"
-                color="primary"
-              />
-            </NotificationItem>
+              <NotificationItem>
+                <NotificationItemContent>
+                  <SettingsIcon sx={{ width: 40, height: 40 }}>
+                    <SecurityIcon />
+                  </SettingsIcon>
+                  <Box sx={{ ml: 2 }}>
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      安全警报
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      重要的安全相关通知和未知登录提醒
+                    </Typography>
+                  </Box>
+                </NotificationItemContent>
+                <Checkbox
+                  checked={notifyTypes.security}
+                  onChange={handleNotifyTypeChange}
+                  name="security"
+                  color="primary"
+                />
+              </NotificationItem>
 
-            <NotificationItem>
-              <NotificationItemContent>
-                <SettingsIcon sx={{ width: 40, height: 40 }}>
-                  <BrowserUpdatedIcon />
-                </SettingsIcon>
-                <Box sx={{ ml: 2 }}>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    系统通知
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    新功能、系统维护和重要更新
-                  </Typography>
-                </Box>
-              </NotificationItemContent>
-              <Checkbox
-                checked={notifyTypes.system}
-                onChange={handleNotifyTypeChange}
-                name="system"
-                color="primary"
-              />
-            </NotificationItem>
+              <NotificationItem>
+                <NotificationItemContent>
+                  <SettingsIcon sx={{ width: 40, height: 40 }}>
+                    <BrowserUpdatedIcon />
+                  </SettingsIcon>
+                  <Box sx={{ ml: 2 }}>
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      系统通知
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      新功能、系统维护和重要更新
+                    </Typography>
+                  </Box>
+                </NotificationItemContent>
+                <Checkbox
+                  checked={notifyTypes.system}
+                  onChange={handleNotifyTypeChange}
+                  name="system"
+                  color="primary"
+                />
+              </NotificationItem>
 
-            <NotificationItem sx={{ pb: 0 }}>
-              <NotificationItemContent>
-                <SettingsIcon sx={{ width: 40, height: 40 }}>
-                  <EventIcon />
-                </SettingsIcon>
-                <Box sx={{ ml: 2 }}>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    日历提醒
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    会议、活动和日程安排提醒
-                  </Typography>
-                </Box>
-              </NotificationItemContent>
-              <Checkbox
-                checked={notifyTypes.calendar}
-                onChange={handleNotifyTypeChange}
-                name="calendar"
-                color="primary"
-              />
-            </NotificationItem>
+              <NotificationItem sx={{ pb: 0 }}>
+                <NotificationItemContent>
+                  <SettingsIcon sx={{ width: 40, height: 40 }}>
+                    <EventIcon />
+                  </SettingsIcon>
+                  <Box sx={{ ml: 2 }}>
+                    <Typography variant="subtitle1" fontWeight="medium">
+                      日历提醒
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      会议、活动和日程安排提醒
+                    </Typography>
+                  </Box>
+                </NotificationItemContent>
+                <Checkbox
+                  checked={notifyTypes.calendar}
+                  onChange={handleNotifyTypeChange}
+                  name="calendar"
+                  color="primary"
+                />
+              </NotificationItem>
+            </Stack>
           </SettingsContainer>
         </Box>
       </SectionContainer>

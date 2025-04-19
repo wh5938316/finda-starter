@@ -71,26 +71,87 @@ interface ThemeOptionProps {
   children: React.ReactNode;
 }
 
-const ThemeOption = styled(Box, {
+// 主题预览组件
+const ThemePreviewOption = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'selected',
 })<ThemeOptionProps>(({ theme, selected }) => ({
-  width: 120,
-  height: 80,
+  width: '100%',
   borderRadius: theme.shape.borderRadius,
-  padding: theme.spacing(1),
-  border: `2px solid ${selected ? theme.palette.primary.main : alpha(theme.palette.divider, 0.1)}`,
-  backgroundColor: alpha(theme.palette.background.paper, 0.7),
+  border: '1px solid',
+  borderColor: selected ? theme.palette.primary.main : theme.vars.palette.divider,
+  backgroundColor: theme.vars.palette.background.paper,
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'center',
-  gap: theme.spacing(1),
+  justifyContent: 'flex-end',
   cursor: 'pointer',
   transition: 'all 0.2s',
+  overflow: 'hidden',
   '&:hover': {
-    borderColor: selected ? theme.palette.primary.main : theme.palette.divider,
+    backgroundColor: theme.vars.palette.action.hover,
     boxShadow: 1,
   },
+}));
+
+// UI预览组件
+const PreviewUI = styled(Box)(({ theme }) => ({
+  width: '100%',
+  height: '100px',
+  padding: theme.spacing(1),
+  position: 'relative',
+  overflow: 'hidden',
+}));
+
+// 预览侧边栏
+const PreviewSidebar = styled(Box)(({ theme, color }) => ({
+  width: '80px',
+  height: '100%',
+  backgroundColor: color === 'dark' ? '#1e1e1e' : '#f0f0f0',
+  display: 'flex',
+  flexDirection: 'column',
+  padding: theme.spacing(0.5),
+}));
+
+// 预览主内容区
+const PreviewContent = styled(Box)(({ theme, color }) => ({
+  flexGrow: 1,
+  backgroundColor: color === 'dark' ? '#2a2a2a' : '#ffffff',
+  padding: theme.spacing(0.5),
+}));
+
+// 预览列表项
+const PreviewListItem = styled(Box)(({ theme, color }) => ({
+  width: '100%',
+  height: '8px',
+  backgroundColor: color === 'dark' ? '#3a3a3a' : '#e0e0e0',
+  marginBottom: theme.spacing(0.5),
+  borderRadius: '2px',
+}));
+
+// 预览按钮
+const PreviewButton = styled(Box)(({ theme, color }) => ({
+  width: '40px',
+  height: '12px',
+  backgroundColor: theme.vars.palette.primary.main,
+  borderRadius: '2px',
+  marginTop: theme.spacing(0.5),
+}));
+
+// 主题选择容器
+const ThemeOptionsContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing(2),
+  width: '100%',
+  justifyContent: 'center',
+}));
+
+// 主题选择标签
+const ThemeLabel = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: theme.spacing(0.5),
+  padding: theme.spacing(1),
 }));
 
 export default function ProfileSettings() {
@@ -152,7 +213,8 @@ export default function ProfileSettings() {
                 sx={{
                   width: 140,
                   height: 140,
-                  border: '4px solid #fff',
+                  border: '4px solid',
+                  borderColor: 'white',
                   boxShadow: 2,
                 }}
                 alt="用户头像"
@@ -203,7 +265,7 @@ export default function ProfileSettings() {
               <Box
                 sx={{
                   height: 6,
-                  bgcolor: alpha('#000', 0.09),
+                  bgcolor: 'background.control',
                   borderRadius: 1,
                   overflow: 'hidden',
                 }}
@@ -552,39 +614,116 @@ export default function ProfileSettings() {
 
             <Box sx={{ pl: { xs: 0, sm: 6 } }}>
               <FormRow>
-                <Typography variant="subtitle2" gutterBottom>
+                <Typography variant="h5" gutterBottom>
                   主题
                 </Typography>
-                <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-                  <ThemeOption
-                    selected={mode === 'light'}
-                    onClick={() => handleThemeChange('light')}
-                  >
-                    <WbSunnyIcon />
-                    <Typography variant="caption">浅色</Typography>
-                  </ThemeOption>
-                  <ThemeOption
-                    selected={mode === 'dark'}
-                    onClick={() => handleThemeChange('dark')}
-                    sx={{
-                      bgcolor: alpha('#000', 0.8),
-                      color: 'white',
-                    }}
-                  >
-                    <DarkModeIcon />
-                    <Typography variant="caption">深色</Typography>
-                  </ThemeOption>
-                  <ThemeOption
-                    selected={mode === 'system'}
-                    onClick={() => handleThemeChange('system')}
-                  >
-                    <Box sx={{ display: 'flex' }}>
-                      <WbSunnyIcon fontSize="small" />
-                      <DarkModeIcon fontSize="small" />
-                    </Box>
-                    <Typography variant="caption">跟随系统</Typography>
-                  </ThemeOption>
-                </Box>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  选择一个主题来个性化您平台的外观
+                </Typography>
+                <ThemeOptionsContainer>
+                  <Box sx={{ width: '30%' }}>
+                    <ThemePreviewOption
+                      selected={mode === 'light'}
+                      onClick={() => handleThemeChange('light')}
+                    >
+                      <PreviewUI>
+                        <Box sx={{ display: 'flex', height: '100%' }}>
+                          <PreviewSidebar color="light">
+                            <PreviewListItem color="light" />
+                            <PreviewListItem color="light" />
+                            <PreviewListItem color="light" />
+                          </PreviewSidebar>
+                          <PreviewContent color="light">
+                            <PreviewListItem color="light" />
+                            <PreviewListItem color="light" />
+                            <PreviewListItem color="light" />
+                            <PreviewListItem color="light" />
+                            <PreviewButton />
+                          </PreviewContent>
+                        </Box>
+                      </PreviewUI>
+                      <ThemeLabel>
+                        <WbSunnyIcon fontSize="small" />
+                        <Typography variant="body2">浅色</Typography>
+                      </ThemeLabel>
+                    </ThemePreviewOption>
+                  </Box>
+
+                  <Box sx={{ width: '30%' }}>
+                    <ThemePreviewOption
+                      selected={mode === 'dark'}
+                      onClick={() => handleThemeChange('dark')}
+                    >
+                      <PreviewUI>
+                        <Box sx={{ display: 'flex', height: '100%' }}>
+                          <PreviewSidebar color="dark">
+                            <PreviewListItem color="dark" />
+                            <PreviewListItem color="dark" />
+                            <PreviewListItem color="dark" />
+                          </PreviewSidebar>
+                          <PreviewContent color="dark">
+                            <PreviewListItem color="dark" />
+                            <PreviewListItem color="dark" />
+                            <PreviewListItem color="dark" />
+                            <PreviewListItem color="dark" />
+                            <PreviewButton />
+                          </PreviewContent>
+                        </Box>
+                      </PreviewUI>
+                      <ThemeLabel>
+                        <DarkModeIcon fontSize="small" />
+                        <Typography variant="body2">深色</Typography>
+                      </ThemeLabel>
+                    </ThemePreviewOption>
+                  </Box>
+
+                  <Box sx={{ width: '30%' }}>
+                    <ThemePreviewOption
+                      selected={mode === 'system'}
+                      onClick={() => handleThemeChange('system')}
+                    >
+                      <PreviewUI>
+                        <Box sx={{ display: 'flex', height: '100%', width: '100%' }}>
+                          <Box sx={{ width: '50%', overflow: 'hidden' }}>
+                            <Box sx={{ display: 'flex', height: '100%' }}>
+                              <PreviewSidebar color="light">
+                                <PreviewListItem color="light" sx={{ height: '4px' }} />
+                                <PreviewListItem color="light" sx={{ height: '4px' }} />
+                              </PreviewSidebar>
+                              <PreviewContent color="light">
+                                <PreviewListItem color="light" sx={{ height: '4px' }} />
+                                <PreviewListItem color="light" sx={{ height: '4px' }} />
+                                <PreviewButton sx={{ height: '6px' }} />
+                              </PreviewContent>
+                            </Box>
+                          </Box>
+                          <Box sx={{ width: '50%', overflow: 'hidden' }}>
+                            <Box sx={{ display: 'flex', height: '100%' }}>
+                              <PreviewSidebar color="dark">
+                                <PreviewListItem color="dark" sx={{ height: '4px' }} />
+                                <PreviewListItem color="dark" sx={{ height: '4px' }} />
+                              </PreviewSidebar>
+                              <PreviewContent color="dark">
+                                <PreviewListItem color="dark" sx={{ height: '4px' }} />
+                                <PreviewListItem color="dark" sx={{ height: '4px' }} />
+                                <PreviewButton sx={{ height: '6px' }} />
+                              </PreviewContent>
+                            </Box>
+                          </Box>
+                        </Box>
+                      </PreviewUI>
+                      <ThemeLabel>
+                        <Box sx={{ display: 'flex' }}>
+                          <Box component="span" sx={{ display: 'flex', alignItems: 'center' }}>
+                            <WbSunnyIcon fontSize="small" />
+                            <DarkModeIcon fontSize="small" />
+                          </Box>
+                        </Box>
+                        <Typography variant="body2">跟随系统</Typography>
+                      </ThemeLabel>
+                    </ThemePreviewOption>
+                  </Box>
+                </ThemeOptionsContainer>
               </FormRow>
 
               <FormRow>

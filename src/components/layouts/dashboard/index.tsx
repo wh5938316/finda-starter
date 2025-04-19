@@ -22,7 +22,7 @@ function Dashboard({ children }: { children: React.ReactNode }) {
           //   : alpha(theme.palette.background.default, 1),
           overflow: 'auto',
           paddingTop: '64px',
-          backgroundColor: theme.vars.palette.background.paper,
+          backgroundColor: theme.vars.palette.background.surface,
         })}
       >
         <Header />

@@ -30,7 +30,7 @@ function Header() {
         sx={{
           width: '100%',
           height: '100%',
-          backgroundColor: 'background.paper',
+          backgroundColor: 'background.surface',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -41,7 +41,6 @@ function Header() {
           direction="row"
           sx={{
             px: 2,
-            // bgcolor: 'background.paper',
             display: { xs: 'none', md: 'flex' },
             width: '100%',
             alignItems: { xs: 'flex-start', md: 'center' },
