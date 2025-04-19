@@ -18,13 +18,13 @@ const dataGridCustomizations: DataGridComponents<Theme> = {
       root: ({ theme }) => ({
         '--DataGrid-overlayHeight': '300px',
         overflow: 'clip',
-        borderColor: theme.palette.divider,
-        backgroundColor: theme.palette.background.default,
+        borderColor: theme.vars.palette.divider,
+        backgroundColor: theme.vars.palette.background.surface,
         [`& .${gridClasses.columnHeader}`]: {
-          backgroundColor: theme.palette.background.paper,
+          backgroundColor: theme.vars.palette.background.paper,
         },
         [`& .${gridClasses.footerContainer}`]: {
-          backgroundColor: theme.palette.background.paper,
+          backgroundColor: theme.vars.palette.background.paper,
         },
         [`& .${checkboxClasses.root}`]: {
           padding: theme.spacing(0.5),
@@ -43,12 +43,13 @@ const dataGridCustomizations: DataGridComponents<Theme> = {
           },
         },
       }),
-      cell: ({ theme }) => ({ borderTopColor: theme.palette.divider }),
+      cell: ({ theme }) => ({ borderTopColor: theme.vars.palette.divider }),
       menu: ({ theme }) => ({
         borderRadius: theme.shape.borderRadius,
         backgroundImage: 'none',
         [`& .${paperClasses.root}`]: {
-          border: `1px solid ${theme.palette.divider}`,
+          border: '1px solid',
+          borderColor: theme.vars.palette.divider,
         },
 
         [`& .${menuItemClasses.root}`]: {
@@ -64,15 +65,16 @@ const dataGridCustomizations: DataGridComponents<Theme> = {
       }),
       row: ({ theme }) => ({
         '&:last-of-type': {
-          borderBottom: `1px solid ${theme.palette.divider}`,
+          borderBottom: '1px solid',
+          borderColor: theme.vars.palette.divider,
         },
         '&:hover': {
-          backgroundColor: theme.palette.action.hover,
+          backgroundColor: theme.vars.palette.action.hover,
         },
         '&.Mui-selected': {
-          background: theme.palette.action.selected,
+          background: theme.vars.palette.action.selected,
           '&:hover': {
-            backgroundColor: theme.palette.action.hover,
+            backgroundColor: theme.vars.palette.action.hover,
           },
         },
       }),
